@@ -1,4 +1,5 @@
 import './App.css'
+import Map from './components/Map'
 
 function App() {
   return (
@@ -16,24 +17,7 @@ function App() {
         </div>
       </header>
 
-      <main>
-        <section>
-          <h2>System Initialized</h2>
-          <p>React + Vite application is running.</p>
-        </section>
-
-        <section className="info">
-          <h3>Environment</h3>
-          <ul>
-            <li>Mode: {import.meta.env.MODE}</li>
-            <li>Base URL: {import.meta.env.BASE_URL}</li>
-          </ul>
-        </section>
-      </main>
-
-      <footer>
-        <p>BharatAtlas © 2025</p>
-      </footer>
+      <Map />
     </div>
   )
 }

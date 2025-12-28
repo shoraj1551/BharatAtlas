@@ -1,0 +1,107 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Karnataka",
+                "state_code": "KA"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            74.0,
+                            12.0
+                        ],
+                        [
+                            78.5,
+                            12.0
+                        ],
+                        [
+                            78.5,
+                            18.5
+                        ],
+                        [
+                            74.0,
+                            18.5
+                        ],
+                        [
+                            74.0,
+                            12.0
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Maharashtra",
+                "state_code": "MH"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            72.5,
+                            15.5
+                        ],
+                        [
+                            80.5,
+                            15.5
+                        ],
+                        [
+                            80.5,
+                            22.0
+                        ],
+                        [
+                            72.5,
+                            22.0
+                        ],
+                        [
+                            72.5,
+                            15.5
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Tamil Nadu",
+                "state_code": "TN"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            76.5,
+                            8.0
+                        ],
+                        [
+                            80.5,
+                            8.0
+                        ],
+                        [
+                            80.5,
+                            13.5
+                        ],
+                        [
+                            76.5,
+                            13.5
+                        ],
+                        [
+                            76.5,
+                            8.0
+                        ]
+                    ]
+                ]
+            }
+        }
+    ]
+}

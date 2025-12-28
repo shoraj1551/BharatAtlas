@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import './Map.css'
+import statesData from '../data/states.json'
 
 // Mapbox access token from environment variable
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || ''
@@ -27,6 +28,27 @@ function Map() {
         // Disable rotation for stability
         map.current.dragRotate.disable()
         map.current.touchZoomRotate.disableRotation()
+
+        // Add state boundaries when map loads
+        map.current.on('load', () => {
+            // Add state boundary source
+            map.current.addSource('states', {
+                type: 'geojson',
+                data: statesData
+            })
+
+            // Add state boundary layer (lines only, no fill)
+            map.current.addLayer({
+                id: 'state-boundaries',
+                type: 'line',
+                source: 'states',
+                paint: {
+                    'line-color': '#333333',
+                    'line-width': 1.5,
+                    'line-opacity': 0.6
+                }
+            })
+        })
 
         // Clean up on unmount
         return () => {

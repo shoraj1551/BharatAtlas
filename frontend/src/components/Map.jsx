@@ -3,9 +3,8 @@ import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import './Map.css'
 
-// Mapbox access token - using public token for development
-// For production, move to environment variable
-mapboxgl.accessToken = 'pk.eyJ1IjoiYmhhcmF0YXRsYXMiLCJhIjoiY20zNXNxZWZkMDJuMTJrcHp5bGJjdHRyZiJ9.placeholder'
+// Mapbox access token from environment variable
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || ''
 
 function Map() {
     const mapContainer = useRef(null)

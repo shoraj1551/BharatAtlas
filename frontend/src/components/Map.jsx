@@ -32,6 +32,7 @@ function Map() {
         return () => {
             if (map.current) {
                 map.current.remove()
+                map.current = null // CRITICAL: Reset ref for React Strict Mode
             }
         }
     }, [])

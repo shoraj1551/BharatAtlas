@@ -1,0 +1,91 @@
+.signal-panel {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 1.5rem;
+}
+
+/* Story 137: Signal disclaimer */
+.signal-disclaimer {
+    padding: 0.75rem 1rem;
+    background: #f3e5f5;
+    border-left: 4px solid #7b1fa2;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+}
+
+.signal-disclaimer em {
+    color: #6a1b9a;
+    font-weight: 500;
+}
+
+/* Story 139: Transparency panel */
+.signal-transparency {
+    margin-bottom: 1.5rem;
+}
+
+.signal-transparency h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 0.9375rem;
+    color: #333;
+}
+
+.signal-factors {
+    margin: 0;
+    padding-left: 1.5rem;
+    list-style: disc;
+}
+
+.signal-factors li {
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+/* Story 140: Counter-signals */
+.counter-signals {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 4px;
+}
+
+.counter-signals h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 0.9375rem;
+    color: #856404;
+}
+
+.counter-signal {
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+}
+
+.counter-signal:last-child {
+    margin-bottom: 0;
+}
+
+.counter-signal.severity-high {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.counter-signal.severity-medium {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.counter-signal.severity-low {
+    background: #f1f8e9;
+    color: #558b2f;
+}
+
+.signal-methodology {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+    color: #666;
+    font-size: 0.8125rem;
+}

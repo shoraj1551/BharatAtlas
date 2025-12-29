@@ -1,0 +1,137 @@
+.opportunities {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.opportunities-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.opportunities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.opportunity-card {
+    padding: 1.25rem;
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.opportunity-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.opportunity-title {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    flex: 1;
+}
+
+.opportunity-confidence-badge {
+    padding: 0.125rem 0.5rem;
+    color: white;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+}
+
+.opportunity-category {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+.opportunity-description {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+.opportunity-reasoning {
+    padding: 1rem;
+    background: white;
+    border-left: 3px solid #2196f3;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.reasoning-title {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #2196f3;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.reasoning-type {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: #666;
+    font-style: italic;
+    text-transform: capitalize;
+}
+
+.reasoning-explanation {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: #444;
+}
+
+.reasoning-data-points,
+.reasoning-sources {
+    font-size: 0.8125rem;
+}
+
+.reasoning-data-points strong,
+.reasoning-sources strong {
+    color: #333;
+    font-weight: 600;
+}
+
+.reasoning-data-points ul,
+.reasoning-sources ul {
+    margin: 0.5rem 0 0 0;
+    padding-left: 1.25rem;
+}
+
+.reasoning-data-points li,
+.reasoning-sources li {
+    margin-bottom: 0.25rem;
+    color: #555;
+}
+
+.opportunity-timeline {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.opportunity-timeline strong {
+    color: #333;
+}

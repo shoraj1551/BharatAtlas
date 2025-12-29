@@ -1,0 +1,12 @@
+/**
+ * MapPage Layout
+ * Map takes full space, InfoPanel overlays on the right
+ */
+
+.map-page {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 80px);
+    /* Subtract header height */
+    overflow: hidden;
+}

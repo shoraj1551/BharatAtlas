@@ -1,0 +1,58 @@
+/**
+ * DataDisclaimer Styles
+ */
+
+.data-disclaimer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 400px;
+    /* Account for info panel width */
+    background: rgba(255, 243, 205, 0.95);
+    border-top: 2px solid #f59e0b;
+    z-index: 5;
+    backdrop-filter: blur(4px);
+}
+
+.disclaimer-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    max-width: 1200px;
+}
+
+.disclaimer-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.disclaimer-text {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #78350f;
+}
+
+.disclaimer-text strong {
+    font-weight: 600;
+    color: #92400e;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .data-disclaimer {
+        right: 0;
+        bottom: 50%;
+        /* Account for mobile info panel */
+    }
+
+    .disclaimer-content {
+        padding: 10px 12px;
+    }
+
+    .disclaimer-text {
+        font-size: 11px;
+    }
+}

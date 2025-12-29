@@ -1,0 +1,168 @@
+.place-panel {
+    width: 30%;
+    height: 100%;
+    background: #ffffff;
+    border-left: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.panel-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #eee;
+    background: #fafafa;
+}
+
+.place-hierarchy {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.8125rem;
+    color: #666;
+}
+
+.hierarchy-parent {
+    color: #666;
+}
+
+.hierarchy-separator {
+    color: #999;
+}
+
+.panel-header h2 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.place-type {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.panel-content {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.place-section {
+    margin-bottom: 2rem;
+}
+
+.place-section h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.place-summary {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+.fact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.fact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.fact-label {
+    font-size: 0.8125rem;
+    color: #666;
+}
+
+.fact-value {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.industry-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    list-style: disc;
+}
+
+.industry-list li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9375rem;
+    color: #555;
+}
+
+.data-quality {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+}
+
+.quality-label {
+    color: #666;
+}
+
+.quality-value {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.quality-status {
+    padding: 0.25rem 0.5rem;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.children-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.child-place-link {
+    padding: 0.75rem 1rem;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.child-place-link:hover {
+    background: #f0f0f0;
+    border-color: #ddd;
+    color: #1a1a1a;
+}
+
+.children-loading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.no-children {
+    margin: 0;
+    color: #999;
+    font-size: 0.875rem;
+    font-style: italic;
+}

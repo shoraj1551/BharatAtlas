@@ -1,0 +1,187 @@
+.governance-page {
+    flex: 1;
+    overflow-y: auto;
+    background: #f5f5f5;
+    padding: 2rem;
+}
+
+.governance-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.governance-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.governance-header h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 2.5rem;
+    color: #1a1a1a;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1.125rem;
+}
+
+/* Charter Section */
+.charter-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    border-left: 4px solid #2196f3;
+}
+
+.principles ul {
+    list-style: none;
+    padding: 0;
+}
+
+.principles li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.principles li:last-child {
+    border-bottom: none;
+}
+
+/* Roles Section */
+.roles-section {
+    margin-bottom: 2rem;
+}
+
+.role-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid #e0e0e0;
+}
+
+.role-card h3 {
+    margin: 0 0 0.5rem 0;
+    color: #2196f3;
+}
+
+.role-card h4 {
+    margin: 1rem 0 0.5rem 0;
+    font-size: 0.9375rem;
+    color: #666;
+}
+
+/* Process Flow */
+.process-flow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.process-step {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.process-step h3 {
+    margin: 0 0 0.75rem 0;
+    color: #2196f3;
+}
+
+/* Dispute Lifecycle */
+.dispute-lifecycle {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.lifecycle-state {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.lifecycle-state strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2196f3;
+}
+
+/* Guarantees */
+.guarantees {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.guarantee {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.guarantee h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.125rem;
+}
+
+/* Sections */
+.contribution-section,
+.dispute-section,
+.transparency-section,
+.curator-section,
+.logs-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    border: 1px solid #e0e0e0;
+}
+
+.view-curators-link,
+.view-logs-link {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: #2196f3;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.view-curators-link:hover,
+.view-logs-link:hover {
+    background: #1976d2;
+}
+
+/* Footer */
+.governance-footer {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+}
+
+.governance-footer a {
+    color: #2196f3;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.governance-footer a:hover {
+    text-decoration: underline;
+}

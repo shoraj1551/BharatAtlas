@@ -1,0 +1,101 @@
+.health-page {
+    flex: 1;
+    overflow-y: auto;
+    background: #f5f5f5;
+    padding: 2rem;
+}
+
+.health-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.health-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.health-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #1a1a1a;
+}
+
+.health-status {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+}
+
+.health-status.healthy {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.health-status.degraded {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.health-timestamp {
+    color: #666;
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.health-section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e0e0e0;
+}
+
+.health-section h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.health-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.health-item:last-child {
+    border-bottom: none;
+}
+
+.health-label {
+    color: #666;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.health-value {
+    color: #333;
+    font-weight: 600;
+}
+
+.health-value.status-operational {
+    color: #2e7d32;
+}
+
+.health-value.status-degraded {
+    color: #e65100;
+}
+
+.health-value.status-ready {
+    color: #2e7d32;
+}
+
+.health-value.status-not_ready {
+    color: #d32f2f;
+}

@@ -1,86 +1,111 @@
+/* PlacePanel - Intelligence Card */
+
 .place-panel {
-    width: 30%;
+    /* Layout */
+    width: var(--panel-width);
+    min-width: 380px;
+    max-width: 480px;
     height: 100%;
-    background: #ffffff;
-    border-left: 1px solid #ddd;
+
+    /* Surface */
+    background: var(--surface-bg);
+    border-right: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    z-index: 50;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
 }
 
 .panel-header {
     padding: 1.5rem;
-    border-bottom: 1px solid #eee;
-    background: #fafafa;
+    background: var(--surface-card);
+    border-bottom: 1px solid var(--border-subtle);
 }
 
+/* Hierarchy Path */
 .place-hierarchy {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 0.75rem;
-    font-size: 0.8125rem;
-    color: #666;
-}
-
-.hierarchy-parent {
-    color: #666;
-}
-
-.hierarchy-separator {
-    color: #999;
-}
-
-.panel-header h2 {
-    margin: 0 0 0.25rem 0;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #1a1a1a;
-}
-
-.place-type {
-    margin: 0 0 0.75rem 0;
+    margin-bottom: 0.5rem;
     font-size: 0.75rem;
-    font-weight: 500;
-    color: #666;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
+.hierarchy-separator {
+    color: var(--border-strong);
+}
+
+/* Title & Type */
+.panel-header h2 {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text-main);
+    line-height: 1.1;
+}
+
+.place-type {
+    display: inline-block;
+    margin-top: 0.25rem;
+    padding: 0.125rem 0.5rem;
+    background: var(--surface-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Actions Ribbon */
 .place-actions {
+    margin-top: 1.25rem;
     display: flex;
     gap: 0.5rem;
-    margin-top: 1rem;
 }
 
 .panel-content {
     flex: 1;
-    padding: 1.5rem;
     overflow-y: auto;
+    background: var(--surface-bg);
+    padding: 0;
+    /* Reset padding, TabPanel handles it */
 }
 
+/* Data Sections */
 .place-section {
-    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--surface-card);
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 0;
 }
 
 .place-section h3 {
-    margin: 0 0 1rem 0;
-    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
     font-weight: 600;
-    color: #333;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 1rem 0;
 }
 
-.place-summary {
-    margin: 0;
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    color: #555;
-}
-
+/* Data Grids */
 .fact-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem 1rem;
 }
 
 .fact-item {
@@ -90,85 +115,49 @@
 }
 
 .fact-label {
+    font-family: var(--font-sans);
     font-size: 0.8125rem;
-    color: #666;
+    color: var(--text-secondary);
 }
 
 .fact-value {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #1a1a1a;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-main);
 }
 
-.industry-list {
-    margin: 0;
-    padding-left: 1.25rem;
-    list-style: disc;
-}
-
-.industry-list li {
-    margin-bottom: 0.5rem;
-    font-size: 0.9375rem;
-    color: #555;
-}
-
+/* Quality Indicators */
 .data-quality {
+    margin-top: 2rem;
+    padding: 0.75rem;
+    background: var(--surface-bg);
+    border: 1px dashed var(--border-strong);
+    border-radius: 6px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.75rem;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
 }
 
 .quality-label {
-    color: #666;
-}
-
-.quality-value {
-    font-weight: 600;
-    color: #1a1a1a;
+    color: var(--text-tertiary);
 }
 
 .quality-status {
-    padding: 0.25rem 0.5rem;
-    background: #e8f5e9;
-    color: #2e7d32;
-    border-radius: 3px;
-    font-size: 0.75rem;
-    font-weight: 500;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
     text-transform: uppercase;
 }
 
-.children-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+.quality-status.verified {
+    background: var(--data-good-bg);
+    color: var(--data-good);
 }
 
-.child-place-link {
-    padding: 0.75rem 1rem;
-    background: #f9f9f9;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    color: #333;
-    text-decoration: none;
-    transition: all 0.2s;
-}
-
-.child-place-link:hover {
-    background: #f0f0f0;
-    border-color: #ddd;
-    color: #1a1a1a;
-}
-
-.children-loading {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.no-children {
-    margin: 0;
-    color: #999;
-    font-size: 0.875rem;
-    font-style: italic;
+.quality-status.sample {
+    background: var(--data-warn-bg);
+    color: var(--data-warn);
 }

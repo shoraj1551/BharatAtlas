@@ -1,12 +1,29 @@
+/* Place Page - Intelligence Layout */
+
 .place-page {
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    background: var(--surface-bg);
 }
 
 .main-layout {
     flex: 1;
     display: flex;
     overflow: hidden;
+    position: relative;
+    height: 100%;
 }
+
+/* Ensure Map fills available space */
+.main-layout> :first-child {
+    flex: 1;
+    min-width: 0;
+    /* Prevent flex overflow */
+    position: relative;
+    z-index: 1;
+}
+
+/* PlacePanel is handled by its own CSS, but ensure z-index layering */
+/* .main-layout > :nth-child(2) is PlacePanel */

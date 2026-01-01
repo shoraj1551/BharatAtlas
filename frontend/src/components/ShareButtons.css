@@ -1,0 +1,168 @@
+.share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #374151;
+}
+
+.share-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.share-icon {
+    font-size: 16px;
+}
+
+.share-text {
+    font-size: 14px;
+}
+
+/* Primary share button */
+.share-primary {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+.share-primary:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+/* Copy button */
+.share-copy {
+    background: #10b981;
+    color: white;
+    border-color: #10b981;
+}
+
+.share-copy:hover {
+    background: #059669;
+    border-color: #059669;
+}
+
+/* Social media buttons */
+.share-twitter {
+    background: #000000;
+    color: white;
+    border-color: #000000;
+}
+
+.share-twitter:hover {
+    background: #1a1a1a;
+}
+
+.share-facebook {
+    background: #1877f2;
+    color: white;
+    border-color: #1877f2;
+}
+
+.share-facebook:hover {
+    background: #0c63d4;
+}
+
+.share-linkedin {
+    background: #0a66c2;
+    color: white;
+    border-color: #0a66c2;
+}
+
+.share-linkedin:hover {
+    background: #004182;
+}
+
+.share-whatsapp {
+    background: #25d366;
+    color: white;
+    border-color: #25d366;
+}
+
+.share-whatsapp:hover {
+    background: #1da851;
+}
+
+.share-embed {
+    background: #6b7280;
+    color: white;
+    border-color: #6b7280;
+}
+
+.share-embed:hover {
+    background: #4b5563;
+}
+
+/* Embed panel */
+.embed-panel {
+    width: 100%;
+    margin-top: 12px;
+    padding: 16px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+}
+
+.embed-panel h4 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    color: #374151;
+}
+
+.embed-code {
+    width: 100%;
+    padding: 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    background: white;
+    resize: vertical;
+    margin-bottom: 12px;
+}
+
+/* Compact variant */
+.share-buttons.compact .share-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+.share-buttons.compact .share-icon {
+    font-size: 14px;
+}
+
+.share-buttons.compact .share-text {
+    display: none;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .share-buttons {
+        width: 100%;
+    }
+
+    .share-btn {
+        flex: 1;
+        justify-content: center;
+        min-width: 44px;
+    }
+
+    .share-text {
+        display: none;
+    }
+}

@@ -11,8 +11,8 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// Data directory path
-const DATA_DIR = path.join(__dirname, '../data')
+// Data directory path - go up two levels from services to backend root, then into data
+const DATA_DIR = path.join(__dirname, '../../data')
 
 /**
  * Load GeoJSON file

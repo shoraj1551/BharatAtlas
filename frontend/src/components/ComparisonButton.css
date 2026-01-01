@@ -1,0 +1,38 @@
+.comparison-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #374151;
+}
+
+.comparison-btn:hover:not(:disabled) {
+    background: #f9fafb;
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
+.comparison-btn.selected {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+.comparison-btn.selected:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+.comparison-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.comparison-btn.compact {
+    padding: 6px 12px;
+    font-size: 13px;
+}

@@ -1,11 +1,18 @@
 import { BrowserRouter, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import './App.css'
+import './styles/mobile.css'
 import PlacePage from './pages/PlacePage'
 import ExplorePage from './pages/ExplorePage'
 import HealthPage from './pages/HealthPage'
+import ComparePage from './pages/ComparePage'
+import BookmarksPage from './pages/BookmarksPage'
 import SearchBar from './components/SearchBar'
 import LoadingSpinner from './components/LoadingSpinner'
+import ErrorBoundary from './components/ErrorBoundary'
+import ComparisonFloatingButton from './components/ComparisonFloatingButton'
+import NotificationCenter from './components/NotificationCenter'
+import AIChat from './components/AIChat'
 import { logScaleReadiness } from './utils/scaleReadiness'
 
 // Log scale readiness on app load (development only)
@@ -39,41 +46,54 @@ function Navigation() {
       >
         Map
       </Link>
+      <Link
+        to="/compare"
+        className={`nav-link ${isActive('/compare') ? 'active' : ''}`}
+      >
+        Compare
+      </Link>
     </nav>
   )
 }
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="app">
-        <header className="identity-header">
-          <div className="header-content">
-            <div className="identity">
-              <h1 className="platform-name">BharatAtlas</h1>
-              <p className="platform-purpose">Digital Intelligence for India</p>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <div className="app">
+          <header className="identity-header">
+            <div className="header-content">
+              <div className="identity">
+                <h1 className="platform-name">BharatAtlas</h1>
+                <p className="platform-purpose">Digital Intelligence for India</p>
+              </div>
+              <Navigation />
+              <SearchBar />
+              <NotificationCenter />
+              <div className="system-info">
+                <span className="status-indicator">●</span>
+                <span className="status-text">Operational</span>
+              </div>
             </div>
-            <Navigation />
-            <SearchBar />
-            <div className="system-info">
-              <span className="status-indicator">●</span>
-              <span className="status-text">Operational</span>
-            </div>
-          </div>
-        </header>
+          </header>
 
-        <Suspense fallback={<LoadingSpinner message="Loading..." />}>
-          <Routes>
-            <Route path="/health" element={<HealthPage />} />
-            <Route path="/admin" element={<AdminPage />} />
-            <Route path="/explore" element={<ExplorePage />} />
-            <Route path="/map" element={<MapPage />} />
-            <Route path="/place/:placeId" element={<PlacePage />} />
-            <Route path="/" element={<Navigate to="/explore" replace />} />
-          </Routes>
-        </Suspense>
-      </div>
-    </BrowserRouter>
+          <Suspense fallback={<LoadingSpinner message="Loading..." />}>
+            <Routes>
+              <Route path="/health" element={<HealthPage />} />
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/explore" element={<ExplorePage />} />
+              <Route path="/map" element={<MapPage />} />
+              <Route path="/compare" element={<ComparePage />} />
+              <Route path="/place/:placeId" element={<PlacePage />} />
+              <Route path="/" element={<Navigate to="/explore" replace />} />
+            </Routes>
+          </Suspense>
+
+          <ComparisonFloatingButton />
+          <AIChat />
+        </div>
+      </BrowserRouter>
+    </ErrorBoundary>
   )
 }
 

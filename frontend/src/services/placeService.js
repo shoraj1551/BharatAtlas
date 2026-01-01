@@ -1,7 +1,7 @@
-// Service for fetching and managing Place data
-// Uses central registry as single source of truth
+// Service for fetching and managing Place data from MongoDB API
+// Replaces hardcoded placeRegistry with real API calls
 
-import placeRegistry from '../data/placeRegistry'
+const API_BASE = '/api/places'
 
 class PlaceService {
     /**
@@ -10,11 +10,16 @@ class PlaceService {
      * @returns {Promise<Object>} Place object
      */
     async getPlaceById(placeId) {
-        const place = placeRegistry.getPlaceById(placeId)
-        if (place) {
-            return Promise.resolve(place)
+        try {
+            const response = await fetch(`${API_BASE}/${placeId}`)
+            if (!response.ok) {
+                throw new Error('Place not found')
+            }
+            return await response.json()
+        } catch (error) {
+            console.error('Error fetching place:', error)
+            throw error
         }
-        return Promise.reject(new Error('Place not found'))
     }
 
     /**
@@ -23,11 +28,19 @@ class PlaceService {
      * @returns {Promise<Object>} Place object
      */
     async getPlaceByName(name) {
-        const place = placeRegistry.getPlaceByName(name)
-        if (place) {
-            return Promise.resolve(place)
+        try {
+            const results = await this.searchPlaces(name)
+            const exactMatch = results.find(
+                p => p.canonical_name.toLowerCase() === name.toLowerCase()
+            )
+            if (exactMatch) {
+                return exactMatch
+            }
+            throw new Error('Place not found')
+        } catch (error) {
+            console.error('Error fetching place by name:', error)
+            throw error
         }
-        return Promise.reject(new Error('Place not found'))
     }
 
     /**
@@ -36,7 +49,16 @@ class PlaceService {
      * @returns {Promise<Array>} Array of matching places
      */
     async searchPlaces(query) {
-        return Promise.resolve(placeRegistry.searchPlaces(query))
+        try {
+            const response = await fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}`)
+            if (!response.ok) {
+                return []
+            }
+            return await response.json()
+        } catch (error) {
+            console.error('Error searching places:', error)
+            return []
+        }
     }
 
     /**
@@ -44,20 +66,16 @@ class PlaceService {
      * @returns {Promise<Array>} Array of state places
      */
     async getAllStates() {
-        return Promise.resolve(placeRegistry.getAllStates())
-    }
-
-    /**
-     * List places with pagination support
-     * @param {Object} options - Query options
-     * @param {string} options.parent_id - Filter by parent place ID
-     * @param {string} options.place_type - Filter by place type
-     * @param {number} options.limit - Maximum results (default: 100)
-     * @param {number} options.offset - Results to skip (default: 0)
-     * @returns {Promise<Object>} Paginated response
-     */
-    async listPlaces(options = {}) {
-        return Promise.resolve(placeRegistry.listPlaces(options))
+        try {
+            const response = await fetch(`${API_BASE}/states`)
+            if (!response.ok) {
+                throw new Error('Failed to fetch states')
+            }
+            return await response.json()
+        } catch (error) {
+            console.error('Error fetching states:', error)
+            throw error
+        }
     }
 
     /**
@@ -67,10 +85,39 @@ class PlaceService {
      * @returns {Promise<Object>} Paginated response with child places
      */
     async getChildren(placeId, options = {}) {
-        return this.listPlaces({
-            ...options,
-            parent_id: placeId
-        })
+        try {
+            const { limit = 100, offset = 0 } = options
+            const response = await fetch(
+                `${API_BASE}/${placeId}/children?limit=${limit}&offset=${offset}`
+            )
+            if (!response.ok) {
+                return { data: [], total: 0, limit, offset }
+            }
+            return await response.json()
+        } catch (error) {
+            console.error('Error fetching children:', error)
+            return { data: [], total: 0, limit: options.limit || 100, offset: options.offset || 0 }
+        }
+    }
+
+    /**
+     * List places with pagination support
+     * @param {Object} options - Query options
+     * @returns {Promise<Object>} Paginated response
+     */
+    async listPlaces(options = {}) {
+        // For now, just return states if no parent_id specified
+        if (!options.parent_id) {
+            const states = await this.getAllStates()
+            return {
+                data: states,
+                total: states.length,
+                limit: options.limit || 100,
+                offset: options.offset || 0
+            }
+        }
+
+        return await this.getChildren(options.parent_id, options)
     }
 }
 

@@ -1,0 +1,21 @@
+    /**
+     * Handle visualization mode change
+     */
+    async function handleVizModeChange(mode) {
+        console.log(`Switching to visualization mode: ${mode}`)
+        setVizMode(mode)
+        
+        if (!mapRef.current) return
+
+        const { removeVisualizationLayers, addPopulationDensityLayer, addLiteracyRateLayer } = await import('./visualizationUtils')
+        
+        // Remove existing viz layers
+        removeVisualizationLayers(mapRef.current)
+        
+        // Add new viz layer (data is already enriched from initial load)
+        if (mode === 'density') {
+            addPopulationDensityLayer(mapRef.current)
+        } else if (mode === 'literacy') {
+            addLiteracyRateLayer(mapRef.current)
+        }
+    }

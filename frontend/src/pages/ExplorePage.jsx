@@ -43,28 +43,22 @@ function ExplorePage() {
 
                 <div className="states-grid">
                     {states.map(state => (
-                        <div key={state.place_id} className="state-card-wrapper">
-                            <Link
-                                to={`/place/${state.place_id}`}
-                                className="state-card"
-                            >
-                                <h3 className="state-name">{state.canonical_name}</h3>
-                                <div className="state-meta">
-                                    <span className="state-population">
-                                        {(state.population.value / 1000000).toFixed(1)}M people
-                                    </span>
-                                    <span className="state-area">
-                                        {state.area_sq_km.toLocaleString()} km²
-                                    </span>
+                        <Link
+                            key={state.place_id}
+                            to={`/place/${state.place_id}`}
+                            className="state-card"
+                        >
+                            <h3 className="state-name">{state.canonical_name}</h3>
+                            <div className="state-meta">
+                                <span className="state-type">{state.place_type.toUpperCase()}</span>
+                            </div>
+                            {state.population && (
+                                <div className="state-stat">
+                                    <span className="stat-label">Population:</span>
+                                    <span className="stat-value">{state.population.value?.toLocaleString() || 'N/A'}</span>
                                 </div>
-                            </Link>
-                            <Link
-                                to={`/map?state=${encodeURIComponent(state.canonical_name)}`}
-                                className="view-on-map-btn"
-                            >
-                                📍 View on Map
-                            </Link>
-                        </div>
+                            )}
+                        </Link>
                     ))}
                 </div>
             </div>

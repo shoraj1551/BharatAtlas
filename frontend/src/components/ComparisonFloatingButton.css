@@ -1,0 +1,79 @@
+.comparison-floating-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #2563eb;
+    color: white;
+    padding: 16px 24px;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    text-decoration: none;
+    transition: all 0.3s;
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
+}
+
+.comparison-floating-btn:hover {
+    background: #1d4ed8;
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.5);
+    transform: translateY(-2px);
+}
+
+.floating-btn-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.floating-btn-icon {
+    font-size: 24px;
+}
+
+.floating-btn-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.floating-btn-label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.floating-btn-count {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .comparison-floating-btn {
+        bottom: 16px;
+        right: 16px;
+        padding: 12px 20px;
+    }
+
+    .floating-btn-icon {
+        font-size: 20px;
+    }
+
+    .floating-btn-label {
+        font-size: 13px;
+    }
+
+    .floating-btn-count {
+        font-size: 11px;
+    }
+}

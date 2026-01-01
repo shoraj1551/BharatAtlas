@@ -1,32 +1,34 @@
 /**
- * MapView Component - Core Map Logic
+ * Enhanced MapView Component with Place Zoom
  * 
- * Handles:
- * - Map initialization with India bounds
- * - State boundary rendering
- * - State selection and zoom
- * - Lazy-loaded district boundaries (per state)
- * - Integration with Zustand selection store
+ * Features:
+ * - URL parameter support (?place=place_id)
+ * - Auto-zoom to selected place
+ * - State and district boundary rendering
  */
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import * as turf from '@turf/turf'
 
 import { MAP_CONFIG } from './mapConfig'
-import { loadStatesGeoJSON, loadDistrictsGeoJSON, filterDistrictsByState } from '../data/geoLoader'
-import { addBoundaryLayer, addFillLayer, removeLayer } from './mapLayers'
-import { styles } from './mapStyles'
-import { useSelectionStore } from '../store/selectionStore'
+import { loadStatesGeoJSON } from '../data/geoLoader'
+import { addBoundaryLayer, addFillLayer } from './mapLayers'
+import { ADMIN_STYLES } from './mapStyles'
+import { zoomToFeature, zoomToCoordinates } from './mapUtils'
+import placeService from '../services/placeService'
+import MapLoadingOverlay from '../components/MapLoadingOverlay'
 import './MapView.css'
 
 export default function MapView() {
     const mapRef = useRef(null)
     const mapContainer = useRef(null)
-    const districtsDataRef = useRef(null) // Cache full districts data
-
-    const { selectFeature, clearSelection } = useSelectionStore()
+    const [isLoading, setIsLoading] = useState(true)
+    const [loadingMessage, setLoadingMessage] = useState('Initializing map...')
+    const [searchParams] = useSearchParams()
+    const placeIdParam = searchParams.get('place')
 
     useEffect(() => {
         if (mapRef.current) return // Initialize only once
@@ -45,112 +47,36 @@ export default function MapView() {
 
         mapRef.current = map
 
-        // Add navigation controls
-        map.addControl(new maplibregl.NavigationControl(), 'top-right')
-
-        // Map load handler
         map.on('load', async () => {
             try {
-                console.log('🗺️  Map loaded, loading state boundaries...')
+                setLoadingMessage('Loading state boundaries...')
 
-                // Load states
-                const statesData = await loadStatesGeoJSON()
+                // Load and add state boundaries
+                const statesGeoJSON = await loadStatesGeoJSON()
+
+                map.addSource('states', {
+                    type: 'geojson',
+                    data: statesGeoJSON
+                })
+
+                // Add state fill layer
+                addFillLayer(map, 'states-fill', 'states', ADMIN_STYLES.state.fill)
 
                 // Add state boundary layer
-                addBoundaryLayer(map, 'states-boundary', statesData, styles.state)
+                addBoundaryLayer(map, 'states-boundary', 'states', ADMIN_STYLES.state.line)
 
-                // Add invisible fill layer for click detection
-                addFillLayer(map, 'states-fill', 'states-boundary')
+                setIsLoading(false)
+                setLoadingMessage('')
 
-                // Pre-load districts data (cached for lazy loading)
-                console.log('📦 Pre-loading districts data...')
-                districtsDataRef.current = await loadDistrictsGeoJSON()
+                // If place parameter exists, zoom to it
+                if (placeIdParam) {
+                    await zoomToPlace(map, placeIdParam, statesGeoJSON)
+                }
 
-                // Setup state click handler
-                map.on('click', 'states-fill', async (e) => {
-                    if (!e.features || e.features.length === 0) return
-
-                    const stateFeature = e.features[0]
-                    const stateName = stateFeature.properties.ST_NM || stateFeature.properties.st_nm
-
-                    console.log(`🎯 State clicked: ${stateName}`)
-
-                    // Update selection store
-                    selectFeature('state', stateFeature.properties)
-
-                    // Zoom to state bounds
-                    try {
-                        const bbox = turf.bbox(stateFeature)
-                        map.fitBounds(bbox, {
-                            padding: 40,
-                            duration: 1000
-                        })
-                    } catch (err) {
-                        console.error('Error calculating bounds:', err)
-                    }
-
-                    // Lazy load districts for this state only
-                    if (districtsDataRef.current) {
-                        console.log(`📍 Loading districts for ${stateName}...`)
-
-                        const filteredDistricts = filterDistrictsByState(
-                            districtsDataRef.current,
-                            stateName
-                        )
-
-                        // Add district boundary layer
-                        addBoundaryLayer(map, 'districts-boundary', filteredDistricts, styles.district)
-
-                        // Add fill layer for district clicks
-                        addFillLayer(map, 'districts-fill', 'districts-boundary')
-
-                        // Setup district click handler
-                        map.off('click', 'districts-fill') // Remove old handler if exists
-                        map.on('click', 'districts-fill', (e) => {
-                            if (!e.features || e.features.length === 0) return
-
-                            const districtFeature = e.features[0]
-                            const districtName = districtFeature.properties.DIST_NM || districtFeature.properties.district
-
-                            console.log(`🎯 District clicked: ${districtName}`)
-
-                            // Update selection store
-                            selectFeature('district', districtFeature.properties)
-
-                            // Zoom to district bounds
-                            try {
-                                const bbox = turf.bbox(districtFeature)
-                                map.fitBounds(bbox, {
-                                    padding: 40,
-                                    duration: 1000
-                                })
-                            } catch (err) {
-                                console.error('Error calculating bounds:', err)
-                            }
-                        })
-
-                        // Cursor pointer on hover
-                        map.on('mouseenter', 'districts-fill', () => {
-                            map.getCanvas().style.cursor = 'pointer'
-                        })
-                        map.on('mouseleave', 'districts-fill', () => {
-                            map.getCanvas().style.cursor = ''
-                        })
-                    }
-                })
-
-                // Cursor pointer on state hover
-                map.on('mouseenter', 'states-fill', () => {
-                    map.getCanvas().style.cursor = 'pointer'
-                })
-                map.on('mouseleave', 'states-fill', () => {
-                    map.getCanvas().style.cursor = ''
-                })
-
-                console.log('✅ Map initialization complete')
-
-            } catch (err) {
-                console.error('❌ Error loading map data:', err)
+            } catch (error) {
+                console.error('Error loading map:', error)
+                setIsLoading(false)
+                setLoadingMessage('Error loading map data')
             }
         })
 
@@ -161,11 +87,112 @@ export default function MapView() {
                 mapRef.current = null
             }
         }
-    }, [selectFeature])
+    }, [])
+
+    // Handle place parameter changes
+    useEffect(() => {
+        if (mapRef.current && placeIdParam && !isLoading) {
+            loadStatesGeoJSON().then(statesGeoJSON => {
+                zoomToPlace(mapRef.current, placeIdParam, statesGeoJSON)
+            })
+        }
+    }, [placeIdParam, isLoading])
+
+    /**
+     * Zoom map to a specific place
+     */
+    async function zoomToPlace(map, placeId, statesGeoJSON) {
+        try {
+            setLoadingMessage(`Zooming to place...`)
+
+            // Get place data
+            const place = await placeService.getPlaceById(placeId)
+
+            if (!place) {
+                console.error('Place not found:', placeId)
+                return
+            }
+
+            // Find matching feature in GeoJSON
+            const feature = statesGeoJSON.features.find(f =>
+                f.properties.place_id === placeId ||
+                f.properties.name === place.canonical_name ||
+                f.properties.ST_NM === place.canonical_name
+            )
+
+            if (feature) {
+                // Zoom to feature boundary
+                zoomToFeature(map, feature, {
+                    padding: 50,
+                    duration: 1500,
+                    maxZoom: place.place_type === 'state' ? 7 : 10
+                })
+
+                // Highlight the feature
+                highlightFeature(map, feature)
+            } else if (place.latitude && place.longitude) {
+                // Fallback: zoom to coordinates
+                zoomToCoordinates(map, [place.longitude, place.latitude],
+                    place.place_type === 'state' ? 7 : 10
+                )
+            }
+
+            setLoadingMessage('')
+        } catch (error) {
+            console.error('Error zooming to place:', error)
+            setLoadingMessage('')
+        }
+    }
+
+    /**
+     * Highlight a feature on the map
+     */
+    function highlightFeature(map, feature) {
+        // Remove existing highlight
+        if (map.getLayer('highlight-fill')) {
+            map.removeLayer('highlight-fill')
+        }
+        if (map.getLayer('highlight-boundary')) {
+            map.removeLayer('highlight-boundary')
+        }
+        if (map.getSource('highlight')) {
+            map.removeSource('highlight')
+        }
+
+        // Add highlight source
+        map.addSource('highlight', {
+            type: 'geojson',
+            data: feature
+        })
+
+        // Add highlight fill
+        map.addLayer({
+            id: 'highlight-fill',
+            type: 'fill',
+            source: 'highlight',
+            paint: {
+                'fill-color': '#fbbf24',
+                'fill-opacity': 0.2
+            }
+        })
+
+        // Add highlight boundary
+        map.addLayer({
+            id: 'highlight-boundary',
+            type: 'line',
+            source: 'highlight',
+            paint: {
+                'line-color': '#fbbf24',
+                'line-width': 3,
+                'line-opacity': 1
+            }
+        })
+    }
 
     return (
-        <div className="map-container">
-            <div ref={mapContainer} className="map" style={{ height: '100vh', width: '100%' }} />
+        <div className="map-view">
+            {isLoading && <MapLoadingOverlay message={loadingMessage} />}
+            <div ref={mapContainer} className="map-container" />
         </div>
     )
 }

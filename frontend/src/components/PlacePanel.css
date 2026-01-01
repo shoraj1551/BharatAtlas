@@ -39,12 +39,18 @@
 }
 
 .place-type {
-    margin: 0;
+    margin: 0 0 0.75rem 0;
     font-size: 0.75rem;
     font-weight: 500;
     color: #666;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+
+.place-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
 }
 
 .panel-content {

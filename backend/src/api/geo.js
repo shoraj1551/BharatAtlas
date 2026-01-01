@@ -7,6 +7,13 @@
 import express from 'express'
 import NodeCache from 'node-cache'
 import * as geoService from '../services/geoService.js'
+import {
+    validateStateName,
+    validateDistrictName,
+    validateTehsilName,
+    validateThanaName,
+    validateLimit
+} from '../middleware/validation.js'
 
 const router = express.Router()
 
@@ -45,13 +52,9 @@ router.get('/states', async (req, res, next) => {
  * GET /api/geo/districts?state=Karnataka
  * Returns districts for specified state
  */
-router.get('/districts', async (req, res, next) => {
+router.get('/districts', validateStateName, async (req, res, next) => {
     try {
         const { state } = req.query
-
-        if (!state) {
-            return res.status(400).json({ error: 'State parameter is required' })
-        }
 
         const cacheKey = `districts:${state}`
 
@@ -79,13 +82,9 @@ router.get('/districts', async (req, res, next) => {
  * GET /api/geo/tehsils?district=Bangalore
  * Returns tehsils for specified district
  */
-router.get('/tehsils', async (req, res, next) => {
+router.get('/tehsils', validateDistrictName, async (req, res, next) => {
     try {
         const { district } = req.query
-
-        if (!district) {
-            return res.status(400).json({ error: 'District parameter is required' })
-        }
 
         const data = await geoService.getTehsilsForDistrict(district)
         res.json(data)
@@ -98,13 +97,9 @@ router.get('/tehsils', async (req, res, next) => {
  * GET /api/geo/thanas?tehsil=Anekal
  * Returns thanas for specified tehsil
  */
-router.get('/thanas', async (req, res, next) => {
+router.get('/thanas', validateTehsilName, async (req, res, next) => {
     try {
         const { tehsil } = req.query
-
-        if (!tehsil) {
-            return res.status(400).json({ error: 'Tehsil parameter is required' })
-        }
 
         const data = await geoService.getThanasForTehsil(tehsil)
         res.json(data)
@@ -117,15 +112,11 @@ router.get('/thanas', async (req, res, next) => {
  * GET /api/geo/villages?thana=Jigani&limit=100
  * Returns villages for specified thana (paginated)
  */
-router.get('/villages', async (req, res, next) => {
+router.get('/villages', validateThanaName, validateLimit, async (req, res, next) => {
     try {
-        const { thana, limit = 100 } = req.query
+        const { thana, limit } = req.query
 
-        if (!thana) {
-            return res.status(400).json({ error: 'Thana parameter is required' })
-        }
-
-        const data = await geoService.getVillagesForThana(thana, parseInt(limit))
+        const data = await geoService.getVillagesForThana(thana, limit)
         res.json(data)
     } catch (err) {
         next(err)

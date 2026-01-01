@@ -5,26 +5,34 @@
  * Later this becomes API-based with no frontend changes
  */
 
+import { fetchWithRetry } from '../utils/retryHelper.js'
+
 export async function loadGeoJSON(path) {
     console.log(`Loading GeoJSON from: ${path}`)
 
-    const res = await fetch(path)
+    try {
+        const res = await fetchWithRetry(path, {}, {
+            maxRetries: 3,
+            initialDelay: 1000
+        })
 
-    if (!res.ok) {
-        throw new Error(`Failed to load ${path}: ${res.status} ${res.statusText}`)
+        const data = await res.json()
+        console.log(`✓ Loaded ${data.features?.length || 0} features from ${path}`)
+
+        return data
+    } catch (error) {
+        console.error(`✗ Failed to load ${path} after retries:`, error)
+        throw new Error(`Failed to load ${path}: ${error.message}`)
     }
-
-    const data = await res.json()
-    console.log(`✓ Loaded ${data.features?.length || 0} features from ${path}`)
-
-    return data
 }
 
 /**
  * Load India states GeoJSON
+ * Aggregates districts into state-level boundaries
  */
 export async function loadStatesGeoJSON() {
-    return loadGeoJSON('/data/india_states.geojson')
+    const { createStateLevelGeoJSON } = await import('./stateAggregator')
+    return createStateLevelGeoJSON()
 }
 
 /**

@@ -1,0 +1,67 @@
+.export-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.export-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #374151;
+}
+
+.export-btn:hover {
+    background: #f9fafb;
+    border-color: #2563eb;
+    color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.export-btn:active {
+    transform: translateY(0);
+}
+
+.export-icon {
+    font-size: 16px;
+}
+
+.export-text {
+    font-size: 14px;
+}
+
+/* Variants */
+.export-buttons.compact .export-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+.export-buttons.compact .export-icon {
+    font-size: 14px;
+}
+
+.export-buttons.compact .export-text {
+    font-size: 13px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .export-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .export-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

@@ -1,0 +1,146 @@
+.comparison-map-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+}
+
+.comparison-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid #e5e7eb;
+    background: #f9fafb;
+}
+
+.comparison-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #111827;
+}
+
+.close-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.close-btn:hover {
+    background: #dc2626;
+}
+
+.comparison-grid {
+    display: grid;
+    flex: 1;
+    gap: 1rem;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+.grid-2 {
+    grid-template-columns: 1fr 1fr;
+}
+
+.grid-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.comparison-panel {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+}
+
+.panel-header {
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.panel-header h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.panel-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    opacity: 0.95;
+}
+
+.panel-stats span {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.comparison-map {
+    flex: 1;
+    min-height: 0;
+}
+
+.comparison-metrics {
+    padding: 1rem 1.5rem;
+    border-top: 2px solid #e5e7eb;
+    background: #f9fafb;
+}
+
+.comparison-metrics h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.1rem;
+    color: #111827;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.metric {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}
+
+.metric-label {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.metric-value {
+    color: #111827;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+
+    .grid-2,
+    .grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .comparison-grid {
+        overflow-y: auto;
+    }
+}

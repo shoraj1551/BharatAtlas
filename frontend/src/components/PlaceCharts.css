@@ -1,0 +1,80 @@
+.place-charts {
+    margin-top: 32px;
+}
+
+.place-charts h3 {
+    margin: 0 0 24px 0;
+    font-size: 20px;
+    color: #1f2937;
+}
+
+.chart-container {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.chart-container h4 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    color: #374151;
+    font-weight: 600;
+}
+
+/* Metrics Summary */
+.metrics-summary {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.metrics-summary h4 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    color: #374151;
+    font-weight: 600;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+.metric-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+}
+
+.metric-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2563eb;
+    margin-bottom: 4px;
+}
+
+.metric-label {
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .chart-container {
+        padding: 16px;
+    }
+
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .metric-value {
+        font-size: 20px;
+    }
+}

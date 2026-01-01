@@ -23,7 +23,7 @@ function SearchBar() {
         return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [])
 
-    // Debounced search
+    // Debounced search with request cancellation
     useEffect(() => {
         if (query.length < 2) {
             setResults([])
@@ -32,19 +32,33 @@ function SearchBar() {
         }
 
         setLoading(true)
+
+        // Create AbortController for this request
+        const abortController = new AbortController()
+
         const timeoutId = setTimeout(async () => {
             try {
                 const searchResults = await placeService.searchPlaces(query)
-                setResults(searchResults.slice(0, 5)) // Max 5 results
-                setIsOpen(true) // Always show dropdown when searching
-                setLoading(false)
+
+                // Only update if request wasn't aborted
+                if (!abortController.signal.aborted) {
+                    setResults(searchResults.slice(0, 5)) // Max 5 results
+                    setIsOpen(true) // Always show dropdown when searching
+                    setLoading(false)
+                }
             } catch (error) {
-                console.error('Search error:', error)
-                setLoading(false)
+                if (error.name !== 'AbortError') {
+                    console.error('Search error:', error)
+                    setLoading(false)
+                }
             }
         }, 300) // 300ms debounce
 
-        return () => clearTimeout(timeoutId)
+        // Cleanup: cancel request and clear timeout
+        return () => {
+            clearTimeout(timeoutId)
+            abortController.abort()
+        }
     }, [query])
 
     const handleSelect = (place) => {
@@ -63,7 +77,7 @@ function SearchBar() {
     }
 
     return (
-        <div className="search-bar" ref={searchRef}>
+        <div className="search-bar" ref={searchRef} role="search">
             <input
                 type="text"
                 className="search-input"
@@ -72,25 +86,49 @@ function SearchBar() {
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
                 onFocus={() => query.length >= 2 && setIsOpen(true)}
+                aria-label="Search for places in India"
+                aria-autocomplete="list"
+                aria-controls="search-results"
+                aria-expanded={isOpen}
             />
 
             {isOpen && (
-                <div className="search-dropdown">
+                <div className="search-dropdown" id="search-results" role="listbox">
                     {loading ? (
-                        <div className="search-loading">Searching...</div>
+                        <div className="search-loading" role="status" aria-live="polite">Searching...</div>
                     ) : results.length > 0 ? (
                         results.map((place) => (
                             <div
                                 key={place.place_id}
                                 className="search-result"
-                                onClick={() => handleSelect(place)}
+                                role="option"
+                                aria-selected="false"
                             >
-                                <div className="search-result-name">{place.canonical_name}</div>
-                                <div className="search-result-type">{place.place_type}</div>
+                                <div
+                                    className="search-result-main"
+                                    onClick={() => handleSelect(place)}
+                                    tabIndex={0}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleSelect(place)}
+                                >
+                                    <div className="search-result-name">{place.canonical_name}</div>
+                                    <div className="search-result-type">{place.place_type.toUpperCase()}</div>
+                                </div>
+                                <button
+                                    className="view-on-map-btn"
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        navigate(`/map?place=${place.place_id}`)
+                                        setQuery('')
+                                        setIsOpen(false)
+                                    }}
+                                    title="View on map"
+                                >
+                                    📍 Map
+                                </button>
                             </div>
                         ))
                     ) : (
-                        <div className="search-empty">
+                        <div className="search-empty" role="status">
                             No places found for "{query}"
                         </div>
                     )}

@@ -1,35 +1,43 @@
+/* Risks Section - Intelligence Risk Assessment */
+
 .risks-section {
     padding: 1.5rem 0;
 }
 
 .section-title {
+    font-family: var(--font-sans);
     font-size: 1.5rem;
     font-weight: 700;
-    color: #111827;
+    color: var(--text-main);
     margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
-/* Overall Risk Assessment */
+/* Overall Assessment */
 .risk-assessment {
-    border-radius: 12px;
+    border-radius: 6px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    border-left: 4px solid;
+    border: 1px solid var(--border-subtle);
+    border-left-width: 4px;
+    background: var(--surface-card);
 }
 
 .risk-assessment.low {
-    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-    border-left-color: #10b981;
+    border-left-color: var(--data-good);
+    background: linear-gradient(to right, var(--data-good-bg), var(--surface-card));
 }
 
 .risk-assessment.moderate {
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    border-left-color: #f59e0b;
+    border-left-color: var(--data-warn);
+    background: linear-gradient(to right, var(--data-warn-bg), var(--surface-card));
 }
 
 .risk-assessment.high {
-    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-    border-left-color: #ef4444;
+    border-left-color: var(--data-bad);
+    background: linear-gradient(to right, var(--data-bad-bg), var(--surface-card));
 }
 
 .assessment-header {
@@ -40,88 +48,93 @@
 }
 
 .assessment-icon {
-    font-size: 2.5rem;
+    font-size: 2rem;
 }
 
 .assessment-content h3 {
+    font-family: var(--font-sans);
     font-size: 1.25rem;
     font-weight: 700;
-    color: #111827;
+    color: var(--text-main);
     margin: 0 0 0.25rem 0;
 }
 
 .risk-level {
+    display: inline-block;
     padding: 0.25rem 0.75rem;
-    border-radius: 12px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
     font-size: 0.875rem;
     font-weight: 600;
     text-transform: uppercase;
 }
 
 .risk-level.low {
-    background: #10b981;
-    color: white;
+    background: var(--data-good);
+    color: var(--text-inverse);
 }
 
 .risk-level.moderate {
-    background: #f59e0b;
-    color: white;
+    background: var(--data-warn);
+    color: var(--text-main);
 }
 
+/* Dark text for contrast */
 .risk-level.high {
-    background: #ef4444;
-    color: white;
+    background: var(--data-bad);
+    color: var(--text-inverse);
 }
 
 .assessment-desc {
+    font-family: var(--font-sans);
     font-size: 1rem;
-    color: #374151;
-    margin: 0;
+    color: var(--text-secondary);
     line-height: 1.5;
 }
 
-/* Risk Categories */
+/* Risk Cards */
 .risk-category {
-    background: white;
-    border-radius: 12px;
+    background: var(--surface-card);
+    border-radius: 6px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--border-subtle);
 }
 
 .risk-category h3 {
-    font-size: 1.125rem;
+    font-family: var(--font-mono);
+    font-size: 1rem;
     font-weight: 600;
-    color: #374151;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     margin: 0 0 1rem 0;
 }
 
 .risk-items {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
 }
 
 .risk-card {
     padding: 1rem;
-    border-radius: 8px;
-    border-left: 4px solid;
+    background: var(--surface-bg);
+    border: 1px solid var(--border-subtle);
+    border-left-width: 4px;
+    border-radius: 4px;
 }
 
 .risk-card.low {
-    background: #f0fdf4;
-    border-left-color: #10b981;
+    border-left-color: var(--data-good);
 }
 
 .risk-card.moderate {
-    background: #fffbeb;
-    border-left-color: #f59e0b;
+    border-left-color: var(--data-warn);
 }
 
 .risk-card.high {
-    background: #fef2f2;
-    border-left-color: #ef4444;
+    border-left-color: var(--data-bad);
 }
 
 .risk-card-header {
@@ -132,114 +145,88 @@
 }
 
 .risk-card-header span:first-child {
+    font-family: var(--font-sans);
     font-size: 0.9375rem;
     font-weight: 600;
-    color: #111827;
+    color: var(--text-main);
 }
 
 .badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
 }
 
 .badge.low {
-    background: #10b981;
-    color: white;
+    color: var(--data-good);
+    background: var(--data-good-bg);
+    border: 1px solid var(--data-good);
 }
 
 .badge.moderate {
-    background: #f59e0b;
-    color: white;
+    color: var(--data-warn);
+    background: var(--data-warn-bg);
+    border: 1px solid var(--data-warn);
 }
 
 .badge.high {
-    background: #ef4444;
-    color: white;
+    color: var(--data-bad);
+    background: var(--data-bad-bg);
+    border: 1px solid var(--data-bad);
 }
 
 .risk-card p {
+    font-family: var(--font-sans);
     font-size: 0.875rem;
-    color: #6b7280;
+    color: var(--text-secondary);
     margin: 0;
     line-height: 1.4;
 }
 
-.no-risk {
-    font-size: 1rem;
-    color: #059669;
-    font-weight: 600;
-    margin: 0;
-}
-
-/* Mitigation Summary */
+/* Mitigation Strategy */
 .mitigation-summary {
-    background: linear-gradient(135deg, #ede9fe 0%, #f5f3ff 100%);
-    border-radius: 12px;
+    background: var(--surface-hover);
+    border: 1px dashed var(--color-primary);
+    border-radius: 6px;
     padding: 1.5rem;
 }
 
 .mitigation-summary h3 {
-    font-size: 1.125rem;
+    font-family: var(--font-mono);
+    font-size: 1rem;
     font-weight: 600;
-    color: #5b21b6;
+    color: var(--color-primary);
     margin: 0 0 1rem 0;
-}
-
-.strategy-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
+    text-transform: uppercase;
 }
 
 .strategy-item {
     display: flex;
     gap: 0.75rem;
-    background: white;
+    background: var(--surface-card);
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border-subtle);
 }
 
 .strategy-icon {
-    font-size: 1.5rem;
-    flex-shrink: 0;
-}
-
-.strategy-content {
-    flex: 1;
+    font-size: 1.25rem;
+    opacity: 0.8;
 }
 
 .strategy-content strong {
     display: block;
+    font-family: var(--font-sans);
     font-size: 0.9375rem;
-    color: #111827;
+    color: var(--text-main);
     margin-bottom: 0.25rem;
 }
 
 .strategy-content p {
     font-size: 0.8125rem;
-    color: #6b7280;
+    color: var(--text-secondary);
     margin: 0;
-    line-height: 1.4;
-}
-
-@media (max-width: 640px) {
-    .risks-section {
-        padding: 1rem 0;
-    }
-
-    .risk-assessment {
-        padding: 1rem;
-    }
-
-    .assessment-header {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .strategy-grid {
-        grid-template-columns: 1fr;
-    }
 }

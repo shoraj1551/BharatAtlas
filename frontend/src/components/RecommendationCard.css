@@ -1,0 +1,67 @@
+.recommendations-list {
+    margin: 1.5rem 0;
+}
+
+.recommendations-list h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
+    color: #111827;
+}
+
+.recommendation-card {
+    padding: 1.25rem;
+    background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.recommendation-card h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    color: #111827;
+}
+
+.recommendation-reason {
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.recommended-places {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.recommended-place {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.recommended-place:hover {
+    border-color: #667eea;
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.place-name {
+    color: #111827;
+    font-weight: 500;
+}
+
+.similarity-badge {
+    background: #667eea;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}

@@ -1,0 +1,89 @@
+.data-story {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.story-header h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.75rem;
+    color: #111827;
+}
+
+.story-progress {
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    transition: width 0.3s;
+}
+
+.story-content {
+    margin: 2rem 0;
+    min-height: 200px;
+}
+
+.story-content h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+    color: #111827;
+}
+
+.story-content p {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #4b5563;
+}
+
+.story-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.story-btn {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: white;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.story-btn:hover:not(:disabled) {
+    background: #f9fafb;
+    border-color: #9ca3af;
+}
+
+.story-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.story-btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+}
+
+.story-btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.story-counter {
+    color: #6b7280;
+    font-size: 0.9rem;
+    font-weight: 500;
+}

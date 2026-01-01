@@ -1,0 +1,96 @@
+.predictions-list {
+    margin: 1.5rem 0;
+}
+
+.predictions-list h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
+    color: #111827;
+}
+
+.predictions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.prediction-card {
+    background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.prediction-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.prediction-icon {
+    font-size: 1.75rem;
+}
+
+.prediction-header h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #111827;
+}
+
+.prediction-values {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.value-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.value-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.value-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.value-number.predicted {
+    color: #667eea;
+}
+
+.trend-arrow {
+    font-size: 1.5rem;
+}
+
+.prediction-meta {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.change-badge,
+.confidence-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.change-badge {
+    background: #10b981;
+    color: white;
+}
+
+.confidence-badge {
+    background: #f3f4f6;
+    color: #6b7280;
+}

@@ -120,6 +120,68 @@ const PlaceSchema = new mongoose.Schema({
     // Industries
     major_industries: [String],
 
+    // Governance & Administration (Civic Intelligence)
+    governance: {
+        // 1. Administration (The Offices)
+        administration: {
+            district_magistrate: {
+                name: String,
+                office_address: String,
+                contact: String
+            },
+            police_superintendent: {
+                name: String,
+                office_address: String,
+                contact: String
+            }
+        },
+
+        // 2. Elected Representatives (The People)
+        representatives: {
+            mp: {
+                name: String,
+                constituency: String,
+                party: String,
+                term_end: Date
+            },
+            mla: {
+                name: String,
+                constituency: String,
+                party: String,
+                term_end: Date
+            },
+            local_body_head: {
+                title: String,
+                name: String
+            }
+        },
+
+        // 3. Public Institutions (The Locations)
+        public_offices: [{
+            name: String,
+            type: {
+                type: String,
+                enum: ['judiciary', 'police', 'administrative', 'medical', 'other']
+            },
+            address: String,
+            location: {
+                lat: Number,
+                lng: Number
+            }
+        }],
+
+        // Legacy Compatibility
+        administrative_head: String,
+        lok_sabha_seats: Number,
+        vidhan_sabha_seats: Number,
+        local_bodies: [String],
+        government_schemes: [String],
+
+        // Metadata
+        last_updated: Date,
+        data_source: String
+    },
+
     // Hierarchy
     parent_id: {
         type: String,

@@ -5,6 +5,8 @@
  */
 
 import FactBadge from './FactBadge'
+import BusinessImpactSummary from './BusinessImpactSummary'
+import WaterResourcesCard from './WaterResourcesCard'
 import './GeographySection.css'
 
 export default function GeographySection({ place }) {
@@ -14,7 +16,13 @@ export default function GeographySection({ place }) {
 
     return (
         <div className="geography-section">
-            <h2 className="section-title">🗺️ Geography</h2>
+            <h2 className="section-title">🗺️ Geography & Physical Constraints</h2>
+
+            {/* Business Impact Summary */}
+            <BusinessImpactSummary place={place} />
+
+            {/* Water Resources */}
+            <WaterResourcesCard place={place} />
 
             {/* Coordinates */}
             <div className="geo-card">

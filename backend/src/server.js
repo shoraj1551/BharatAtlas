@@ -11,7 +11,8 @@ import dotenv from 'dotenv'
 import geoRouter from './api/geo.js'
 import imagesRouter from './api/images.js'
 import placesRouter from './api/places.js'
-import aiRoutes from './api/ai.js' // Added AI routes import
+import aiRoutes from './api/ai.js'
+import communityRouter from './api/community.js' // Added Community import
 import { connectMongo } from './services/mongoService.js'
 import { apiLimiter } from './middleware/rateLimiter.js'
 import { securityHeaders } from './middleware/securityHeaders.js'
@@ -51,6 +52,7 @@ app.use('/api/geo', geoRouter)
 app.use('/api/images', imagesRouter)
 app.use('/api/places', placesRouter)
 app.use('/api/ai', aiRoutes)
+app.use('/api/community', communityRouter)
 
 // 404 handler
 app.use((req, res) => {

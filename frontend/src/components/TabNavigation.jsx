@@ -18,6 +18,7 @@ const TABS = [
     { id: 'economy', label: 'Economy', icon: '💰' },
     { id: 'governance', label: 'Governance', icon: '🏛️' },
     { id: 'culture', label: 'Culture', icon: '🎭' },
+    { id: 'community', label: 'Community', icon: '🤝' },
     { id: 'risks', label: 'Risks', icon: '⚠️' }
 ]
 

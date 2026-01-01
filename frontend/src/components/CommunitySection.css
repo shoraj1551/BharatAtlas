@@ -1,0 +1,290 @@
+/* CommunitySection - Citizen Layer Design System */
+
+.community-section {
+    padding: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Palette: Citizen (Teal & Orange) */
+:root {
+    --comm-primary: #0d9488;
+    /* Teal 600 */
+    --comm-accent: #ea580c;
+    /* Orange 600 */
+    --comm-bg: #f0fdfa;
+    /* Teal 50 */
+}
+
+/* Header */
+.comm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 1rem;
+}
+
+.comm-subtitle {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--comm-primary);
+    margin-top: 0.25rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.comm-btn {
+    padding: 0.5rem 1rem;
+    background: white;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.comm-btn:hover {
+    border-color: var(--comm-primary);
+    color: var(--comm-primary);
+}
+
+.comm-btn.active {
+    background: var(--comm-primary);
+    color: white;
+    border-color: var(--comm-primary);
+}
+
+/* Feed Grid */
+.feed-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.empty-feed {
+    text-align: center;
+    padding: 3rem;
+    background: var(--surface-bg);
+    border: 1px dashed var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-tertiary);
+}
+
+.empty-feed button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--comm-bg);
+    border: none;
+    color: var(--comm-primary);
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+/* Feed Card */
+.feed-card {
+    background: white;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.feed-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-sm);
+}
+
+.feed-card.issue {
+    border-top: 3px solid var(--comm-accent);
+}
+
+.feed-card.blog {
+    border-top: 3px solid var(--comm-primary);
+}
+
+.feed-card.image {
+    border-top: 3px solid #6366f1;
+}
+
+.card-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    background: var(--surface-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.card-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: var(--text-main);
+    padding-right: 2rem;
+}
+
+.card-body {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    /* Truncate nicely */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 0.75rem;
+}
+
+.contributor-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-icon {
+    font-size: 1.2rem;
+    background: var(--surface-bg);
+    border-radius: 50%;
+    padding: 4px;
+}
+
+.username {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.level {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--comm-primary);
+    text-transform: uppercase;
+}
+
+.date {
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+}
+
+/* Submission Form */
+.contribute-panel {
+    background: white;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.comm-form h3 {
+    margin-top: 0;
+    color: var(--text-main);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--text-tertiary);
+    font-size: 0.8rem;
+}
+
+.type-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.type-selector button {
+    flex: 1;
+    padding: 0.5rem;
+    background: var(--surface-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.type-selector button.selected {
+    background: var(--comm-primary);
+    color: white;
+    border-color: var(--comm-primary);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--comm-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.success-message {
+    text-align: center;
+    padding: 2rem;
+    color: var(--comm-primary);
+}
+
+.success-message span {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.error-msg {
+    color: #ef4444;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}

@@ -1,225 +1,287 @@
-/* Culture Section - Heritage & Arts */
+/* CultureSection - Bureau Soft Design System */
 
 .culture-section {
     padding: 1.5rem 0;
-}
-
-.section-title {
-    font-family: var(--font-sans);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-main);
-    margin-bottom: 1.5rem;
-}
-
-.culture-card {
-    background: var(--surface-card);
-    border-radius: 6px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border-subtle);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.25rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-subtle);
-}
-
-.card-header h3 {
-    font-family: var(--font-mono);
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin: 0;
-}
-
-/* Heritage */
-.heritage-grid {
     display: flex;
     flex-direction: column;
+    gap: 2.5rem;
+}
+
+/* Palette: "Bureau Soft" - Warm Ambers & Roses mixed with Slate */
+:root {
+    --culture-accent: #D97706;
+    /* Amber 600 */
+    --culture-accent-light: #FEF3C7;
+    /* Amber 100 */
+    --culture-text: #92400E;
+    /* Amber 800 */
+    --rose-accent: #E11D48;
+}
+
+/* Header */
+.culture-header {
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 1rem;
+}
+
+.culture-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--culture-accent);
+    margin-top: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+/* Tips Grid */
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1rem;
 }
 
-.heritage-item {
+.tip-card {
+    background: linear-gradient(135deg, #FFFBEB 0%, #FFFFFF 100%);
+    border: 1px solid #FDE68A;
+    border-radius: var(--radius-md);
+    padding: 1rem;
     display: flex;
-    gap: 1.25rem;
-    padding: 1.25rem;
-    background: var(--surface-bg);
-    border: 1px solid var(--border-subtle);
-    border-radius: 4px;
-    transition: all 0.2s;
+    gap: 0.75rem;
+    align-items: flex-start;
 }
 
-.heritage-item:hover {
-    border-color: var(--color-primary);
-    transform: translateY(-1px);
-}
-
-.heritage-icon {
-    font-size: 2rem;
-    flex-shrink: 0;
-}
-
-.heritage-content h4 {
-    font-family: var(--font-sans);
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--text-main);
-    margin: 0 0 0.25rem 0;
-}
-
-.heritage-type {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--color-primary);
-    font-weight: 600;
-    text-transform: uppercase;
-    margin: 0 0 0.5rem 0;
-    padding: 0.125rem 0.375rem;
-    background: var(--color-primary-light);
-    border-radius: 3px;
-}
-
-.heritage-desc {
-    font-family: var(--font-sans);
-    font-size: 0.9375rem;
-    color: var(--text-secondary);
+.tip-card p {
     margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-main);
     line-height: 1.5;
 }
 
-/* Festivals (Grid) */
-.festival-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1rem;
-}
-
-.festival-item {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem;
-    background: var(--surface-bg);
+/* Linguistic Profile */
+.lang-dashboard {
+    background: var(--surface-card);
     border: 1px solid var(--border-subtle);
-    border-radius: 4px;
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
 }
 
-.festival-icon {
-    font-size: 1.5rem;
+.lang-stat {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
-.festival-content h4 {
-    font-family: var(--font-sans);
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-main);
-    margin: 0 0 0.25rem 0;
-}
-
-.festival-time {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
-    margin: 0 0 0.5rem 0;
-    display: block;
-}
-
-.festival-desc {
-    font-size: 0.8125rem;
+.lang-stat label {
+    width: 100px;
+    font-size: 0.8rem;
     color: var(--text-secondary);
-    line-height: 1.4;
+    font-weight: 500;
 }
 
-/* Languages */
-.language-tags,
-.arts-grid {
+.lang-values {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-.language-tag,
-.art-tag {
-    padding: 0.375rem 0.75rem;
-    background: var(--surface-bg);
-    border: 1px solid var(--border-strong);
-    color: var(--text-main);
+.lang-tag {
+    padding: 0.25rem 0.75rem;
     border-radius: 99px;
-    /* Pill shape */
-    font-family: var(--font-sans);
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     font-weight: 500;
 }
 
-/* Cuisine */
-.cuisine-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 0.75rem;
-}
-
-.cuisine-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
+.lang-tag.official {
     background: var(--surface-bg);
     border: 1px solid var(--border-subtle);
-    border-radius: 4px;
-}
-
-.cuisine-name {
-    font-family: var(--font-sans);
-    font-size: 0.875rem;
-    font-weight: 500;
     color: var(--text-main);
 }
 
-/* Placeholder */
-.placeholder-content {
-    text-align: center;
-    padding: 3rem 1rem;
+.lang-tag.spoke {
+    background: rgba(59, 130, 246, 0.05);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: var(--color-primary);
+}
+
+.lang-context {
+    border-top: 1px dashed var(--border-subtle);
+    padding-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Cuisine Panel */
+.cuisine-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .cuisine-panel {
+        grid-template-columns: 1fr;
+    }
+}
+
+.diet-monitor {
     background: var(--surface-bg);
-    border-radius: 4px;
-    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-.placeholder-icon {
-    font-size: 3rem;
-    display: block;
-    margin-bottom: 1rem;
-    opacity: 0.3;
+.monitor-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
 }
 
-.placeholder-content h3 {
-    font-family: var(--font-sans);
-    font-size: 1.125rem;
+.monitor-label {
+    color: var(--text-secondary);
+}
+
+.monitor-val {
     font-weight: 600;
     color: var(--text-main);
-    margin: 0 0 0.5rem 0;
 }
 
-.placeholder-content p {
-    font-family: var(--font-sans);
-    font-size: 0.9375rem;
-    color: var(--text-secondary);
-    margin: 0 0 1.5rem 0;
+.monitor-row.alert .monitor-val {
+    color: var(--culture-accent);
 }
 
-.feature-item {
-    padding: 0.375rem 0.75rem;
-    background: var(--surface-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: 4px;
+.dish-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.dish-tag {
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    color: var(--text-tertiary);
+    color: var(--text-secondary);
+    background: var(--surface-bg);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border-subtle);
+}
+
+/* Norms Grid */
+.norms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.norm-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    padding: 1.25rem;
+    border-radius: var(--radius-sm);
+}
+
+.norm-card h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.norm-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+.norm-card.highlight {
+    border-left: 3px solid var(--color-primary);
+}
+
+.norm-card.warning {
+    border-left: 3px solid var(--rose-accent);
+    background: #FFF1F2;
+    /* Rose 50 */
+}
+
+.norm-card.warning ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.9rem;
+    color: var(--rose-accent);
+}
+
+/* Business Calendar */
+.fest-timeline {
+    border-left: 2px solid var(--border-subtle);
+    margin-left: 0.5rem;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.fest-item {
+    position: relative;
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+}
+
+.fest-item::before {
+    content: '';
+    position: absolute;
+    left: -1.9rem;
+    top: 1.5rem;
+    width: 10px;
+    height: 10px;
+    background: var(--surface-bg);
+    border: 2px solid var(--text-tertiary);
+    border-radius: 50%;
+}
+
+.fest-month {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.fest-name {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.fest-impact {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.impact-label {
+    font-weight: 600;
+    color: var(--culture-accent);
+}
+
+/* Heritage Chips */
+.heritage-mini-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.heritage-chip {
+    padding: 0.25rem 0.75rem;
+    background: var(--surface-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 99px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
 }

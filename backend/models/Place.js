@@ -182,6 +182,49 @@ const PlaceSchema = new mongoose.Schema({
         data_source: String
     },
 
+    // Cultural & Social Context (Market Intelligence)
+    culture_society: {
+        // 1. Communication (The Market Voice)
+        languages: {
+            official: [String],
+            spoken: [String],
+            business_preferred: String
+        },
+
+        // 2. Consumption Habits (The Palate)
+        cuisine: {
+            staple_diet: String,
+            dietary_restrictions: String, // e.g., "Vegetarian prevalent"
+            famous_dishes: [String]
+        },
+
+        // 3. Social Rhythm (The Business Calendar)
+        festivals: [{
+            name: String,
+            significance: String,
+            business_impact: String, // e.g., "High retail volume"
+            month: String
+        }],
+
+        // 4. Social Norms (Etiquette)
+        social_norms: {
+            greetings: String,
+            business_etiquette: String,
+            taboos: [String]
+        },
+
+        // 5. Entrepreneurial Guide
+        market_adaptation_tips: [String],
+
+        // Legacy Compatibility
+        heritage_sites: [{
+            name: String,
+            type: String,
+            description: String
+        }],
+        traditional_arts: [String]
+    },
+
     // Hierarchy
     parent_id: {
         type: String,

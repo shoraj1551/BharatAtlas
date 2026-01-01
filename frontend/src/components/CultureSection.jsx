@@ -1,133 +1,165 @@
 /**
- * CultureSection Component
+ * CultureSection - Market Adaptation Intelligence
  * 
- * Displays cultural information including heritage, festivals, languages, and cuisine
+ * Decodes soft infrastructure: Language, Food, Social Norms.
+ * "Bureau Soft" Design Standard.
  */
 
-import FactBadge from './FactBadge'
+import React from 'react'
 import './CultureSection.css'
 
 export default function CultureSection({ place }) {
-    if (!place) return null
+    if (!place || !place.culture_society) return null
 
-    const culture = place.culture || {}
+    const {
+        languages,
+        cuisine,
+        festivals,
+        social_norms,
+        market_adaptation_tips,
+        heritage_sites
+    } = place.culture_society
 
     return (
         <div className="culture-section">
-            <h2 className="section-title">🎭 Culture & Heritage</h2>
+            <header className="culture-header">
+                <div>
+                    <h2 className="section-title">🎭 Cultural Intelligence</h2>
+                    <p className="culture-subtitle">Market Adaptation & Social Context</p>
+                </div>
+            </header>
 
-            {/* Cultural Heritage */}
-            {culture.heritage_sites && culture.heritage_sites.length > 0 && (
-                <div className="culture-card">
-                    <div className="card-header">
-                        <h3>🏛️ Heritage Sites</h3>
-                        <FactBadge type="verified" source="UNESCO, ASI" />
+            {/* 1. ENTREPRENEURIAL INSIGHTS (The "Cheat Sheet") */}
+            {market_adaptation_tips && market_adaptation_tips.length > 0 && (
+                <section className="culture-group">
+                    <h3 className="group-title">💡 Market Adaptation Strategy</h3>
+                    <div className="tips-grid">
+                        {market_adaptation_tips.map((tip, idx) => (
+                            <div key={idx} className="tip-card">
+                                <span className="tip-icon">✨</span>
+                                <p>{tip}</p>
+                            </div>
+                        ))}
                     </div>
-                    <div className="heritage-grid">
-                        {culture.heritage_sites.map((site, index) => (
-                            <div key={index} className="heritage-item">
-                                <span className="heritage-icon">🏛️</span>
-                                <div className="heritage-content">
-                                    <h4>{site.name}</h4>
-                                    {site.type && <p className="heritage-type">{site.type}</p>}
-                                    {site.description && <p className="heritage-desc">{site.description}</p>}
+                </section>
+            )}
+
+            {/* 2. LINGUISTIC PROFILE */}
+            {languages && (
+                <section className="culture-group">
+                    <div className="group-header">
+                        <h3 className="group-title">🗣️ Linguistic Landscape</h3>
+                    </div>
+                    <div className="lang-dashboard">
+                        <div className="lang-stat">
+                            <label>Official</label>
+                            <div className="lang-values">
+                                {languages.official?.map(l => <span key={l} className="lang-tag official">{l}</span>)}
+                            </div>
+                        </div>
+                        <div className="lang-stat">
+                            <label>Market / Street</label>
+                            <div className="lang-values">
+                                {languages.spoken?.map(l => <span key={l} className="lang-tag spoke">{l}</span>)}
+                            </div>
+                        </div>
+                        {languages.business_preferred && (
+                            <div className="lang-context">
+                                <strong>Business Preference:</strong> {languages.business_preferred}
+                            </div>
+                        )}
+                    </div>
+                </section>
+            )}
+
+            {/* 3. CONSUMPTION & CUISINE */}
+            {cuisine && (
+                <section className="culture-group">
+                    <h3 className="group-title">🍛 Consumption Habits</h3>
+                    <div className="cuisine-panel">
+                        <div className="diet-monitor">
+                            <div className="monitor-row">
+                                <span className="monitor-label">Staple Diet</span>
+                                <span className="monitor-val">{cuisine.staple_diet}</span>
+                            </div>
+                            {cuisine.dietary_restrictions && (
+                                <div className="monitor-row alert">
+                                    <span className="monitor-label">Dietary Note</span>
+                                    <span className="monitor-val">{cuisine.dietary_restrictions}</span>
                                 </div>
+                            )}
+                        </div>
+                        <div className="dishes-list">
+                            <h4>Local Favorites</h4>
+                            <div className="dish-tags">
+                                {cuisine.famous_dishes?.map(dish => (
+                                    <span key={dish} className="dish-tag">{dish}</span>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {/* Festivals */}
-            {culture.major_festivals && culture.major_festivals.length > 0 && (
-                <div className="culture-card">
-                    <div className="card-header">
-                        <h3>🎉 Major Festivals</h3>
-                        <FactBadge type="community" />
-                    </div>
-                    <div className="festival-grid">
-                        {culture.major_festivals.map((festival, index) => (
-                            <div key={index} className="festival-item">
-                                <span className="festival-icon">🎊</span>
-                                <div className="festival-content">
-                                    <h4>{festival.name || festival}</h4>
-                                    {festival.month && <p className="festival-time">📅 {festival.month}</p>}
-                                    {festival.significance && <p className="festival-desc">{festival.significance}</p>}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {/* Languages */}
-            {culture.languages && culture.languages.length > 0 && (
-                <div className="culture-card">
-                    <div className="card-header">
-                        <h3>🗣️ Languages Spoken</h3>
-                        <FactBadge type="verified" source="Census 2011" />
-                    </div>
-                    <div className="language-tags">
-                        {culture.languages.map((lang, index) => (
-                            <div key={index} className="language-tag">
-                                {typeof lang === 'string' ? lang : lang.name}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {/* Cuisine */}
-            {culture.famous_cuisine && culture.famous_cuisine.length > 0 && (
-                <div className="culture-card">
-                    <div className="card-header">
-                        <h3>🍛 Famous Cuisine</h3>
-                        <FactBadge type="community" />
-                    </div>
-                    <div className="cuisine-grid">
-                        {culture.famous_cuisine.map((dish, index) => (
-                            <div key={index} className="cuisine-item">
-                                <span className="cuisine-icon">🍽️</span>
-                                <span className="cuisine-name">{dish}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {/* Art & Crafts */}
-            {culture.traditional_arts && culture.traditional_arts.length > 0 && (
-                <div className="culture-card">
-                    <div className="card-header">
-                        <h3>🎨 Traditional Arts & Crafts</h3>
-                        <FactBadge type="community" />
-                    </div>
-                    <div className="arts-grid">
-                        {culture.traditional_arts.map((art, index) => (
-                            <div key={index} className="art-tag">
-                                {art}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {/* Placeholder if no data */}
-            {!culture.heritage_sites && !culture.major_festivals && !culture.languages && !culture.famous_cuisine && !culture.traditional_arts && (
-                <div className="culture-card">
-                    <div className="placeholder-content">
-                        <span className="placeholder-icon">🎭</span>
-                        <h3>Cultural Information Coming Soon</h3>
-                        <p>We're gathering comprehensive cultural data for this region.</p>
-                        <div className="placeholder-features">
-                            <div className="feature-item">🏛️ Heritage Sites</div>
-                            <div className="feature-item">🎉 Festivals</div>
-                            <div className="feature-item">🗣️ Languages</div>
-                            <div className="feature-item">🍛 Cuisine</div>
-                            <div className="feature-item">🎨 Arts & Crafts</div>
                         </div>
                     </div>
-                </div>
+                </section>
+            )}
+
+            {/* 4. SOCIAL NORMS & ETIQUETTE */}
+            {social_norms && (
+                <section className="culture-group">
+                    <h3 className="group-title">🤝 Social Norms & Etiquette</h3>
+                    <div className="norms-grid">
+                        {social_norms.greetings && (
+                            <div className="norm-card">
+                                <h4>Greetings</h4>
+                                <p>{social_norms.greetings}</p>
+                            </div>
+                        )}
+                        {social_norms.business_etiquette && (
+                            <div className="norm-card highlight">
+                                <h4>Business Etiquette</h4>
+                                <p>{social_norms.business_etiquette}</p>
+                            </div>
+                        )}
+                        {social_norms.taboos && social_norms.taboos.length > 0 && (
+                            <div className="norm-card warning">
+                                <h4>⚠️ Sensitivities to Avoid</h4>
+                                <ul>
+                                    {social_norms.taboos.map((t, i) => <li key={i}>{t}</li>)}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                </section>
+            )}
+
+            {/* 5. BUSINESS CALENDAR (Festivals) */}
+            {festivals && festivals.length > 0 && (
+                <section className="culture-group">
+                    <h3 className="group-title">📅 Business Calendar Impact</h3>
+                    <div className="fest-timeline">
+                        {festivals.map((fest, idx) => (
+                            <div key={idx} className="fest-item">
+                                <div className="fest-month">{fest.month || 'Season'}</div>
+                                <div className="fest-details">
+                                    <div className="fest-name">{fest.name}</div>
+                                    <div className="fest-impact">
+                                        <span className="impact-label">Business Impact:</span> {fest.business_impact}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )}
+
+            {/* Legacy Heritage Fallback */}
+            {heritage_sites && heritage_sites.length > 0 && (
+                <section className="culture-group">
+                    <h3 className="group-title">🏛️ Heritage Context</h3>
+                    <div className="heritage-mini-grid">
+                        {heritage_sites.map((site, i) => (
+                            <div key={i} className="heritage-chip">{site.name}</div>
+                        ))}
+                    </div>
+                </section>
             )}
         </div>
     )

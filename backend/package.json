@@ -27,6 +27,7 @@
     "express-rate-limit": "^7.4.1",
     "langchain": "^1.2.3",
     "mongodb": "^6.21.0",
+    "mongoose": "^8.21.0",
     "node-cache": "^5.1.2",
     "ollama": "^0.6.3",
     "pg": "^8.16.3"

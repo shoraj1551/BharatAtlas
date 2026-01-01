@@ -15,7 +15,8 @@ class PlaceService {
             if (!response.ok) {
                 throw new Error('Place not found')
             }
-            return await response.json()
+            const result = await response.json()
+            return result.data || result // Handle both wrapped and direct responses
         } catch (error) {
             console.error('Error fetching place:', error)
             throw error
@@ -54,7 +55,8 @@ class PlaceService {
             if (!response.ok) {
                 return []
             }
-            return await response.json()
+            const result = await response.json()
+            return result.data || result || []
         } catch (error) {
             console.error('Error searching places:', error)
             return []
@@ -71,7 +73,8 @@ class PlaceService {
             if (!response.ok) {
                 throw new Error('Failed to fetch states')
             }
-            return await response.json()
+            const result = await response.json()
+            return result.data || result || [] // Extract data array from wrapped response
         } catch (error) {
             console.error('Error fetching states:', error)
             throw error

@@ -4,7 +4,7 @@
  * Tracks Core Web Vitals and custom metrics
  */
 
-import { onCLS, onFID, onFCP, onLCP, onTTFB } from 'web-vitals'
+import { onCLS, onINP, onFCP, onLCP, onTTFB } from 'web-vitals'
 
 class PerformanceMonitor {
     constructor() {
@@ -15,7 +15,7 @@ class PerformanceMonitor {
     init() {
         // Track Core Web Vitals
         onCLS(this.handleMetric.bind(this))
-        onFID(this.handleMetric.bind(this))
+        onINP(this.handleMetric.bind(this)) // Updated from onFID
         onFCP(this.handleMetric.bind(this))
         onLCP(this.handleMetric.bind(this))
         onTTFB(this.handleMetric.bind(this))

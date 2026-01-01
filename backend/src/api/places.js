@@ -9,7 +9,6 @@ import {
     getAllStates,
     getPlaceById,
     getPlaceByName,
-    getPlaceChildren,
     searchPlaces
 } from '../services/mongoPlaceService.js'
 

@@ -11,6 +11,7 @@ import {
     getPlaceByName,
     searchPlaces
 } from '../services/mongoPlaceService.js'
+import { cachePlaceById, cachePlaceList, invalidatePlaceCache } from '../middleware/placeCache.js'
 
 const router = express.Router()
 
@@ -18,13 +19,13 @@ const router = express.Router()
  * GET /api/places/states
  * Get all states with full data
  */
-router.get('/states', async (req, res, next) => {
+router.get('/states', cachePlaceList, async (req, res, next) => {
     try {
-        const states = await getAllStates()
+        const { page = 1, limit = 50, fields } = req.query
+        const result = await getAllStates(parseInt(page), parseInt(limit), fields?.split(','))
         res.json({
             success: true,
-            count: states.length,
-            data: states
+            ...result
         })
     } catch (error) {
         next(error)
@@ -35,9 +36,10 @@ router.get('/states', async (req, res, next) => {
  * GET /api/places/:id
  * Get place by ID with all enhanced data
  */
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', cachePlaceById, async (req, res, next) => {
     try {
-        const place = await getPlaceById(req.params.id)
+        const { fields } = req.query
+        const place = await getPlaceById(req.params.id, fields?.split(','))
 
         if (!place) {
             return res.status(404).json({
@@ -198,6 +200,9 @@ router.patch('/:id', async (req, res, next) => {
                 error: 'Place not found'
             })
         }
+
+        // Invalidate cache for this place
+        invalidatePlaceCache(req.params.id)
 
         res.json({
             success: true,

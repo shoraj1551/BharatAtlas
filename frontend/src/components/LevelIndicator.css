@@ -1,0 +1,94 @@
+.level-indicator {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 250px;
+    z-index: 10;
+}
+
+.level-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.level-icon {
+    font-size: 2rem;
+}
+
+.level-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.level-type {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.level-name {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.level-path {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid #e5e7eb;
+    font-size: 0.875rem;
+}
+
+.path-item {
+    color: #374151;
+}
+
+.path-separator {
+    color: #9ca3af;
+}
+
+.back-button {
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.back-button:hover {
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .level-indicator {
+        top: 10px;
+        left: 10px;
+        min-width: 200px;
+        padding: 0.75rem;
+    }
+
+    .level-icon {
+        font-size: 1.5rem;
+    }
+
+    .level-name {
+        font-size: 1rem;
+    }
+}

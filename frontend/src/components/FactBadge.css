@@ -1,0 +1,87 @@
+.fact-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: help;
+    transition: all 0.2s;
+}
+
+.fact-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.fact-badge-icon {
+    font-size: 0.875rem;
+}
+
+.fact-badge-label {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.fact-badge-source {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-left: 0.25rem;
+    padding-left: 0.5rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.source-icon {
+    font-size: 0.75rem;
+}
+
+.source-text {
+    font-size: 0.7rem;
+    opacity: 0.9;
+}
+
+/* Verified - Green */
+.fact-badge-verified {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+/* AI-Generated - Purple */
+.fact-badge-ai {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    color: white;
+}
+
+/* Community - Blue */
+.fact-badge-community {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+}
+
+/* Unverified - Yellow */
+.fact-badge-unverified {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+}
+
+/* Unknown - Gray */
+.fact-badge-unknown {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    color: white;
+}
+
+/* Compact variant */
+.fact-badge.compact {
+    padding: 0.125rem 0.375rem;
+    font-size: 0.65rem;
+}
+
+.fact-badge.compact .fact-badge-label {
+    display: none;
+}
+
+.fact-badge.compact .fact-badge-source {
+    display: none;
+}

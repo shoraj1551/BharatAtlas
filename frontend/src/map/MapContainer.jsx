@@ -17,6 +17,7 @@ import { loadStatesGeoJSON } from '../data/geoLoader'
 import MapStyleSwitcher from './MapStyleSwitcher'
 import MapLegend from '../components/MapLegend'
 import MapVisualizationToggle from '../components/MapVisualizationToggle'
+import LevelIndicator from '../components/LevelIndicator'
 import { POPULATION_DENSITY_SCALE, LITERACY_RATE_SCALE, createChoroplethExpression } from './colorScales'
 import './MapView.css'
 
@@ -313,6 +314,9 @@ export default function MapContainer() {
             {vizMode === 'literacy' && (
                 <MapLegend scale={LITERACY_RATE_SCALE} title="Literacy Rate" />
             )}
+
+            {/* Level Indicator */}
+            <LevelIndicator />
 
             {/* Only render layer manager when map is ready */}
             {mapReady && mapRef.current && (

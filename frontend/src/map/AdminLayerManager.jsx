@@ -12,14 +12,32 @@ import { useMapLayers } from '../hooks/useMapLayers'
 import { useURLSync } from '../hooks/useURLSync'
 import { useStates, useDistricts, useTehsils } from '../hooks/useGeoData'
 import { ADMIN_STYLES, ZOOM_THRESHOLDS } from './mapStyles'
+import { useSelectionStore } from '../store/selectionStore'
+import HighlightManager from './highlightManager'
 
 export default function AdminLayerManager({ map }) {
     const { state, district, tehsil } = useParams()
     const { addLayer, removeLayer, clearAllLayers, addClickHandler } = useMapLayers(map)
     const { navigateToState, navigateToDistrict, navigateToTehsil } = useURLSync()
+    const { selectFeature } = useSelectionStore()
 
     // Track current zoom for village loading
     const currentZoomRef = useRef(map.getZoom())
+
+    // Highlight manager
+    const highlightManagerRef = useRef(null)
+
+    // Initialize highlight manager
+    useEffect(() => {
+        if (!map || highlightManagerRef.current) return
+        highlightManagerRef.current = new HighlightManager(map)
+        return () => {
+            if (highlightManagerRef.current) {
+                highlightManagerRef.current.destroy()
+                highlightManagerRef.current = null
+            }
+        }
+    }, [map])
 
     // Fetch data based on current level
     const { data: statesData } = useStates()
@@ -41,6 +59,15 @@ export default function AdminLayerManager({ map }) {
             const stateName = feature.properties.name || feature.properties.ST_NM
 
             console.log(`🎯 State clicked: ${stateName}`)
+
+            // Update selection store
+            selectFeature('state', feature.properties, stateName)
+
+            // Highlight boundary
+            if (highlightManagerRef.current) {
+                highlightManagerRef.current.highlightFeature(feature, 'state')
+            }
+
             navigateToState(stateName)
 
             // Zoom to state bounds
@@ -73,6 +100,15 @@ export default function AdminLayerManager({ map }) {
             const districtName = feature.properties.name || feature.properties.DIST_NM
 
             console.log(`🎯 District clicked: ${districtName}`)
+
+            // Update selection store
+            selectFeature('district', feature.properties, districtName)
+
+            // Highlight boundary
+            if (highlightManagerRef.current) {
+                highlightManagerRef.current.highlightFeature(feature, 'district')
+            }
+
             navigateToDistrict(state, districtName)
 
             // Zoom to district bounds
@@ -105,6 +141,15 @@ export default function AdminLayerManager({ map }) {
             const tehsilName = feature.properties.name || feature.properties.tehsil_name
 
             console.log(`🎯 Tehsil clicked: ${tehsilName}`)
+
+            // Update selection store
+            selectFeature('tehsil', feature.properties, tehsilName)
+
+            // Highlight boundary
+            if (highlightManagerRef.current) {
+                highlightManagerRef.current.highlightFeature(feature, 'tehsil')
+            }
+
             navigateToTehsil(state, district, tehsilName)
 
             // Zoom to tehsil bounds

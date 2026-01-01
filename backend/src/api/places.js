@@ -178,4 +178,34 @@ router.get('/search', async (req, res, next) => {
     }
 })
 
+/**
+ * PATCH /api/places/:id
+ * Update place data (for adding water resources, etc.)
+ */
+router.patch('/:id', async (req, res, next) => {
+    try {
+        const Place = (await import('../models/Place.js')).default
+
+        const place = await Place.findOneAndUpdate(
+            { place_id: req.params.id },
+            { $set: req.body },
+            { new: true, runValidators: true }
+        )
+
+        if (!place) {
+            return res.status(404).json({
+                success: false,
+                error: 'Place not found'
+            })
+        }
+
+        res.json({
+            success: true,
+            data: place
+        })
+    } catch (error) {
+        next(error)
+    }
+})
+
 export default router

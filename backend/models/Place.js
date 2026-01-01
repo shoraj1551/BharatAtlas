@@ -108,6 +108,15 @@ const PlaceSchema = new mongoose.Schema({
         last_updated: Date
     },
 
+    // Water Resources (NEW)
+    water_resources: {
+        annual_rainfall_mm: Number,
+        groundwater_level: String, // 'Abundant', 'Moderate', 'Scarce'
+        major_water_bodies: [String],
+        irrigation_coverage_percent: Number,
+        water_quality: String // 'Excellent', 'Good', 'Fair', 'Poor'
+    },
+
     // Industries
     major_industries: [String],
 

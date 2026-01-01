@@ -1,0 +1,71 @@
+[
+    {
+        "canonical_name": "Maharashtra",
+        "water_resources": {
+            "annual_rainfall_mm": 1200,
+            "groundwater_level": "Moderate",
+            "major_water_bodies": [
+                "Arabian Sea",
+                "Godavari River",
+                "Krishna River"
+            ],
+            "irrigation_coverage_percent": 45,
+            "water_quality": "Good"
+        }
+    },
+    {
+        "canonical_name": "Kerala",
+        "water_resources": {
+            "annual_rainfall_mm": 3000,
+            "groundwater_level": "Abundant",
+            "major_water_bodies": [
+                "Arabian Sea",
+                "Periyar River",
+                "Pamba River"
+            ],
+            "irrigation_coverage_percent": 65,
+            "water_quality": "Excellent"
+        }
+    },
+    {
+        "canonical_name": "Rajasthan",
+        "water_resources": {
+            "annual_rainfall_mm": 550,
+            "groundwater_level": "Scarce",
+            "major_water_bodies": [
+                "Indira Gandhi Canal",
+                "Chambal River"
+            ],
+            "irrigation_coverage_percent": 35,
+            "water_quality": "Fair"
+        }
+    },
+    {
+        "canonical_name": "Punjab",
+        "water_resources": {
+            "annual_rainfall_mm": 650,
+            "groundwater_level": "Moderate",
+            "major_water_bodies": [
+                "Sutlej River",
+                "Beas River",
+                "Ravi River"
+            ],
+            "irrigation_coverage_percent": 98,
+            "water_quality": "Good"
+        }
+    },
+    {
+        "canonical_name": "West Bengal",
+        "water_resources": {
+            "annual_rainfall_mm": 1750,
+            "groundwater_level": "Abundant",
+            "major_water_bodies": [
+                "Bay of Bengal",
+                "Ganges River",
+                "Hooghly River"
+            ],
+            "irrigation_coverage_percent": 55,
+            "water_quality": "Good"
+        }
+    }
+]

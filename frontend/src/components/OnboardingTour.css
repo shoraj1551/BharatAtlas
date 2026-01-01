@@ -1,0 +1,136 @@
+.tour-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 9999;
+    animation: fadeIn 0.3s;
+}
+
+.tour-card {
+    position: fixed;
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 450px;
+    z-index: 10000;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.4s;
+}
+
+.tour-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.tour-progress {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+}
+
+.progress-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d1d5db;
+    transition: all 0.3s;
+}
+
+.progress-dot.active {
+    background: #667eea;
+    transform: scale(1.5);
+}
+
+.progress-dot.completed {
+    background: #10b981;
+}
+
+.tour-card h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+    color: #111827;
+}
+
+.tour-card p {
+    margin: 0 0 1.5rem 0;
+    color: #6b7280;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+.tour-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+.tour-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tour-btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.tour-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.tour-btn-secondary {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.tour-btn-secondary:hover {
+    background: #e5e7eb;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@media (max-width: 768px) {
+    .tour-card {
+        max-width: 90%;
+        padding: 1.5rem;
+    }
+
+    .tour-actions {
+        flex-direction: column;
+    }
+
+    .tour-btn {
+        width: 100%;
+    }
+}

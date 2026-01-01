@@ -1,0 +1,156 @@
+.customizer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.customizer-panel {
+    background: white;
+    width: 400px;
+    height: 100%;
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+    animation: slideInRight 0.3s;
+    overflow-y: auto;
+}
+
+.customizer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 2px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
+}
+
+.customizer-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.customizer-content {
+    padding: 1.5rem;
+}
+
+.customizer-section {
+    margin-bottom: 2rem;
+}
+
+.customizer-section h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: #111827;
+}
+
+.section-desc {
+    margin: 0 0 1rem 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.metric-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: #f9fafb;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.metric-checkbox:hover {
+    background: #f3f4f6;
+}
+
+.metric-checkbox input {
+    cursor: pointer;
+}
+
+.metric-icon {
+    font-size: 1.25rem;
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    color: #374151;
+}
+
+.customizer-section select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: #f9fafb;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.radio-group input {
+    cursor: pointer;
+}
+
+.reset-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.reset-btn:hover {
+    background: #dc2626;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .customizer-panel {
+        width: 100%;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+}

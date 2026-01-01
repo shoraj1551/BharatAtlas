@@ -63,7 +63,7 @@ router.get('/:id', cachePlaceById, async (req, res, next) => {
  */
 router.get('/:id/economic', async (req, res, next) => {
     try {
-        const place = await getPlaceById(req.params.id)
+        const place = await getPlaceById(req.params.id, ['economic_data'])
 
         if (!place) {
             return res.status(404).json({
@@ -87,7 +87,7 @@ router.get('/:id/economic', async (req, res, next) => {
  */
 router.get('/:id/infrastructure', async (req, res, next) => {
     try {
-        const place = await getPlaceById(req.params.id)
+        const place = await getPlaceById(req.params.id, ['infrastructure'])
 
         if (!place) {
             return res.status(404).json({
@@ -111,7 +111,7 @@ router.get('/:id/infrastructure', async (req, res, next) => {
  */
 router.get('/:id/health-education', async (req, res, next) => {
     try {
-        const place = await getPlaceById(req.params.id)
+        const place = await getPlaceById(req.params.id, ['health_education'])
 
         if (!place) {
             return res.status(404).json({
@@ -135,7 +135,7 @@ router.get('/:id/health-education', async (req, res, next) => {
  */
 router.get('/:id/climate', async (req, res, next) => {
     try {
-        const place = await getPlaceById(req.params.id)
+        const place = await getPlaceById(req.params.id, ['climate_environment'])
 
         if (!place) {
             return res.status(404).json({
@@ -157,9 +157,9 @@ router.get('/:id/climate', async (req, res, next) => {
  * GET /api/places/search
  * Search places by name
  */
-router.get('/search', async (req, res, next) => {
+router.get('/search', cachePlaceList, async (req, res, next) => {
     try {
-        const { q } = req.query
+        const { q, page = 1, limit = 10 } = req.query
 
         if (!q) {
             return res.status(400).json({
@@ -168,12 +168,11 @@ router.get('/search', async (req, res, next) => {
             })
         }
 
-        const results = await searchPlaces(q)
+        const result = await searchPlaces(q, parseInt(page), parseInt(limit))
 
         res.json({
             success: true,
-            count: results.length,
-            data: results
+            ...result
         })
     } catch (error) {
         next(error)

@@ -12,8 +12,12 @@ import {
     searchPlaces
 } from '../services/mongoPlaceService.js'
 import { cachePlaceById, cachePlaceList, invalidatePlaceCache } from '../middleware/placeCache.js'
+import opportunitiesRouter from './opportunities.js'
 
 const router = express.Router()
+
+// Mount sub-routers
+router.use('/:placeId/opportunities', opportunitiesRouter)
 
 /**
  * GET /api/places/states

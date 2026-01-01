@@ -158,6 +158,74 @@ ${p.canonical_name} (${p.place_type}):
             }
         }
     }
+
+    /**
+     * Analyze local text signals to identify business opportunities
+     * 
+     * @param {string} placeName - Name of the location
+     * @param {Array<string>} inputs - Raw text inputs (blogs, reports, complaints)
+     * @returns {Array} - List of structured Opportunity objects
+     */
+    async analyzeLocalSignals(placeName, inputs) {
+        try {
+            if (!inputs || inputs.length === 0) return []
+
+            const combinedInput = inputs.map((txt, i) => `[Source ${i + 1}]: ${txt}`).join('\n\n')
+
+            const analysisPrompt = `
+You are an Expert Entrepreneurial Analyst for BharatAtlas.
+Your task is to analyze the following unstructured local reports from ${placeName} and cluster them into 1-3 clear business opportunities.
+
+INPUT SIGNALS:
+${combinedInput}
+
+INSTRUCTIONS:
+1. CLUSTER related problems (e.g., "power cut" + "generator cost" = "Energy Reliability Gap").
+2. INVERT problems into OPPORTUNITIES (e.g., "Energy Reliability Gap" -> "Solar Micro-Grid Service").
+3. AVOID exaggeration. Only output based on evidence provided.
+4. ASSIGN a confidence score (0-100) based on signal repetition.
+
+OUTPUT FORMAT:
+Return ONLY a JSON array with this structure (no markdown):
+[
+  {
+    "sector": "Sector Name",
+    "signal": {
+      "title": "Opportunity Title",
+      "description": "2 sentence explanation of the gap/trend.",
+      "type": "Gap" | "Pain Point" | "Trend",
+      "confidence_score": 85
+    },
+    "evidence": [
+      { "snippet": "Quote from source inputs supporting this", "source": "Analyzed Report" }
+    ],
+    "recommended_business_models": ["Model 1", "Model 2"]
+  }
+]
+`
+            // Generate analysis
+            const response = await this.ollama.generate({
+                model: 'llama3.2:3b',
+                prompt: analysisPrompt,
+                stream: false,
+                format: 'json' // Force JSON mode
+            })
+
+            // Parse JSON response
+            try {
+                const opportunities = JSON.parse(response.response)
+                return opportunities
+            } catch (jsonErr) {
+                console.error("Failed to parse AI JSON:", jsonErr)
+                // Fallback: return raw text wrapped in a generic object if JSON fails
+                return []
+            }
+
+        } catch (error) {
+            console.error('Signal Analysis Error:', error)
+            throw new Error('Failed to analyze local signals')
+        }
+    }
 }
 
 export default new AIService()

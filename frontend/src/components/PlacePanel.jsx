@@ -17,6 +17,7 @@ import GeographySection from './GeographySection'
 import DemographicsSection from './DemographicsSection'
 import EconomySection from './EconomySection'
 import GovernanceSection from './GovernanceSection'
+import OpportunitySection from './OpportunitySection'
 import CultureSection from './CultureSection'
 import RisksSection from './RisksSection'
 import FactBadge from './FactBadge'
@@ -281,6 +282,11 @@ function PlacePanel({ placeId, place: initialPlace }) {
                 {/* Governance Tab */}
                 <TabPanel id="governance">
                     <GovernanceSection place={place} />
+                </TabPanel>
+
+                {/* Opportunity Tab */}
+                <TabPanel id="opportunity">
+                    <OpportunitySection place={place} />
                 </TabPanel>
 
                 {/* Culture Tab */}

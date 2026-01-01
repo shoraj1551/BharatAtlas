@@ -17,6 +17,8 @@ import GeographySection from './GeographySection'
 import DemographicsSection from './DemographicsSection'
 import EconomySection from './EconomySection'
 import GovernanceSection from './GovernanceSection'
+import CultureSection from './CultureSection'
+import RisksSection from './RisksSection'
 import FactBadge from './FactBadge'
 import placeService from '../services/placeService'
 import narrativeService from '../services/narrativeService'
@@ -281,20 +283,14 @@ function PlacePanel({ placeId, place: initialPlace }) {
                     <GovernanceSection place={place} />
                 </TabPanel>
 
-                {/* Culture Tab - Placeholder */}
+                {/* Culture Tab */}
                 <TabPanel id="culture">
-                    <div className="placeholder-section">
-                        <h2>🎭 Culture</h2>
-                        <p>Cultural information coming soon...</p>
-                    </div>
+                    <CultureSection place={place} />
                 </TabPanel>
 
-                {/* Risks Tab - Placeholder */}
+                {/* Risks Tab */}
                 <TabPanel id="risks">
-                    <div className="placeholder-section">
-                        <h2>⚠️ Risks & Challenges</h2>
-                        <p>Risk assessment coming soon...</p>
-                    </div>
+                    <RisksSection place={place} />
                 </TabPanel>
             </div>
         </div>

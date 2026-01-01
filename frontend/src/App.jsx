@@ -7,6 +7,7 @@ import ExplorePage from './pages/ExplorePage'
 import HealthPage from './pages/HealthPage'
 import ComparePage from './pages/ComparePage'
 import BookmarksPage from './pages/BookmarksPage'
+import GovernancePage from './pages/GovernancePage'
 import SearchBar from './components/SearchBar'
 import LoadingSpinner from './components/LoadingSpinner'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -82,9 +83,23 @@ function App() {
               <Route path="/health" element={<HealthPage />} />
               <Route path="/admin" element={<AdminPage />} />
               <Route path="/explore" element={<ExplorePage />} />
+
+              {/* Map Routes - Hierarchical */}
               <Route path="/map" element={<MapPage />} />
+              <Route path="/map/state/:state" element={<MapPage />} />
+              <Route path="/map/state/:state/district/:district" element={<MapPage />} />
+              <Route path="/map/state/:state/district/:district/tehsil/:tehsil" element={<MapPage />} />
+
               <Route path="/compare" element={<ComparePage />} />
               <Route path="/place/:placeId" element={<PlacePage />} />
+              <Route path="/bookmarks" element={<BookmarksPage />} />
+              <Route path="/governance" element={<GovernancePage />} />
+
+              {/* Placeholders for Governance links to prevent 404s */}
+              <Route path="/curators" element={<div style={{ padding: '4rem', textAlign: 'center' }}><h2>Curator Profiles</h2><p>Coming Soon</p></div>} />
+              <Route path="/governance/logs" element={<div style={{ padding: '4rem', textAlign: 'center' }}><h2>Governance Logs</h2><p>Coming Soon</p></div>} />
+              <Route path="/governance/charter" element={<div style={{ padding: '4rem', textAlign: 'center' }}><h2>Full Charter</h2><p>Coming Soon</p></div>} />
+
               <Route path="/" element={<Navigate to="/explore" replace />} />
             </Routes>
           </Suspense>

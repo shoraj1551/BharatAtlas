@@ -5,6 +5,7 @@ import MapView from '../map/MapView'
 import PlacePanel from '../components/PlacePanel'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
+import AIConsultant from '../components/AIConsultant'
 import placeService from '../services/placeService'
 import recentPlacesService from '../services/recentPlacesService'
 
@@ -57,6 +58,7 @@ function PlacePage() {
             <div className="main-layout">
                 <MapView />
                 <PlacePanel placeId={placeId} place={place} />
+                <AIConsultant place={place} />
             </div>
         </div>
     )

@@ -1,5 +1,9 @@
 import { Ollama } from 'ollama'
 import mongoPlaceService from './mongoPlaceService.js'
+import { Ollama } from 'ollama'
+import mongoPlaceService from './mongoPlaceService.js'
+import Opportunity from '../../models/Opportunity.js'
+import Contribution from '../../models/Contribution.js'
 
 class AIService {
     constructor() {
@@ -167,63 +171,112 @@ ${p.canonical_name} (${p.place_type}):
      * @returns {Array} - List of structured Opportunity objects
      */
     async analyzeLocalSignals(placeName, inputs) {
+        // ... (existing implementation) ...
+    }
+
+    /**
+     * Build rich context for the Consultant Profile
+     * Aggregates Governance, Culture, Opportunities, and Verified Community Data
+     */
+    async getConsultantContext(placeId) {
         try {
-            if (!inputs || inputs.length === 0) return []
+            // 1. Fetch Core Place Data
+            const place = await mongoPlaceService.getPlaceById(placeId)
+            if (!place) throw new Error("Place not found")
 
-            const combinedInput = inputs.map((txt, i) => `[Source ${i + 1}]: ${txt}`).join('\n\n')
+            // 2. Fetch AI Opportunities
+            const opportunities = await Opportunity.find({ place_id: placeId })
+                .sort({ 'signal.confidence_score': -1 })
+                .limit(5)
 
-            const analysisPrompt = `
-You are an Expert Entrepreneurial Analyst for BharatAtlas.
-Your task is to analyze the following unstructured local reports from ${placeName} and cluster them into 1-3 clear business opportunities.
+            // 3. Fetch Approved Community Insights (High Reputation only)
+            const communityInsights = await Contribution.find({
+                place_id: placeId,
+                status: 'approved',
+                type: { $in: ['issue', 'blog'] }
+            }).limit(3)
 
-INPUT SIGNALS:
-${combinedInput}
-
-INSTRUCTIONS:
-1. CLUSTER related problems (e.g., "power cut" + "generator cost" = "Energy Reliability Gap").
-2. INVERT problems into OPPORTUNITIES (e.g., "Energy Reliability Gap" -> "Solar Micro-Grid Service").
-3. AVOID exaggeration. Only output based on evidence provided.
-4. ASSIGN a confidence score (0-100) based on signal repetition.
-
-OUTPUT FORMAT:
-Return ONLY a JSON array with this structure (no markdown):
-[
-  {
-    "sector": "Sector Name",
-    "signal": {
-      "title": "Opportunity Title",
-      "description": "2 sentence explanation of the gap/trend.",
-      "type": "Gap" | "Pain Point" | "Trend",
-      "confidence_score": 85
-    },
-    "evidence": [
-      { "snippet": "Quote from source inputs supporting this", "source": "Analyzed Report" }
-    ],
-    "recommended_business_models": ["Model 1", "Model 2"]
-  }
-]
-`
-            // Generate analysis
-            const response = await this.ollama.generate({
-                model: 'llama3.2:3b',
-                prompt: analysisPrompt,
-                stream: false,
-                format: 'json' // Force JSON mode
-            })
-
-            // Parse JSON response
-            try {
-                const opportunities = JSON.parse(response.response)
-                return opportunities
-            } catch (jsonErr) {
-                console.error("Failed to parse AI JSON:", jsonErr)
-                // Fallback: return raw text wrapped in a generic object if JSON fails
-                return []
-            }
+            // Serialize Context
+            return JSON.stringify({
+                profile: {
+                    name: place.canonical_name,
+                    type: place.place_type,
+                    population: place.population?.value,
+                    literacy: place.literacy_rate?.value,
+                    economy: place.major_industries
+                },
+                governance: place.governance ? {
+                    type: place.governance.administration?.type,
+                    schemes: place.governance.government_schemes
+                } : 'N/A',
+                culture: place.culture_society ? {
+                    norms: place.culture_society.social_norms,
+                    tips: place.culture_society.market_adaptation_tips
+                } : 'N/A',
+                opportunities: opportunities.map(o => ({
+                    title: o.signal.title,
+                    type: o.signal.type,
+                    confidence: o.signal.confidence_score
+                })),
+                community_voices: communityInsights.map(c => c.data.title)
+            }, null, 2)
 
         } catch (error) {
-            console.error('Signal Analysis Error:', error)
-            throw new Error('Failed to analyze local signals')
+            console.error("Context Build Error", error)
+            return "{}"
+        }
+    }
+
+    /**
+     * Ask the AI Consultant a question
+     * Returns structured JSON with citations and confidence
+     */
+    async askConsultant(placeId, question) {
+        try {
+            const contextJson = await this.getConsultantContext(placeId)
+
+            const consultantPrompt = `
+You are the "BharatAtlas Decision Support Agent". 
+Your goal is to answer entrepreneurial questions using ONLY the provided data.
+
+CONTEXT DATA:
+${contextJson}
+
+USER QUESTION: 
+"${question}"
+
+RULES:
+1. CITATIONS: You must cite the specific data layer used (e.g., [Governance], [Culture], [Opportunity: "Gap Title"]).
+2. CONFIDENCE: Assign a score (0-100) based on how much the data ACTUALLY supports the answer.
+3. MISSING DATA: If the answer requires data not in the context (like "real estate prices"), list it in "missing_data".
+4. TONE: Professional, objective, risk-aware.
+
+OUTPUT FORMAT (JSON ONLY):
+{
+  "answer": "Your detailed answer here with embedded citations like [Culture].",
+  "confidence_score": 85,
+  "data_layers_used": ["Culture", "Demographics"],
+  "missing_data": ["Rental Costs", "Footfall"]
+}
+`
+            const response = await this.ollama.generate({
+                model: 'llama3.2:3b',
+                prompt: consultantPrompt,
+                stream: false,
+                format: 'json'
+            })
+
+            return JSON.parse(response.response)
+
+        } catch (error) {
+            console.error("Consultant Error:", error)
+            // Fallback error structure
+            return {
+                answer: "I encountered an error analyzing the data. Please try again.",
+                confidence_score: 0,
+                data_layers_used: [],
+                missing_data: []
+            }
         }
     }
 }

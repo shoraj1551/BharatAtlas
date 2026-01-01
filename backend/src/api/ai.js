@@ -1,3 +1,9 @@
+/**
+ * AI API Routes
+ * 
+ * Routes for AI-driven features (Consultant, Chat, etc.)
+ */
+
 import express from 'express'
 import aiService from '../services/aiService.js'
 
@@ -5,71 +11,55 @@ const router = express.Router()
 
 /**
  * POST /api/ai/ask
- * Ask a question to the AI assistant
+ * Standard RAG Chat (Legacy)
  */
 router.post('/ask', async (req, res, next) => {
     try {
         const { question } = req.body
-
-        if (!question || typeof question !== 'string') {
-            return res.status(400).json({
-                error: 'Question is required and must be a string'
-            })
-        }
-
-        if (question.length > 500) {
-            return res.status(400).json({
-                error: 'Question is too long (max 500 characters)'
-            })
-        }
-
-        // Get AI response
-        const response = await aiService.ask(question)
-
-        // Get suggested actions
-        const actions = await aiService.suggestActions(question)
-
-        res.json({
-            ...response,
-            actions,
-            timestamp: new Date().toISOString()
-        })
+        const answer = await aiService.ask(question)
+        res.json({ success: true, data: answer })
     } catch (error) {
-        // Send user-friendly error
-        res.status(503).json({
-            error: error.message,
-            timestamp: new Date().toISOString()
-        })
+        next(error)
     }
 })
 
 /**
- * GET /api/ai/health
- * Check if AI service is available
+ * POST /api/ai/consult
+ * New Decision Support Agent
+ * Accepts: { placeId, question }
+ * Returns : { answer, confidence, citation_layers }
  */
-router.get('/health', async (req, res) => {
+router.post('/consult', async (req, res, next) => {
     try {
-        const health = await aiService.checkHealth()
+        const { placeId, question } = req.body
 
-        if (health.available) {
-            res.json({
-                status: 'ok',
-                model: health.model,
-                available: true
-            })
-        } else {
-            res.status(503).json({
-                status: 'unavailable',
-                available: false,
-                error: health.error
-            })
+        if (!placeId || !question) {
+            return res.status(400).json({ success: false, error: "placeId and question are required." })
         }
-    } catch (error) {
-        res.status(503).json({
-            status: 'error',
-            available: false,
-            error: error.message
+
+        const result = await aiService.askConsultant(placeId, question)
+
+        res.json({
+            success: true,
+            data: result
         })
+
+    } catch (error) {
+        next(error)
+    }
+})
+
+/**
+ * POST /api/ai/suggest-actions
+ * Suggest follow-up actions
+ */
+router.post('/suggest-actions', async (req, res, next) => {
+    try {
+        const { question } = req.body
+        const actions = await aiService.suggestActions(question)
+        res.json({ success: true, data: actions })
+    } catch (error) {
+        next(error)
     }
 })
 

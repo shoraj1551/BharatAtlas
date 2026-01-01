@@ -11,5 +11,16 @@ export default defineConfig({
         changeOrigin: true
       }
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-map': ['maplibre-gl']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 600
   }
 })

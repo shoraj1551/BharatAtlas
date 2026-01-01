@@ -6,22 +6,19 @@
  */
 
 import { fetchWithRetry } from '../utils/retryHelper.js'
+import { fetchWithCache } from '../utils/cacheManager.js'
 
 export async function loadGeoJSON(path) {
     console.log(`Loading GeoJSON from: ${path}`)
 
     try {
-        const res = await fetchWithRetry(path, {}, {
-            maxRetries: 3,
-            initialDelay: 1000
-        })
-
-        const data = await res.json()
+        // Use cache for GeoJSON files
+        const data = await fetchWithCache(path)
         console.log(`✓ Loaded ${data.features?.length || 0} features from ${path}`)
 
         return data
     } catch (error) {
-        console.error(`✗ Failed to load ${path} after retries:`, error)
+        console.error(`✗ Failed to load ${path}:`, error)
         throw new Error(`Failed to load ${path}: ${error.message}`)
     }
 }

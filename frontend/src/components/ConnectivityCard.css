@@ -1,0 +1,273 @@
+.connectivity-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.card-header h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #374151;
+    margin: 0;
+}
+
+/* Connectivity Score */
+.connectivity-score {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.connectivity-score.excellent {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+}
+
+.connectivity-score.good {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.connectivity-score.fair {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.score-circle {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: white;
+    flex-shrink: 0;
+}
+
+.score-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.score-max {
+    font-size: 1rem;
+    color: #6b7280;
+    margin-left: 0.25rem;
+}
+
+.score-label h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 0.25rem 0;
+}
+
+.score-label p {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0;
+}
+
+/* Transport Grid */
+.transport-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.transport-item {
+    border-radius: 8px;
+    padding: 1rem;
+    border: 2px solid;
+}
+
+.transport-item.road {
+    background: #fef3c7;
+    border-color: #f59e0b;
+}
+
+.transport-item.rail {
+    background: #dbeafe;
+    border-color: #3b82f6;
+}
+
+.transport-item.air {
+    background: #e0e7ff;
+    border-color: #6366f1;
+}
+
+.transport-item.port {
+    background: #ddd6fe;
+    border-color: #8b5cf6;
+}
+
+.transport-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.transport-icon {
+    font-size: 1.5rem;
+}
+
+.transport-header h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.transport-quality {
+    margin-bottom: 0.75rem;
+}
+
+.quality-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.quality-badge.excellent {
+    background: #10b981;
+    color: white;
+}
+
+.quality-badge.good {
+    background: #3b82f6;
+    color: white;
+}
+
+.quality-badge.fair {
+    background: #f59e0b;
+    color: white;
+}
+
+.quality-badge.poor {
+    background: #ef4444;
+    color: white;
+}
+
+.transport-details {
+    margin-bottom: 0.75rem;
+}
+
+.transport-details p {
+    font-size: 0.875rem;
+    color: #374151;
+    margin: 0.25rem 0;
+}
+
+.business-impact {
+    background: white;
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin-top: 0.75rem;
+}
+
+.business-impact strong {
+    display: block;
+    font-size: 0.75rem;
+    color: #5b21b6;
+    margin-bottom: 0.25rem;
+}
+
+.business-impact p {
+    font-size: 0.875rem;
+    color: #374151;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.no-data {
+    font-size: 0.875rem;
+    color: #9ca3af;
+    font-style: italic;
+    margin: 0;
+}
+
+/* Logistics Costs */
+.logistics-costs {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.logistics-costs h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e40af;
+    margin: 0 0 1rem 0;
+}
+
+.cost-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+}
+
+.cost-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: white;
+    padding: 0.75rem;
+    border-radius: 6px;
+}
+
+.cost-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.cost-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.cost-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.cost-value {
+    font-size: 0.875rem;
+    color: #111827;
+    font-weight: 700;
+}
+
+@media (max-width: 640px) {
+    .connectivity-card {
+        padding: 1rem;
+    }
+
+    .connectivity-score {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .transport-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cost-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}

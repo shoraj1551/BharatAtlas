@@ -1,0 +1,143 @@
+.governance-section {
+    padding: 1.5rem 0;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1.5rem;
+}
+
+.gov-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.card-header h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #374151;
+    margin: 0;
+}
+
+.admin-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #ede9fe 0%, #f5f3ff 100%);
+    border-radius: 8px;
+}
+
+.admin-icon {
+    font-size: 2rem;
+}
+
+.admin-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #5b21b6;
+}
+
+.constituency-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.constituency-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f9fafb;
+    border-radius: 8px;
+}
+
+.const-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.const-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.const-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.const-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.local-body-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.local-body-item {
+    padding: 0.75rem;
+    background: #f9fafb;
+    border-radius: 6px;
+    font-size: 0.9375rem;
+    color: #374151;
+}
+
+.scheme-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.scheme-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+    border-radius: 8px;
+}
+
+.scheme-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.scheme-name {
+    font-size: 0.9375rem;
+    color: #1e40af;
+    font-weight: 600;
+}
+
+.no-data {
+    text-align: center;
+    color: #6b7280;
+    font-style: italic;
+    padding: 2rem;
+}
+
+@media (max-width: 640px) {
+    .constituency-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -5,6 +5,7 @@
  */
 
 import { getMongoDb } from './mongoService.js'
+import Place from '../../models/Place.js'
 
 /**
  * Enrich place data with calculated fields

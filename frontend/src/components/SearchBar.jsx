@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './SearchBar.css'
 import placeService from '../services/placeService'
+import { useLanguage } from '../context/LanguageContext'
 
 function SearchBar() {
     const [query, setQuery] = useState('')
@@ -10,6 +11,7 @@ function SearchBar() {
     const [loading, setLoading] = useState(false)
     const searchRef = useRef(null)
     const navigate = useNavigate()
+    const { t } = useLanguage()
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -78,10 +80,11 @@ function SearchBar() {
 
     return (
         <div className="search-bar" ref={searchRef} role="search">
+
             <input
                 type="text"
                 className="search-input"
-                placeholder="Search places..."
+                placeholder={t("Search places...")}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}

@@ -12,7 +12,9 @@ import geoRouter from './api/geo.js'
 import imagesRouter from './api/images.js'
 import placesRouter from './api/places.js'
 import aiRoutes from './api/ai.js'
-import communityRouter from './api/community.js' // Added Community import
+import communityRouter from './api/community.js'
+import opportunitiesRouter from './api/opportunities.js'
+import workspaceRouter from './api/workspace.js' // Added Workspace import
 import { connectMongo } from './services/mongoService.js'
 import { apiLimiter } from './middleware/rateLimiter.js'
 import { securityHeaders } from './middleware/securityHeaders.js'
@@ -53,6 +55,8 @@ app.use('/api/images', imagesRouter)
 app.use('/api/places', placesRouter)
 app.use('/api/ai', aiRoutes)
 app.use('/api/community', communityRouter)
+app.use('/api/opportunities', opportunitiesRouter)
+app.use('/api/workspace', workspaceRouter) // Added Workspace API
 
 // 404 handler
 app.use((req, res) => {

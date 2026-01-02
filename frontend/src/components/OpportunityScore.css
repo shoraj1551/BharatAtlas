@@ -28,6 +28,56 @@
     color: white;
 }
 
+.score-subtitle {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    font-weight: 500;
+}
+
+.score-main-label {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.readiness-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.r-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.r-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.r-bar-bg {
+    height: 6px;
+    background: var(--surface-bg);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.r-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease-out;
+}
+
 .score-value {
     font-size: 32px;
     font-weight: 700;

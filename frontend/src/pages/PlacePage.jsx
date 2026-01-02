@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import './PlacePage.css'
 import MapView from '../map/MapView'
@@ -10,10 +10,19 @@ import placeService from '../services/placeService'
 import recentPlacesService from '../services/recentPlacesService'
 
 function PlacePage() {
-    const { placeId } = useParams()
+    const { placeId, layer } = useParams() // Get layer from URL
+    const navigate = useNavigate()
     const [place, setPlace] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+
+    // Sync tab with URL
+    const activeLayer = layer || 'overview'
+
+    const handleLayerChange = (newLayer) => {
+        // Update URL when tab changes
+        navigate(`/place/${placeId}/${newLayer}`)
+    }
 
     useEffect(() => {
         setLoading(true)
@@ -57,7 +66,12 @@ function PlacePage() {
         <div className="place-page">
             <div className="main-layout">
                 <MapView />
-                <PlacePanel placeId={placeId} place={place} />
+                <PlacePanel
+                    placeId={placeId}
+                    place={place}
+                    activeTab={activeLayer}
+                    onTabChange={handleLayerChange}
+                />
                 <AIConsultant place={place} />
             </div>
         </div>

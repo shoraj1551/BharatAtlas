@@ -6,7 +6,8 @@
  */
 
 import React from 'react'
-import './GovernanceSection.css'
+import DataFreshnessLabel from './DataFreshnessLabel' // NEW
+import './GovernanceSection_v2.css'
 
 export default function GovernanceSection({ place }) {
     if (!place || !place.governance) return null
@@ -32,11 +33,14 @@ export default function GovernanceSection({ place }) {
                     <h2 className="section-title">🏛️ Governance Intelligence</h2>
                     <p className="gov-subtitle">Civic Administration & Representation</p>
                 </div>
-                {data_source && (
-                    <div className="gov-source-badge">
-                        <span>Source: {data_source}</span>
-                    </div>
-                )}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+                    {last_updated && <DataFreshnessLabel date={last_updated} type="GOVERNANCE" />}
+                    {data_source && (
+                        <div className="gov-source-badge">
+                            <span>Source: {data_source}</span>
+                        </div>
+                    )}
+                </div>
             </header>
 
             {/* 1. ADMINISTRATION (The Executive) */}
@@ -116,6 +120,32 @@ export default function GovernanceSection({ place }) {
                                     <div className="office-address">{office.address}</div>
                                 </div>
                                 <button className="navigate-btn" title="View location">↗</button>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )}
+
+            {/* 4. LOCAL PROCESSES (The "How-To") */}
+            {place.governance.local_processes && place.governance.local_processes.length > 0 && (
+                <section className="gov-group">
+                    <h3 className="group-title">📋 Key Compliance & Approvals</h3>
+                    <div className="process-grid">
+                        {place.governance.local_processes.map((proc, idx) => (
+                            <div key={idx} className="process-card">
+                                <div className="proc-header">
+                                    <span className="proc-name">{proc.name}</span>
+                                    <span className={`risk-badge risk-${proc.risk_level.toLowerCase()}`}>
+                                        {proc.risk_level} Risk
+                                    </span>
+                                </div>
+                                <div className="proc-body">
+                                    <div className="proc-office">🏛️ {proc.responsible_office} ({proc.level})</div>
+                                    <div className="proc-sla">⏱️ ~{proc.approval_timeline_days} Days</div>
+                                    {proc.verification_required && (
+                                        <div className="proc-check">⚠️ Phys. Verification</div>
+                                    )}
+                                </div>
                             </div>
                         ))}
                     </div>

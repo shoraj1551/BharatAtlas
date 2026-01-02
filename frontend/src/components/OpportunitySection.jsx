@@ -6,33 +6,37 @@
  */
 
 import React, { useState, useEffect } from 'react'
-import './OpportunitySection.css'
+import opportunityService from '../services/opportunityService'
+import BusinessSimulator from './BusinessSimulator'
+import './OpportunitySection_v2.css'
 
 export default function OpportunitySection({ place }) {
-    const [mode, setMode] = useState('view') // 'view' or 'analyze'
     const [opportunities, setOpportunities] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
+    const [mode, setMode] = useState('view') // 'view' or 'analyze'
     const [inputText, setInputText] = useState('')
     const [analyzing, setAnalyzing] = useState(false)
-    const [error, setError] = useState(null)
 
-    // Load existing opportunities on mount
+    // Load initial opportunities
+    const loadOpportunities = () => {
+        setLoading(true)
+        opportunityService.generatePlaceOpportunities(place)
+            .then(data => {
+                setOpportunities(data)
+                setLoading(false)
+            })
+            .catch(err => {
+                console.error("Failed to load opportunities", err)
+                setLoading(false)
+            })
+    }
+
     useEffect(() => {
-        if (place && place.place_id) {
-            fetchOpportunities()
+        if (place) {
+            loadOpportunities()
         }
     }, [place])
-
-    const fetchOpportunities = async () => {
-        try {
-            const res = await fetch(`http://localhost:3001/api/places/${place.place_id}/opportunities`)
-            const data = await res.json()
-            if (data.success) {
-                setOpportunities(data.data)
-            }
-        } catch (err) {
-            console.error("Failed to load opportunities", err)
-        }
-    }
 
     const handleAnalyze = async () => {
         if (!inputText.trim()) return
@@ -44,7 +48,7 @@ export default function OpportunitySection({ place }) {
             // Split by newlines to simulate multiple sources if user pastes a block
             const signals = inputText.split('\n').filter(line => line.trim().length > 10)
 
-            const res = await fetch(`http://localhost:3001/api/places/${place.place_id}/opportunities/analyze`, {
+            const res = await fetch(`/api/opportunities/analyze/${place.place_id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ signals })
@@ -115,48 +119,60 @@ export default function OpportunitySection({ place }) {
 
             {/* VIEW MODE (Radar Dashboard) */}
             {mode === 'view' && (
-                <div className="radar-dashboard">
-                    {opportunities.length === 0 ? (
-                        <div className="empty-radar">
-                            <span className="radar-icon">📡</span>
-                            <p>No signals detected yet.</p>
-                            <button onClick={() => setMode('analyze')}>Start a Scan</button>
-                        </div>
-                    ) : (
-                        <div className="opp-grid">
-                            {opportunities.map((opp, idx) => (
-                                <div key={opp._id || idx} className="opp-card">
-                                    <div className="card-top">
-                                        <span className={`opp-type ${opp.signal.type.toLowerCase().replace(' ', '-')}`}>
-                                            {opp.signal.type}
-                                        </span>
-                                        <span className="opp-score" title="AI Confidence Score">
-                                            {opp.signal.confidence_score}% Conf.
-                                        </span>
-                                    </div>
+                <>
+                    <div className="radar-dashboard">
+                        {opportunities.length === 0 ? (
+                            <div className="empty-radar">
+                                <span className="radar-icon">📡</span>
+                                <p>No signals detected yet.</p>
+                                <button onClick={() => setMode('analyze')}>Start a Scan</button>
+                            </div>
+                        ) : (
+                            <div className="opp-grid">
+                                {opportunities.map((opp, idx) => (
+                                    <div key={opp._id || idx} className="opp-card">
+                                        <div className="card-top">
+                                            <span className={`opp-type ${opp.signal.type.toLowerCase().replace(' ', '-')}`}>
+                                                {opp.signal.type}
+                                            </span>
+                                            <span className="opp-score" title="AI Confidence Score">
+                                                {opp.signal.confidence_score}% Conf.
+                                            </span>
+                                            <button
+                                                className="track-btn"
+                                                onClick={() => workspaceService.saveInsight('opportunity', opp.signal.title, opp, place.place_id)}
+                                                title="Save to Workspace"
+                                            >
+                                                📌 Track
+                                            </button>
+                                        </div>
 
-                                    <h3 className="opp-title">{opp.signal.title}</h3>
-                                    <p className="opp-desc">{opp.signal.description}</p>
+                                        <h3 className="opp-title">{opp.signal.title}</h3>
+                                        <p className="opp-desc">{opp.signal.description}</p>
 
-                                    <div className="opp-evidence">
-                                        <h4>Evidence Trace:</h4>
-                                        {opp.evidence.map((ev, i) => (
-                                            <div key={i} className="evidence-chip">
-                                                "{ev.snippet}" <span className="source">— {ev.source}</span>
-                                            </div>
-                                        ))}
-                                    </div>
+                                        <div className="opp-evidence">
+                                            <h4>Evidence Trace:</h4>
+                                            {opp.evidence.map((ev, i) => (
+                                                <div key={i} className="evidence-chip">
+                                                    "{ev.snippet}" <span className="source">— {ev.source}</span>
+                                                </div>
+                                            ))}
+                                        </div>
 
-                                    <div className="opp-models">
-                                        {opp.recommended_business_models.map((model, i) => (
-                                            <span key={i} className="model-tag">🚀 {model}</span>
-                                        ))}
+                                        <div className="opp-models">
+                                            {opp.recommended_business_models.map((model, i) => (
+                                                <span key={i} className="model-tag">🚀 {model}</span>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* IDEA VALIDATOR: Business Simulator */}
+                    <BusinessSimulator placeId={place.place_id} />
+                </>
             )}
         </div>
     )

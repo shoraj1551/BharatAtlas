@@ -63,4 +63,20 @@ router.post('/suggest-actions', async (req, res, next) => {
     }
 })
 
+// Generate Place Intelligence Summary
+router.post('/summary', async (req, res) => {
+    try {
+        const { placeId } = req.body
+        if (!placeId) {
+            return res.status(400).json({ error: 'Place ID is required' })
+        }
+
+        const summary = await aiService.generateIntelligenceSummary(placeId)
+        res.json(summary)
+    } catch (error) {
+        console.error('Summary Generation API Error:', error)
+        res.status(500).json({ error: 'Failed to generate summary' })
+    }
+})
+
 export default router

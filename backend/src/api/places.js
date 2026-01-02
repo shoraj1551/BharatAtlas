@@ -11,6 +11,8 @@ import {
     getPlaceByName,
     searchPlaces
 } from '../services/mongoPlaceService.js'
+import Place from '../../models/Place.js'
+import PlaceHistory from '../../models/PlaceHistory.js'
 import { cachePlaceById, cachePlaceList, invalidatePlaceCache } from '../middleware/placeCache.js'
 import opportunitiesRouter from './opportunities.js'
 
@@ -18,6 +20,23 @@ const router = express.Router()
 
 // Mount sub-routers
 router.use('/:placeId/opportunities', opportunitiesRouter)
+
+/**
+ * GET /api/places/:placeId/history
+ * Fetch the Audit Log / Trust Ledger for a place
+ */
+router.get('/:placeId/history', async (req, res, next) => {
+    try {
+        const { placeId } = req.params
+        const history = await PlaceHistory.find({ place_id: placeId })
+            .sort({ timestamp: -1 })
+            .limit(50)
+
+        res.json({ success: true, data: history })
+    } catch (error) {
+        next(error)
+    }
+})
 
 /**
  * GET /api/places/states

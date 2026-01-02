@@ -6,14 +6,14 @@
  */
 
 import React, { useState, useEffect } from 'react'
-import './CommunitySection.css'
+import './CommunitySection_v2.css'
 
 export default function CommunitySection({ place }) {
     const [view, setView] = useState('feed') // 'feed' | 'contribute'
     const [contributions, setContributions] = useState([])
     const [formData, setFormData] = useState({
         email: '',
-        type: 'issue',
+        type: 'problem',
         title: '',
         body: ''
     })
@@ -66,7 +66,7 @@ export default function CommunitySection({ place }) {
                 setTimeout(() => {
                     setView('feed')
                     setSubmitStatus(null)
-                    setFormData({ email: '', type: 'issue', title: '', body: '' })
+                    setFormData({ email: '', type: 'problem', title: '', body: '' })
                 }, 2000)
             } else {
                 setSubmitStatus('error')
@@ -147,19 +147,35 @@ export default function CommunitySection({ place }) {
                         <form onSubmit={handleSubmit} className="comm-form">
                             <h3>Share Local Knowledge</h3>
 
+                            <div className="policy-alert">
+                                <strong>⚠️ Ground Truth Only</strong>
+                                <p>We accept facts, problems, and evidence. <strong>No politics. No opinions.</strong></p>
+                            </div>
+
                             <div className="form-group">
-                                <label>Contribution Type</label>
+                                <label>Report Type</label>
                                 <div className="type-selector">
-                                    {['issue', 'blog', 'image'].map(t => (
-                                        <button
-                                            key={t}
-                                            type="button"
-                                            className={formData.type === t ? 'selected' : ''}
-                                            onClick={() => setFormData({ ...formData, type: t })}
-                                        >
-                                            {t.toUpperCase()}
-                                        </button>
-                                    ))}
+                                    <button
+                                        type="button"
+                                        className={formData.type === 'problem' ? 'selected' : ''}
+                                        onClick={() => setFormData({ ...formData, type: 'problem' })}
+                                    >
+                                        🛑 PROBLEM
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={formData.type === 'evidence' ? 'selected' : ''}
+                                        onClick={() => setFormData({ ...formData, type: 'evidence' })}
+                                    >
+                                        📸 EVIDENCE
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={formData.type === 'observation' ? 'selected' : ''}
+                                        onClick={() => setFormData({ ...formData, type: 'observation' })}
+                                    >
+                                        👁️ OBSERVATION
+                                    </button>
                                 </div>
                             </div>
 
@@ -168,17 +184,25 @@ export default function CommunitySection({ place }) {
                                 <input
                                     type="text"
                                     required
-                                    placeholder="e.g. Broken Bridge on NH-44"
+                                    placeholder={
+                                        formData.type === 'problem' ? "e.g. Broken Bridge on NH-44, Water Contamination..." :
+                                            formData.type === 'evidence' ? "e.g. Photo of illegal dump yard..." :
+                                                "e.g. Observed traffic pattern change..."
+                                    }
                                     value={formData.title}
                                     onChange={e => setFormData({ ...formData, title: e.target.value })}
                                 />
                             </div>
 
                             <div className="form-group">
-                                <label>Details</label>
+                                <label>Details {formData.type === 'problem' && '(Be Specific)'}</label>
                                 <textarea
                                     required
-                                    placeholder="Describe the issue or insight in detail..."
+                                    placeholder={
+                                        formData.type === 'problem' ? "Describe the issue, location, and impact. No opinions." :
+                                            formData.type === 'evidence' ? "Describe what this image proves." :
+                                                "State your observation clearly using neutral language."
+                                    }
                                     rows="5"
                                     value={formData.body}
                                     onChange={e => setFormData({ ...formData, body: e.target.value })}

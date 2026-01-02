@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import workspaceService from '../services/workspaceService'
 import './AIChat.css'
 
 export default function AIChat() {
@@ -122,6 +123,14 @@ export default function AIChat() {
                                                 {action.icon} {action.label}
                                             </button>
                                         ))}
+                                        {/* Save to Workspace Action */}
+                                        <button
+                                            className="action-btn save-btn"
+                                            onClick={() => workspaceService.saveInsight('consultant_chat', 'AI Conversation', msg.content, null)}
+                                            style={{ marginLeft: 'auto', background: '#f0f9ff', color: '#0369a1', borderColor: '#bae6fd' }}
+                                        >
+                                            💾 Save
+                                        </button>
                                     </div>
                                 )}
                             </div>

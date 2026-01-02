@@ -1,0 +1,252 @@
+/* Governance Section - The "Bureau" Aesthetic */
+
+.governance-section {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Headers */
+.gov-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 16px;
+}
+
+.section-title {
+    margin: 0 0 4px 0;
+    font-size: 1.25rem;
+    color: #1e293b;
+    /* Slate 800 */
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gov-subtitle {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #64748b;
+    /* Slate 500 */
+}
+
+/* Section Groups */
+.gov-group {
+    margin-bottom: 32px;
+}
+
+.group-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #64748b;
+    letter-spacing: 0.05em;
+    margin: 0 0 16px 0;
+    border-left: 3px solid #cbd5e1;
+    padding-left: 8px;
+}
+
+.gov-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+/* Cards (Administration & Reps) */
+.gov-card {
+    background: #f8fafc;
+    /* Slate 50 */
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.gov-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border-color: #cbd5e1;
+}
+
+.card-role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.card-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 12px;
+    font-family: 'Merriweather', serif;
+    /* Authority font */
+}
+
+.card-details p {
+    margin: 4px 0;
+    font-size: 0.85rem;
+    color: #475569;
+    display: flex;
+    gap: 6px;
+}
+
+/* Representative Card Specifics */
+.rep-card {
+    background: #fff;
+    border-left: 4px solid #3b82f6;
+    /* Blue accent for Elected */
+}
+
+.rep-meta {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.party-tag {
+    background: #eff6ff;
+    color: #1d4ed8;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.const-name {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.term-info {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 8px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 8px;
+}
+
+/* Public Offices Directory */
+.offices-list {
+    display: grid;
+    gap: 12px;
+}
+
+.office-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.office-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    border-radius: 50%;
+}
+
+.office-info {
+    flex: 1;
+}
+
+.office-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #1e293b;
+}
+
+.office-address {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.navigate-btn {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.navigate-btn:hover {
+    background: #eff6ff;
+}
+
+/* Process Cards */
+.process-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.process-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 12px;
+    background: #fff;
+}
+
+.proc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.proc-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #334155;
+}
+
+.risk-badge {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.risk-high {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.risk-medium {
+    background: #fffbeb;
+    color: #b45309;
+}
+
+.risk-low {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.proc-body {
+    display: flex;
+    gap: 16px;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.proc-check {
+    color: #b45309;
+    font-weight: 500;
+}

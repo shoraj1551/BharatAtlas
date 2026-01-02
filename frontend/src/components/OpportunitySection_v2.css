@@ -1,0 +1,243 @@
+/* Opportunity Section - The "Tech Radar" Aesthetic */
+
+.opportunity-section {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    font-family: 'Inter', sans-serif;
+}
+
+.opp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 16px;
+}
+
+.opp-subtitle {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.action-btn {
+    padding: 8px 16px;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-btn.active {
+    background: #ef4444;
+    color: white;
+    border-color: #ef4444;
+}
+
+/* Analyze Mode */
+.analyze-panel {
+    background: #f8fafc;
+    padding: 24px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+}
+
+.panel-instructions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    color: #334155;
+    font-size: 0.9rem;
+}
+
+.signal-input {
+    width: 100%;
+    min-height: 150px;
+    padding: 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+}
+
+.run-scan-btn {
+    background: #000;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+}
+
+.run-scan-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Radar Mode */
+.opp-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.opp-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #3b82f6;
+    /* Blue default */
+    border-radius: 8px;
+    padding: 20px;
+    transition: transform 0.2s;
+}
+
+.opp-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.opp-type {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.opp-type.gap {
+    background: #fef2f2;
+    color: #ef4444;
+}
+
+.opp-type.trend {
+    background: #eff6ff;
+    color: #3b82f6;
+}
+
+.opp-type.underserved {
+    background: #fffbeb;
+    color: #b45309;
+}
+
+.opp-score {
+    font-size: 0.75rem;
+    color: #059669;
+    font-weight: 600;
+    background: #d1fae5;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.track-btn {
+    background: none;
+    border: 1px solid #e2e8f0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.track-btn:hover {
+    background: #f1f5f9;
+}
+
+.opp-title {
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.opp-desc {
+    color: #475569;
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+}
+
+/* Evidence Chips */
+.opp-evidence {
+    margin-bottom: 16px;
+}
+
+.opp-evidence h4 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin: 0 0 8px 0;
+}
+
+.evidence-chip {
+    font-size: 0.85rem;
+    background: #f8fafc;
+    padding: 8px;
+    border-radius: 4px;
+    color: #334155;
+    border: 1px dashed #cbd5e1;
+    margin-bottom: 6px;
+    font-style: italic;
+}
+
+.evidence-chip .source {
+    font-style: normal;
+    font-weight: 600;
+    color: #94a3b8;
+    font-size: 0.75rem;
+}
+
+/* Models */
+.opp-models {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.model-tag {
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Empty State */
+.empty-radar {
+    text-align: center;
+    padding: 40px;
+    color: #64748b;
+}
+
+.radar-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-radar button {
+    margin-top: 16px;
+    padding: 8px 20px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}

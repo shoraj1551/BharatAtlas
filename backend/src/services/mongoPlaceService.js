@@ -20,7 +20,76 @@ function enrichPlaceData(place) {
         )
     }
 
+    // Readiness Score Calculation (Qualitative)
+    const readiness = calculateReadinessScore(place)
+    place.readiness = readiness
+
     return place
+}
+
+/**
+ * Calculates a qualitative Opportunity Readiness Score (0-100)
+ * DOES NOT predict revenue. Measures structural fitness.
+ */
+function calculateReadinessScore(place) {
+    let scores = {
+        workforce: 0, // 25%
+        infrastructure: 0, // 20%
+        governance: 0, // 20%
+        social_fit: 0, // 15%
+        data_reliability: 0 // 20%
+    }
+
+    // 1. Workforce (25 pts)
+    const literacy = place.literacy_rate?.value || 0
+    scores.workforce += (literacy / 100) * 15 // Max 15 based on literacy
+    if (place.population_density > 500) scores.workforce += 10 // Dense talent pool
+    else if (place.population_density > 200) scores.workforce += 5
+
+    // 2. Infrastructure (20 pts)
+    const industries = place.major_industries?.length || 0
+    scores.infrastructure += Math.min(industries * 4, 15) // Max 15 from industries
+    if (place.place_type === 'city') scores.infrastructure += 5 // Urban bonus
+
+    // 3. Governance (20 pts)
+    const adminType = place.governance?.administration?.type || place.governance?.administrative_head || ''
+    if (adminType.toLowerCase().includes('corporation')) scores.governance += 15
+    else if (adminType.toLowerCase().includes('municipality')) scores.governance += 10
+    else scores.governance += 5
+
+    if (place.governance?.government_schemes?.length > 0) scores.governance += 5
+
+    // 4. Social Fit (15 pts) - Risk reduction
+    if (place.culture_society) {
+        scores.social_fit += 5 // Base for data presence
+        if (place.culture_society.market_adaptation_tips?.length > 0) scores.social_fit += 5
+        if (place.culture_society.social_norms) scores.social_fit += 5
+    }
+
+    // 5. Data Reliability (20 pts)
+    const quality = place.data_quality_score || (place.data_quality === 'official' ? 1.0 : 0.5)
+    scores.data_reliability = quality * 20
+
+    // Total Calculation
+    const total = Math.round(
+        scores.workforce +
+        scores.infrastructure +
+        scores.governance +
+        scores.social_fit +
+        scores.data_reliability
+    )
+
+    // Labeling
+    let label = 'Developing'
+    if (total > 80) label = 'Ready for Business'
+    else if (total > 60) label = 'Scaling Up'
+    else if (total > 40) label = 'Emerging'
+
+    return {
+        total_score: total,
+        label,
+        breakdown: scores
+    }
 }
 
 /**
@@ -120,14 +189,24 @@ export async function searchPlaces(query, page = 1, limit = 10) {
     const [data, total] = await Promise.all([
         db.collection('places')
             .find({
-                canonical_name: { $regex: new RegExp(query, 'i') }
+                $or: [
+                    { canonical_name: { $regex: new RegExp(query, 'i') } },
+                    { 'local_names.hi': { $regex: new RegExp(query, 'i') } },
+                    { 'local_names.ta': { $regex: new RegExp(query, 'i') } },
+                    { 'local_names.bn': { $regex: new RegExp(query, 'i') } }
+                ]
             })
             .skip(skip)
             .limit(limit)
             .toArray(),
         db.collection('places')
             .countDocuments({
-                canonical_name: { $regex: new RegExp(query, 'i') }
+                $or: [
+                    { canonical_name: { $regex: new RegExp(query, 'i') } },
+                    { 'local_names.hi': { $regex: new RegExp(query, 'i') } },
+                    { 'local_names.ta': { $regex: new RegExp(query, 'i') } },
+                    { 'local_names.bn': { $regex: new RegExp(query, 'i') } }
+                ]
             })
     ])
 

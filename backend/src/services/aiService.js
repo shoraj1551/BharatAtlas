@@ -1,7 +1,5 @@
 import { Ollama } from 'ollama'
 import mongoPlaceService from './mongoPlaceService.js'
-import { Ollama } from 'ollama'
-import mongoPlaceService from './mongoPlaceService.js'
 import Opportunity from '../../models/Opportunity.js'
 import Contribution from '../../models/Contribution.js'
 
@@ -166,12 +164,93 @@ ${p.canonical_name} (${p.place_type}):
     /**
      * Analyze local text signals to identify business opportunities
      * 
-     * @param {string} placeName - Name of the location
-     * @param {Array<string>} inputs - Raw text inputs (blogs, reports, complaints)
+     * @param {string} placeId - ID of the place
      * @returns {Array} - List of structured Opportunity objects
      */
-    async analyzeLocalSignals(placeName, inputs) {
-        // ... (existing implementation) ...
+    async analyzeLocalSignals(placeId) {
+        try {
+            // 1. Fetch User Contributions (Issues/Complaints)
+            const contributions = await Contribution.find({
+                place_id: placeId,
+                status: 'approved',
+                type: 'issue'
+            }).limit(50) // Analyze last 50 issues
+
+            if (contributions.length === 0) {
+                return []
+            }
+
+            const complaintsText = contributions
+                .map((c, i) => `${i + 1}. ${c.data.title}: ${c.data.body}`)
+                .join('\n')
+
+            // 2. Prompt for Clustering & Opportunity Conversion
+            const prompt = `
+You are an expert Business Strategy Consultant.
+I have a list of citizen complaints from a specific location in India.
+
+YOUR TASK:
+1. Cluster related complaints (e.g., "No bus" + "Far school" = Transport Issue).
+2. Convert each cluster into a specific "Business Opportunity".
+3. Assign a confidence score (0-100) based on how many complaints imply this need.
+
+COMPLAINTS LIST:
+${complaintsText}
+
+OUTPUT FORMAT (JSON ONLY):
+[
+  {
+    "title": "Evening Public Transport Service",
+    "description": "High demand for travel after 7 PM detected from multiple complaints regarding student and worker mobility.",
+    "type": "Gap",
+    "confidence_score": 85,
+    "evidence_snippets": ["No bus after 7 PM", "Students travel 30km"]
+  }
+]
+`
+            // 3. Generate Analysis
+            const response = await this.ollama.generate({
+                model: 'llama3.2:3b',
+                prompt: prompt,
+                stream: false,
+                format: 'json'
+            })
+
+            const analysis = JSON.parse(response.response)
+
+            // 4. Persistence: Save/Update Opportunities
+            const savedOpportunities = []
+            for (const item of analysis) {
+                // Upsert to avoid duplicates if running multiple times
+                const opp = await Opportunity.findOneAndUpdate(
+                    {
+                        place_id: placeId,
+                        'signal.title': item.title
+                    },
+                    {
+                        place_id: placeId,
+                        sector: 'General', // LLM could infer this too, defaulting for now
+                        signal: {
+                            title: item.title,
+                            description: item.description,
+                            type: item.type,
+                            confidence_score: item.confidence_score
+                        },
+                        evidence: item.evidence_snippets?.map(s => ({ snippet: s, source: "Community Signal" })),
+                        recommended_business_models: ["Service Aggregator", "Local SME"],
+                        created_at: new Date()
+                    },
+                    { upsert: true, new: true }
+                )
+                savedOpportunities.push(opp)
+            }
+
+            return savedOpportunities
+
+        } catch (error) {
+            console.error("Signal Analysis Error:", error)
+            return []
+        }
     }
 
     /**
@@ -276,6 +355,113 @@ OUTPUT FORMAT (JSON ONLY):
                 confidence_score: 0,
                 data_layers_used: [],
                 missing_data: []
+            }
+        }
+    }
+
+    /**
+     * Generate One-Screen Place Intelligence Summary
+     * Identity, People, Business Fit
+     */
+    async generateIntelligenceSummary(placeId) {
+        try {
+            // 1. Build Context 
+            // We reuse getConsultantContext but focus it for summary generation
+            const contextJson = await this.getConsultantContext(placeId)
+
+            // 2. Specialized Prompt
+            const prompt = `
+You are an expert economic analyst for the Indian market.
+Analyze the following place data and output a "Place Intelligence Summary".
+
+DATA:
+${contextJson}
+
+INSTRUCTIONS:
+Output a structured JSON summary with exactly these 3 sections.
+Keep it concise, high-impact, and grounded in the data.
+
+1. "identity": What kind of place is this? (e.g., "Agriculture-dominant tehsil with seasonal migration...")
+2. "people": Who lives/works here? (e.g., "Young workforce with high literacy but looking for local jobs...")
+3. "opportunity": What fits / doesn't fit? (e.g., "Cold storage matches perfectly; Luxury retail will fail due to...")
+
+OUTPUT FORMAT (JSON ONLY):
+{
+  "identity": "...",
+  "people": "...",
+  "opportunity": "..."
+}
+`
+            const response = await this.ollama.generate({
+                model: 'llama3.2:3b',
+                prompt: prompt,
+                stream: false,
+                format: 'json'
+            })
+
+            return JSON.parse(response.response)
+
+        } catch (error) {
+            console.error("Intelligence Summary Error:", error)
+            return {
+                identity: "Data unavailable for identity analysis.",
+                people: "Demographic data not currently accessible.",
+                opportunity: "Cannot determine business fit at this time."
+            }
+        }
+    }
+
+    /**
+     * Evaluate the viability of a specific business idea in a place
+     * 
+     * @param {string} placeId 
+     * @param {string} businessType 
+     */
+    async evaluateBusinessFit(placeId, businessType) {
+        try {
+            // reuse context builder
+            const contextJson = await this.getConsultantContext(placeId)
+
+            const prompt = `
+You are a conservative Investment Risk Analyst for the Indian market.
+A user wants to start a "${businessType}" in this location.
+Evaluate its feasibility based strictly on the provided data.
+
+DATA:
+${contextJson}
+
+INSTRUCTIONS:
+1. FIT SCORE: 0-100 (0 = Terrible idea, 100 = Perfect match).
+2. VERDICT: ONE sentence summary (e.g., "High potential due to lack of local competition and rising income.").
+3. RISKS: List 3 specific risks based on the data (e.g., "Electricity supply is erratic").
+4. VERIFICATION: List 3 things the user MUST check physically (e.g., "Check peak hour traffic at Main Bazaar").
+
+OUTPUT FORMAT (JSON ONLY):
+{
+  "fit_score": 75,
+  "verdict": "...",
+  "reasoning": "...",
+  "key_risks": ["Risk 1", "Risk 2", "Risk 3"],
+  "on_ground_verification": ["Check 1", "Check 2", "Check 3"]
+}
+`
+            const response = await this.ollama.generate({
+                model: 'llama3.2:3b',
+                prompt: prompt,
+                stream: false,
+                format: 'json'
+            })
+
+            return JSON.parse(response.response)
+
+        } catch (error) {
+            console.error("Evaluation Error:", error)
+            return {
+                fit_score: 0,
+                verdict: "Error analyzing business fit.",
+                reasoning: "Please try again.",
+                key_risks: [],
+                on_ground_verification: []
             }
         }
     }

@@ -21,7 +21,7 @@ const ContributionSchema = new mongoose.Schema({
 
     type: {
         type: String,
-        enum: ['image', 'blog', 'issue'],
+        enum: ['problem', 'evidence', 'observation'], // Strict types: No blogs/opinions
         required: true
     },
 

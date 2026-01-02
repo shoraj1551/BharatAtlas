@@ -1,0 +1,81 @@
+/* Blind Spots Card - The "Anti-Dashboard" Component */
+
+.blind-spots-card {
+    background: #f8fafc;
+    /* Slate 50 - Neutral background */
+    border: 1px solid #cbd5e1;
+    /* Slate 300 - Distinct border */
+    border-radius: 8px;
+    padding: 16px;
+    margin: 24px 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.blind-spots-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 8px;
+}
+
+.warning-icon {
+    font-size: 1.2rem;
+}
+
+.blind-spots-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #475569;
+    /* Slate 600 */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+.blind-spots-intro {
+    font-size: 0.9rem;
+    color: #64748b;
+    /* Slate 500 */
+    margin-bottom: 16px;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.blind-spots-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.blind-spot-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: #fff;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+}
+
+.item-icon {
+    font-size: 1.1rem;
+    padding-top: 2px;
+}
+
+.item-content h4 {
+    margin: 0 0 4px 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.item-content p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.4;
+}

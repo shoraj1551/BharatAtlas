@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import './ComparisonPanel.css'
+import './ComparisonPanel_v2.css'
 import { createComparisonSession } from '../utils/comparisonSystem'
 import { exportComparisonSnapshot, logComparisonAudit } from '../utils/comparisonExport'
 

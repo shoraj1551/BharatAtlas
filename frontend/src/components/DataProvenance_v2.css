@@ -1,0 +1,89 @@
+/* Data Provenance & Truth Hierarchy Styles */
+
+/* Base container for a data point (optional wrapper) */
+.data-point-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+/* 1. FACT: The Gold Standard */
+/* Used for Official, Census, Gov Data - High Confidence */
+.provenance-fact {
+    font-family: 'JetBrains Mono', monospace;
+    /* Monospace implies raw data */
+    color: #0f172a;
+    /* Slate 900 - High Contrast */
+    font-weight: 600;
+    font-size: 1.1em;
+    /* Slightly larger */
+    letter-spacing: -0.02em;
+}
+
+/* 2. SIGNAL: The Trend */
+/* Used for High-Frequency Indicators - Medium Confidence */
+.provenance-signal {
+    font-family: 'Inter', sans-serif;
+    color: #3b82f6;
+    /* Blue 500 */
+    background: #eff6ff;
+    /* Blue 50 */
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.9em;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.signal-arrow {
+    font-size: 0.8em;
+}
+
+.signal-up {
+    color: #10b981;
+}
+
+.signal-down {
+    color: #ef4444;
+}
+
+/* 3. STORY: The Narrative */
+/* Used for Qualitative/AI Summaries */
+.provenance-story {
+    font-family: 'Merriweather', serif;
+    /* Serif for narrative feel */
+    color: #475569;
+    /* Slate 600 - Softer reading */
+    font-style: italic;
+    font-size: 0.95em;
+    line-height: 1.6;
+    background: #fff;
+    border-left: 3px solid #cbd5e1;
+    padding: 8px 12px;
+    margin: 8px 0;
+    display: block;
+    /* Stories take full width */
+}
+
+/* Source Badge (Tiny pill next to data) */
+.source-citation {
+    font-size: 0.65rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid #e2e8f0;
+    padding: 1px 4px;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-left: 4px;
+    cursor: help;
+}
+
+.source-citation:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #64748b;
+}

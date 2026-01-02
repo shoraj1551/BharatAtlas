@@ -8,22 +8,50 @@ class OpportunityService {
     /**
      * Generate opportunities for a place
      * @param {Object} place - Place object
-     * @returns {Promise<Array>} Array of approved opportunity objects
      */
     async generatePlaceOpportunities(place) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                const opportunities = generateOpportunities(place)
+        if (!place || !place.place_id) {
+            return []
+        }
 
-                // CRITICAL: Filter out unapproved opportunities for public view
-                // Only show opportunities that are approved_for_public
-                const approvedOpportunities = opportunities.filter(opp =>
-                    opp.approved_for_public === true
-                )
+        try {
+            // Fetch AI-analyzed opportunities from backend
+            const response = await fetch(`http://localhost:3001/api/opportunities/${place.place_id}`)
+            if (response.ok) {
+                const data = await response.json()
+                if (data && data.length > 0) {
+                    return data.map(opp => ({
+                        title: opp.signal.title,
+                        description: opp.signal.description,
+                        sector: opp.sector,
+                        confidence: opp.signal.confidence_score,
+                        type: opp.signal.type
+                    }))
+                }
+            }
 
-                resolve(approvedOpportunities)
-            }, 100) // Simulate async operation
-        })
+            // If no data yet, trigger analysis (or just fallback to mock for now)
+            // Ideally this trigger should be user-initiated or background job
+            return []
+        } catch (error) {
+            console.error("Error fetching opportunities:", error)
+            return []
+        }
+    }
+
+    /**
+     * Trigger fresh analysis based on community signals
+     */
+    async analyzeCommunitySignals(placeId) {
+        try {
+            const response = await fetch(`http://localhost:3001/api/opportunities/analyze/${placeId}`, {
+                method: 'POST'
+            })
+            return await response.json()
+        } catch (error) {
+            console.error("Analysis Trigger Error:", error)
+            throw error
+        }
     }
 
     /**

@@ -1,0 +1,63 @@
+/* Data Freshness Badging */
+
+.data-freshness-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    user-select: none;
+}
+
+/* Status variants */
+.status-fresh {
+    color: #10b981;
+    /* Green */
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+}
+
+.status-aging {
+    color: #b45309;
+    /* Amber */
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+}
+
+.status-stale {
+    color: #be123c;
+    /* Rose */
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+}
+
+.freshness-icon {
+    font-size: 0.9em;
+}
+
+/* Tooltip dot variant (for tight spaces) */
+.freshness-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.freshness-dot.status-fresh {
+    background-color: #10b981;
+    border: none;
+}
+
+.freshness-dot.status-aging {
+    background-color: #f59e0b;
+    border: none;
+}
+
+.freshness-dot.status-stale {
+    background-color: #ef4444;
+    border: none;
+}

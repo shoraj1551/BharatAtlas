@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useLanguage } from '../context/LanguageContext'
 import './PlacePanel.css'
 import PlacePanelSkeleton from './PlacePanelSkeleton'
 import PlaceNarrative from './PlaceNarrative'
@@ -22,24 +23,39 @@ import CommunitySection from './CommunitySection'
 import CultureSection from './CultureSection'
 import RisksSection from './RisksSection'
 import FactBadge from './FactBadge'
+import { Fact } from './DataProvenance' // Import Fact
+import TrustLedger from './TrustLedger'
+import IntelligenceSummary from './IntelligenceSummary'
+import BlindSpots from './BlindSpots'
+import DataFreshnessLabel from './DataFreshnessLabel' // NEW
+import FieldVerificationMode from './FieldVerificationMode' // NEW
 import placeService from '../services/placeService'
 import narrativeService from '../services/narrativeService'
 import opportunityService from '../services/opportunityService'
 
-function PlacePanel({ placeId, place: initialPlace }) {
+function PlacePanel({ placeId, place: initialPlace, activeTab = 'overview', onTabChange }) {
+    const { getPlaceName, t } = useLanguage()
     const [place, setPlace] = useState(initialPlace || null)
 
-    // Consolidated loading state
+    // Fallback for uncontrolled usage (e.g. specialized views)
+    const [internalTab, setInternalTab] = useState('overview')
+    const currentTab = onTabChange ? activeTab : internalTab
+    const handleTabChange = (tabId) => {
+        if (onTabChange) onTabChange(tabId)
+        else setInternalTab(tabId)
+    }
+
+    // Loading states
     const [loadingState, setLoadingState] = useState({
-        place: !initialPlace,
+        place: false,
         narrative: false,
         opportunities: false,
         children: false
     })
 
-    const [children, setChildren] = useState([])
     const [narrative, setNarrative] = useState(null)
     const [opportunities, setOpportunities] = useState([])
+    const [children, setChildren] = useState([])
 
     useEffect(() => {
         // If place is provided as prop, use it
@@ -112,6 +128,9 @@ function PlacePanel({ placeId, place: initialPlace }) {
         }
     }, [place])
 
+    const [showLedger, setShowLedger] = useState(false)
+    const [showFieldMode, setShowFieldMode] = useState(false) // NEW
+
     if (loadingState.place) {
         return <PlacePanelSkeleton />
     }
@@ -120,7 +139,7 @@ function PlacePanel({ placeId, place: initialPlace }) {
         return (
             <div className="place-panel">
                 <div className="panel-content">
-                    <p className="placeholder-text">No place data available</p>
+                    <p>No place data available.</p>
                 </div>
             </div>
         )
@@ -128,6 +147,16 @@ function PlacePanel({ placeId, place: initialPlace }) {
 
     return (
         <div className="place-panel" role="region" aria-label="Place information panel">
+            {/* Trust Ledger Modal */}
+            {showLedger && (
+                <TrustLedger placeId={place ? place.place_id : ''} onClose={() => setShowLedger(false)} />
+            )}
+
+            {/* Field Verification Modal */}
+            {showFieldMode && (
+                <FieldVerificationMode place={place} onClose={() => setShowFieldMode(false)} />
+            )}
+
             <div className="panel-header">
                 {place.parent_place_id && (
                     <nav className="place-hierarchy" aria-label="Place hierarchy">
@@ -135,8 +164,43 @@ function PlacePanel({ placeId, place: initialPlace }) {
                         <span className="hierarchy-separator" aria-hidden="true">›</span>
                     </nav>
                 )}
-                <h2 id="place-name">{place.canonical_name}</h2>
-                <p className="place-type" aria-label="Place type">{place.place_type?.toUpperCase() ?? 'UNKNOWN'}</p>
+
+                {/* Header Row with Trust Shield */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div>
+                        <h2 id="place-name">{getPlaceName(place)}</h2>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <p className="place-type" aria-label="Place type">{place.place_type?.toUpperCase() ?? 'UNKNOWN'}</p>
+
+                            {/* NEW: Field Verify Button */}
+                            <button
+                                onClick={() => setShowFieldMode(true)}
+                                style={{
+                                    border: 'none', background: 'none', cursor: 'pointer',
+                                    fontSize: '0.8rem', color: '#6366f1', display: 'flex', alignItems: 'center', gap: '4px'
+                                }}
+                                title="Open Field Verification Checklist"
+                            >
+                                <span>🕵️‍♂️</span> <span style={{ textDecoration: 'underline' }}>Field Verify</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* The Trust Shield */}
+                    <button
+                        onClick={() => setShowLedger(true)}
+                        style={{
+                            display: 'flex', alignItems: 'center', gap: '6px',
+                            background: '#ecfdf5', border: '1px solid #10b981',
+                            padding: '6px 10px', borderRadius: '20px',
+                            cursor: 'pointer', fontSize: '0.8rem', color: '#047857'
+                        }}
+                        title="Click to view Data Trust Ledger"
+                    >
+                        <span>🛡️</span>
+                        <span style={{ fontWeight: 600 }}>Official</span>
+                    </button>
+                </div>
 
                 {/* Action Buttons */}
                 <div className="place-actions">
@@ -149,11 +213,14 @@ function PlacePanel({ placeId, place: initialPlace }) {
             <QuickStatsBar place={place} />
 
             {/* Tab Navigation */}
-            <TabNavigation />
+            <TabNavigation activeTab={currentTab} onTabChange={handleTabChange} />
 
             <div className="panel-content">
                 {/* Overview Tab */}
-                <TabPanel id="overview">
+                <TabPanel id="overview" activeTab={currentTab}>
+                    {/* 1. Intelligence Executive Summary (The "One Screen" Answer) */}
+                    <IntelligenceSummary placeId={place.place_id} place={place} />
+
                     {/* Structured Narrative */}
                     {loadingState.narrative ? (
                         <div className="place-section">
@@ -171,6 +238,9 @@ function PlacePanel({ placeId, place: initialPlace }) {
                         </div>
                     ) : null}
 
+                    {/* BLIND SPOTS: Transparency Section */}
+                    <BlindSpots />
+
                     {/* Share Section */}
                     <div className="place-section">
                         <h3>Share this Place</h3>
@@ -185,19 +255,27 @@ function PlacePanel({ placeId, place: initialPlace }) {
                         <div className="fact-grid" role="list">
                             <div className="fact-item">
                                 <span className="fact-label">Population</span>
-                                <span className="fact-value">{place.population?.value?.toLocaleString() ?? 'N/A'}</span>
+                                <Fact source="Census 2011">
+                                    <span className="fact-value">{place.population?.value?.toLocaleString() ?? 'N/A'}</span>
+                                </Fact>
                             </div>
                             <div className="fact-item">
                                 <span className="fact-label">Area</span>
-                                <span className="fact-value">{place.area_sq_km?.toLocaleString() ?? 'N/A'} km²</span>
+                                <Fact source="Official">
+                                    <span className="fact-value">{place.area_sq_km?.toLocaleString() ?? 'N/A'} km²</span>
+                                </Fact>
                             </div>
                             <div className="fact-item">
                                 <span className="fact-label">Literacy Rate</span>
-                                <span className="fact-value">{place.literacy_rate?.value ?? 'N/A'}%</span>
+                                <Fact source="Census">
+                                    <span className="fact-value">{place.literacy_rate?.value ?? 'N/A'}%</span>
+                                </Fact>
                             </div>
                             <div className="fact-item">
                                 <span className="fact-label">Districts</span>
-                                <span className="fact-value">{place.num_districts?.value ?? 'N/A'}</span>
+                                <Fact source="Govt">
+                                    <span className="fact-value">{place.num_districts?.value ?? 'N/A'}</span>
+                                </Fact>
                             </div>
                         </div>
                     </div>
@@ -266,42 +344,42 @@ function PlacePanel({ placeId, place: initialPlace }) {
                 </TabPanel>
 
                 {/* Geography Tab */}
-                <TabPanel id="geography">
+                <TabPanel id="geography" activeTab={currentTab}>
                     <GeographySection place={place} />
                 </TabPanel>
 
                 {/* Demographics Tab */}
-                <TabPanel id="demographics">
+                <TabPanel id="demographics" activeTab={currentTab}>
                     <DemographicsSection place={place} />
                 </TabPanel>
 
                 {/* Economy Tab */}
-                <TabPanel id="economy">
+                <TabPanel id="economy" activeTab={currentTab}>
                     <EconomySection place={place} />
                 </TabPanel>
 
                 {/* Governance Tab */}
-                <TabPanel id="governance">
+                <TabPanel id="governance" activeTab={currentTab}>
                     <GovernanceSection place={place} />
                 </TabPanel>
 
                 {/* Opportunity Tab */}
-                <TabPanel id="opportunity">
-                    <OpportunitySection place={place} />
+                <TabPanel id="opportunity" activeTab={currentTab}>
+                    <OpportunitySection activeTab={currentTab} place={place} />
                 </TabPanel>
 
                 {/* Culture Tab */}
-                <TabPanel id="culture">
+                <TabPanel id="culture" activeTab={currentTab}>
                     <CultureSection place={place} />
                 </TabPanel>
 
                 {/* Community Tab */}
-                <TabPanel id="community">
+                <TabPanel id="community" activeTab={currentTab}>
                     <CommunitySection place={place} />
                 </TabPanel>
 
                 {/* Risks Tab */}
-                <TabPanel id="risks">
+                <TabPanel id="risks" activeTab={currentTab}>
                     <RisksSection place={place} />
                 </TabPanel>
             </div>

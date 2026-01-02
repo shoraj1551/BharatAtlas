@@ -1,0 +1,277 @@
+/* Community Section - The "Public Square" Aesthetic */
+
+.community-section {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    font-family: 'Inter', sans-serif;
+}
+
+.comm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 16px;
+}
+
+.section-title {
+    margin: 0 0 4px 0;
+    font-size: 1.25rem;
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.comm-subtitle {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.comm-btn {
+    padding: 8px 16px;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.comm-btn.active {
+    background: #0f172a;
+    color: white;
+    border-color: #0f172a;
+}
+
+/* Feed Grid */
+.feed-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.feed-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    background: #f8fafc;
+    transition: transform 0.2s;
+}
+
+.feed-card:hover {
+    transform: translateY(-2px);
+    border-color: #cbd5e1;
+}
+
+/* Card Types */
+.feed-card.problem {
+    border-left: 4px solid #ef4444;
+}
+
+.feed-card.evidence {
+    border-left: 4px solid #f59e0b;
+}
+
+.feed-card.observation {
+    border-left: 4px solid #3b82f6;
+}
+
+.card-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.problem .card-badge {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.evidence .card-badge {
+    background: #fffbeb;
+    color: #b45309;
+}
+
+.observation .card-badge {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.card-title {
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.card-body {
+    font-size: 0.9rem;
+    color: #475569;
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 12px;
+    font-size: 0.8rem;
+}
+
+.contributor-info {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.user-icon {
+    font-size: 1.2rem;
+}
+
+.username {
+    display: block;
+    font-weight: 600;
+    color: #334155;
+}
+
+.level {
+    display: block;
+    font-size: 0.7rem;
+    color: #94a3b8;
+}
+
+.date {
+    color: #94a3b8;
+}
+
+/* Empty State */
+.empty-feed {
+    text-align: center;
+    padding: 48px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 2px dashed #e2e8f0;
+}
+
+.feed-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.empty-feed button {
+    margin-top: 16px;
+    padding: 8px 16px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Contribute Form */
+.contribute-panel {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.policy-alert {
+    background: #fff7ed;
+    border: 1px solid #ffedd5;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 24px;
+    color: #9a3412;
+    font-size: 0.9rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #334155;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.type-selector {
+    display: flex;
+    gap: 12px;
+}
+
+.type-selector button {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #64748b;
+    transition: all 0.2s;
+}
+
+.type-selector button.selected {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    color: #1d4ed8;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: #0f172a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background: #1e293b;
+}
+
+.submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.success-message {
+    text-align: center;
+    padding: 40px;
+    background: #ecfdf5;
+    border-radius: 8px;
+    color: #065f46;
+}
+
+.error-msg {
+    color: #ef4444;
+    text-align: center;
+    margin-top: 12px;
+}

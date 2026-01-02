@@ -1,10 +1,12 @@
 /**
  * MongoDB Service for BharatAtlas
  * 
- * Handles MongoDB Atlas connection and provides database access
+ * Handles MongoDB Atlas connection and provides database access.
+ * Manages BOTH native MongoDB driver (for legacy/performance) AND Mongoose (for Models).
  */
 
 import { MongoClient } from 'mongodb'
+import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -28,10 +30,15 @@ export async function connectMongo() {
             throw new Error('MONGO_URI not found in environment variables')
         }
 
+        // 1. Connect Native Client (Existing Service Layer)
         client = new MongoClient(MONGO_URI)
         await client.connect()
         db = client.db(DB_NAME)
-        console.log('✅ Connected to MongoDB Atlas')
+
+        // 2. Connect Mongoose (New AI/Community Models)
+        await mongoose.connect(MONGO_URI, { dbName: DB_NAME })
+
+        console.log('✅ Connected to MongoDB Atlas (Native + Mongoose)')
         return db
     } catch (error) {
         console.error('❌ MongoDB connection error:', error.message)
@@ -56,9 +63,10 @@ export async function closeMongo() {
     if (client) {
         await client.close()
         client = null
-        db = null
-        console.log('MongoDB connection closed')
     }
+    await mongoose.disconnect()
+    db = null
+    console.log('MongoDB connection closed')
 }
 
 export default {

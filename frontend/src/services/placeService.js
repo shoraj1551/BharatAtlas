@@ -10,15 +10,35 @@ class PlaceService {
      * @returns {Promise<Object>} Place object
      */
     async getPlaceById(placeId) {
+        // 1. Try Cache First (if offline or just for speed - Stale-While-Revalidate could be better but let's do Cache-First-Offline)
+        // Actually, "Tier 3 Resilient" usually means: Try Network, if fail -> Cache.
+        // OR: Show Cache immediately, then update.
+        // Let's go with: Try Network. If error (offline), return Cache.
+
         try {
             const response = await fetch(`${API_BASE}/${placeId}`)
             if (!response.ok) {
                 throw new Error('Place not found')
             }
             const result = await response.json()
-            return result.data || result // Handle both wrapped and direct responses
+            const placeData = result.data || result // Handle both wrapped and direct responses
+
+            // SAVE TO CACHE
+            import('./cachingService_v2').then(({ cachingService }) => cachingService.cachePlaceData(placeData))
+
+            return placeData
         } catch (error) {
-            console.error('Error fetching place:', error)
+            console.warn('Network fetch failed, trying cache...', error)
+
+            // FALLBACK TO CACHE
+            const { cachingService } = await import('./cachingService_v2')
+            const cached = cachingService.getCachedPlace(placeId)
+
+            if (cached) {
+                console.log(`Served ${placeId} from offline cache`)
+                return { ...cached, is_offline_copy: true } // Mark as offline
+            }
+
             throw error
         }
     }

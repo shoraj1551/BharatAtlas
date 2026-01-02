@@ -1,91 +1,55 @@
-/**
- * Opportunity API Routes
- * 
- * Routes for AI-driven opportunity analysis system
- */
-
 import express from 'express'
 import aiService from '../services/aiService.js'
-import Opportunity from '../models/Opportunity.js'
-import mongoPlaceService from '../services/mongoPlaceService.js'
+import Opportunity from '../../models/Opportunity.js'
 
-const router = express.Router({ mergeParams: true }) // Allow access to :placeId from parent router
+const router = express.Router()
 
-/**
- * GET /api/places/:placeId/opportunities
- * Fetch generated opportunities for a place
- */
-router.get('/', async (req, res, next) => {
+// Get Opportunities for a Place
+router.get('/:placeId', async (req, res) => {
+    try {
+        const opportunities = await Opportunity.find({ place_id: req.params.placeId })
+            .sort({ 'signal.confidence_score': -1 })
+        res.json(opportunities)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+// Trigger AI Analysis (Problem -> Opportunity)
+router.post('/analyze/:placeId', async (req, res) => {
     try {
         const { placeId } = req.params
-        const opportunities = await Opportunity.find({ place_id: placeId })
-            .sort({ created_at: -1 })
-            .limit(20)
-
+        // In a real app, this would be an async background job
+        // For demo, we await it
+        const newOpportunities = await aiService.analyzeLocalSignals(placeId)
         res.json({
             success: true,
-            data: opportunities
+            count: newOpportunities.length,
+            opportunities: newOpportunities
         })
     } catch (error) {
-        next(error)
+        console.error("Analysis Error:", error)
+        res.status(500).json({ error: "Failed to generate opportunities via AI" })
     }
 })
 
 /**
- * POST /api/places/:placeId/opportunities/analyze
- * Trigger AI analysis of raw signals
+ * POST /api/places/:placeId/opportunities/evaluate
+ * Evaluate a specific user business idea
  */
-router.post('/analyze', async (req, res, next) => {
+router.post('/evaluate/:placeId', async (req, res, next) => {
     try {
         const { placeId } = req.params
-        const { signals } = req.body // Array of text strings
+        const { businessType } = req.body
 
-        if (!signals || !Array.isArray(signals) || signals.length === 0) {
-            return res.status(400).json({
-                success: false,
-                error: 'Valid array of "signals" (text inputs) is required.'
-            })
+        if (!businessType) {
+            return res.status(400).json({ success: false, error: "Business Type is required" })
         }
 
-        // Get place name for context
-        const place = await mongoPlaceService.getPlaceById(placeId)
-        if (!place) {
-            return res.status(404).json({ success: false, error: 'Place not found' })
-        }
-
-        // 1. Run AI Analysis
-        // Note: Using a timeout race could be added here for resilience, 
-        // but for now we await the AI service directly.
-        const findings = await aiService.analyzeLocalSignals(place.canonical_name, signals)
-
-        if (!findings || findings.length === 0) {
-            return res.json({
-                success: true,
-                message: 'No distinct opportunities found in signals.',
-                data: []
-            })
-        }
-
-        // 2. Persist Opportunities
-        const opportunitiesToSave = findings.map(f => ({
-            place_id: placeId,
-            sector: f.sector,
-            signal: f.signal,
-            evidence: f.evidence,
-            recommended_business_models: f.recommended_business_models
-        }))
-
-        // Insert new ones
-        const savedOps = await Opportunity.insertMany(opportunitiesToSave)
-
-        res.json({
-            success: true,
-            count: savedOps.length,
-            data: savedOps
-        })
+        const evaluation = await aiService.evaluateBusinessFit(placeId, businessType)
+        res.json({ success: true, data: evaluation })
 
     } catch (error) {
-        console.error("Opportunity Analysis Failed:", error)
         next(error)
     }
 })

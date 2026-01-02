@@ -26,6 +26,19 @@ const PlaceSchema = new mongoose.Schema({
         index: true
     },
 
+    // Localized Names
+    local_names: {
+        hi: { type: String, index: true }, // Hindi
+        ta: { type: String, index: true }, // Tamil
+        te: { type: String, index: true }, // Telugu
+        bn: { type: String, index: true }, // Bengali
+        mr: { type: String, index: true }, // Marathi
+        kn: { type: String, index: true }, // Kannada
+        gu: { type: String, index: true }, // Gujarati
+        ml: { type: String, index: true }, // Malayalam
+        pa: { type: String, index: true }  // Punjabi
+    },
+
     // Geographic Data
     area_sq_km: Number,
     population_density: Number,
@@ -170,6 +183,22 @@ const PlaceSchema = new mongoose.Schema({
             }
         }],
 
+        // 4. Local Processes (The "How-To")
+        local_processes: [{
+            name: String, // e.g., "Trade License"
+            responsible_office: String, // e.g., "Municipal Corp"
+            level: {
+                type: String,
+                enum: ['village', 'block', 'tehsil', 'district', 'state']
+            },
+            approval_timeline_days: Number,
+            verification_required: Boolean,
+            risk_level: {
+                type: String,
+                enum: ['Low', 'Medium', 'High'] // High = Manual Inspection / frequent bribery risk
+            }
+        }],
+
         // Legacy Compatibility
         administrative_head: String,
         lok_sabha_seats: Number,
@@ -253,7 +282,7 @@ const PlaceSchema = new mongoose.Schema({
 
 // Indexes for performance
 PlaceSchema.index({ place_type: 1, canonical_name: 1 })
-PlaceSchema.index({ parent_id: 1 })
+// PlaceSchema.index({ parent_id: 1 }) - Already defined in schema
 PlaceSchema.index({ 'population.value': -1 })
 PlaceSchema.index({ 'literacy_rate.value': -1 })
 

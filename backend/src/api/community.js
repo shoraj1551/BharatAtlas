@@ -5,8 +5,8 @@
  */
 
 import express from 'express'
-import Contributor from '../models/Contributor.js'
-import Contribution from '../models/Contribution.js'
+import Contributor from '../../models/Contributor.js'
+import Contribution from '../../models/Contribution.js'
 
 const router = express.Router()
 

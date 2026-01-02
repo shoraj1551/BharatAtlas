@@ -9,70 +9,70 @@
  */
 
 import { useSearchParams } from 'react-router-dom'
+import { useLanguage } from '../context/LanguageContext'
 import './TabNavigation.css'
 
-const TABS = [
-    { id: 'overview', label: 'Overview', icon: '📋' },
-    { id: 'geography', label: 'Geography', icon: '🗺️' },
-    { id: 'demographics', label: 'Demographics', icon: '👥' },
-    { id: 'economy', label: 'Economy', icon: '💰' },
-    { id: 'governance', label: 'Governance', icon: '🏛️' },
-    { id: 'culture', label: 'Culture', icon: '🎭' },
-    { id: 'community', label: 'Community', icon: '🤝' },
-    { id: 'risks', label: 'Risks', icon: '⚠️' }
-]
+export default function TabNavigation({ activeTab = 'overview', onTabChange }) {
+    const { t } = useLanguage()
 
-export default function TabNavigation({ activeTab, onTabChange }) {
+    const tabs = [
+        { id: 'overview', label: t('Overview'), icon: '📊' },
+        { id: 'geography', label: t('Geography'), icon: '🗺️' },
+        { id: 'demographics', label: t('Demographics'), icon: '👥' },
+        { id: 'economy', label: t('Economy'), icon: '💰' },
+        { id: 'infrastructure', label: t('Infrastructure'), icon: '🏗️' },
+        { id: 'governance', label: t('Governance'), icon: '🏛️' },
+        { id: 'opportunity', label: t('Opportunity'), icon: '🚀' },
+        { id: 'culture', label: t('Culture'), icon: '🎭' },
+        { id: 'community', label: t('Community'), icon: '🏙️' },
+        { id: 'risks', label: t('Risks'), icon: '⚠️' }
+    ]
+
+    // Internal state for uncontrolled usage, but we prefer controlled
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const handleTabClick = (tabId) => {
-        // Update URL
-        setSearchParams({ tab: tabId })
+    // Determine current tab: Prop > URL > Default
+    const urlTab = searchParams.get('tab')
+    // If we are functioning as a controlled component (via PlacePage deep linking), 
+    // we prefer the prop 'activeTab'. 
+    // If 'activeTab' is passed, we use it. 
+    const currentTab = activeTab || urlTab || 'overview'
 
-        // Notify parent
+    const handleTabClick = (tabId) => {
         if (onTabChange) {
             onTabChange(tabId)
         }
     }
 
-    // Get active tab from URL or prop
-    const currentTab = searchParams.get('tab') || activeTab || 'overview'
-
+    // The rest of the TabNavigation component's JSX would go here.
+    // For example, rendering the tabs and their content.
+    // This example assumes the TabNavigation component is not fully provided
+    // and focuses on the TabPanel definition.
     return (
-        <nav className="tab-navigation" role="tablist" aria-label="Place information tabs">
-            <div className="tab-list">
-                {TABS.map(tab => (
-                    <button
-                        key={tab.id}
-                        role="tab"
-                        aria-selected={currentTab === tab.id}
-                        aria-controls={`tab-panel-${tab.id}`}
-                        className={`tab-button ${currentTab === tab.id ? 'active' : ''}`}
-                        onClick={() => handleTabClick(tab.id)}
-                    >
-                        <span className="tab-icon">{tab.icon}</span>
-                        <span className="tab-label">{tab.label}</span>
-                    </button>
-                ))}
-            </div>
+        <nav className="tab-navigation">
+            {tabs.map(tab => (
+                <button
+                    key={tab.id}
+                    className={`tab-button ${currentTab === tab.id ? 'active' : ''}`}
+                    onClick={() => handleTabClick(tab.id)}
+                    aria-selected={currentTab === tab.id}
+                    role="tab"
+                    id={`tab-${tab.id}`}
+                >
+                    <span className="tab-icon">{tab.icon}</span>
+                    <span className="tab-label">{tab.label}</span>
+                </button>
+            ))}
         </nav>
     )
 }
 
-/**
- * TabPanel Component
- * 
- * Container for tab content
- */
 export function TabPanel({ id, activeTab, children }) {
-    const [searchParams] = useSearchParams()
-    const currentTab = searchParams.get('tab') || activeTab || 'overview'
-
-    if (currentTab !== id) return null
+    if (activeTab !== id) return null
 
     return (
         <div
-            id={`tab-panel-${id}`}
+            id={`panel-${id}`}
             role="tabpanel"
             aria-labelledby={`tab-${id}`}
             className="tab-panel"

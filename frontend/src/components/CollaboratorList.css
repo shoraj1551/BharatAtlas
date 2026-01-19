@@ -1,0 +1,104 @@
+.collaborator-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.no-collaborators {
+    text-align: center;
+    padding: 2rem;
+    color: #999;
+}
+
+.collaborator-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.collaborator-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.avatar-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1976d2;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.collaborator-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.collaborator-details strong {
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.collaborator-details .email {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.collaborator-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.role-select {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.role-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.role-badge.owner {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.role-badge.editor {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.role-badge.viewer {
+    background: #f5f5f5;
+    color: #666;
+}
+
+.remove-btn {
+    background: #ffebee;
+    color: #c62828;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.remove-btn:hover {
+    background: #ffcdd2;
+}

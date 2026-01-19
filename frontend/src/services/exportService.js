@@ -1,144 +1,94 @@
 /**
  * Export Service
  * 
- * Handles data export in multiple formats (CSV, JSON, PDF)
+ * Handle data export downloads
  */
 
-/**
- * Export comparison data to CSV
- */
-export function exportToCSV(comparisonData, places) {
-    if (!comparisonData || !places || places.length === 0) {
-        throw new Error('No data to export')
-    }
+const API_BASE = '/api/v1/export'
 
-    // Build CSV header
-    const headers = ['Metric', ...places.map(p => p.canonical_name)]
-
-    // Build CSV rows
-    const rows = comparisonData.map(row => {
-        const metricName = row.unit ? `${row.metric} (${row.unit})` : row.metric
-        const values = row.values.map(v => v.displayValue)
-        return [metricName, ...values]
+export async function exportPlaces(placeIds, format = 'json') {
+    // ... existing implementation ...
+    const response = await fetch(`${API_BASE}/places`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('api_key') || ''}`
+        },
+        body: JSON.stringify({ place_ids: placeIds, format })
     })
 
-    // Combine headers and rows
-    const csvContent = [
-        headers.join(','),
-        ...rows.map(row => row.join(','))
-    ].join('\n')
+    if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(`Export failed: ${errorText}`)
+    }
 
-    return csvContent
+    // Handle file download
+    const blob = await response.blob()
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `places_export.${format}`
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(url)
+    document.body.removeChild(a)
 }
 
 /**
- * Export comparison data to JSON
+ * Export comparison data to CSV (Client-side)
  */
-export function exportToJSON(comparisonData, places) {
-    if (!comparisonData || !places || places.length === 0) {
-        throw new Error('No data to export')
-    }
+export function exportComparisonToCSV(comparisonData, places) {
+    if (!comparisonData || !places) return
 
-    const exportData = {
-        metadata: {
-            exportDate: new Date().toISOString(),
-            placesCount: places.length,
-            places: places.map(p => ({
-                id: p.place_id,
-                name: p.canonical_name,
-                type: p.place_type
-            }))
-        },
-        comparison: comparisonData.map(row => ({
-            metric: row.metric,
-            unit: row.unit,
-            comparable: row.comparable,
-            values: row.values.map(v => ({
-                placeName: v.placeName,
-                value: v.rawValue,
-                displayValue: v.displayValue,
-                confidence: v.confidence,
-                timestamp: v.timestamp
-            })),
-            min: row.min,
-            max: row.max
-        }))
-    }
+    // Create CSV content
+    // Header
+    const headers = ['Metric', ...places.map(p => p.canonical_name)]
+    const rows = [headers.join(',')]
 
-    return JSON.stringify(exportData, null, 2)
-}
+    // Rows
+    Object.keys(comparisonData).forEach(metric => {
+        const row = [formatMetricName(metric)]
+        places.forEach(place => {
+            const val = comparisonData[metric][place.place_id]
+            row.push(val !== undefined ? val : 'N/A')
+        })
+        rows.push(row.join(','))
+    })
 
-/**
- * Download file to user's computer
- */
-export function downloadFile(content, filename, mimeType) {
-    const blob = new Blob([content], { type: mimeType })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = filename
+    const csvContent = "data:text/csv;charset=utf-8," + rows.join("\n")
+    const encodedUri = encodeURI(csvContent)
+    const link = document.createElement("a")
+    link.setAttribute("href", encodedUri)
+    link.setAttribute("download", "bharatatlas_comparison.csv")
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
-    URL.revokeObjectURL(url)
 }
 
 /**
- * Export comparison to CSV file
- */
-export function exportComparisonToCSV(comparisonData, places) {
-    const csv = exportToCSV(comparisonData, places)
-    const filename = `bharatatlas-comparison-${Date.now()}.csv`
-    downloadFile(csv, filename, 'text/csv')
-}
-
-/**
- * Export comparison to JSON file
+ * Export comparison data to JSON (Client-side)
  */
 export function exportComparisonToJSON(comparisonData, places) {
-    const json = exportToJSON(comparisonData, places)
-    const filename = `bharatatlas-comparison-${Date.now()}.json`
-    downloadFile(json, filename, 'application/json')
-}
-
-/**
- * Export single place data to JSON
- */
-export function exportPlaceToJSON(place) {
-    if (!place) {
-        throw new Error('No place data to export')
-    }
+    if (!comparisonData || !places) return
 
     const exportData = {
-        metadata: {
-            exportDate: new Date().toISOString(),
-            source: 'BharatAtlas'
+        meta: {
+            date: new Date().toISOString(),
+            source: 'BharatAtlas',
+            places: places.map(p => ({ id: p.place_id, name: p.canonical_name }))
         },
-        place: {
-            id: place.place_id,
-            name: place.canonical_name,
-            type: place.place_type,
-            population: place.population,
-            area: place.area_sq_km,
-            literacyRate: place.literacy_rate,
-            numDistricts: place.num_districts,
-            majorIndustries: place.major_industries,
-            dataQuality: place.data_quality_score,
-            verificationStatus: place.verification_status,
-            lastUpdated: place.last_updated
-        }
+        data: comparisonData
     }
 
-    const json = JSON.stringify(exportData, null, 2)
-    const filename = `bharatatlas-${place.canonical_name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`
-    downloadFile(json, filename, 'application/json')
+    const jsonString = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2))
+    const link = document.createElement("a")
+    link.setAttribute("href", jsonString)
+    link.setAttribute("download", "bharatatlas_comparison.json")
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
 }
 
-export default {
-    exportToCSV,
-    exportToJSON,
-    exportComparisonToCSV,
-    exportComparisonToJSON,
-    exportPlaceToJSON,
-    downloadFile
+function formatMetricName(key) {
+    return key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
 }

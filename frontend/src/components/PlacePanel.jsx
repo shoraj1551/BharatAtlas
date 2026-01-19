@@ -8,6 +8,7 @@ import Opportunities from './Opportunities'
 import ComparisonButton from './ComparisonButton'
 import BookmarkButton from './BookmarkButton'
 import ShareButtons from './ShareButtons'
+import ExportMenu from './ExportMenu' // NEW
 import ConfidenceBadge from './ConfidenceBadge'
 import DataFreshness from './DataFreshness'
 import PlaceCharts from './PlaceCharts'
@@ -29,6 +30,7 @@ import IntelligenceSummary from './IntelligenceSummary'
 import BlindSpots from './BlindSpots'
 import DataFreshnessLabel from './DataFreshnessLabel' // NEW
 import FieldVerificationMode from './FieldVerificationMode' // NEW
+import TimelineView from './Timeline/TimelineView' // NEW - Feature 3.2
 import placeService from '../services/placeService'
 import narrativeService from '../services/narrativeService'
 import opportunityService from '../services/opportunityService'
@@ -204,6 +206,7 @@ function PlacePanel({ placeId, place: initialPlace, activeTab = 'overview', onTa
 
                 {/* Action Buttons */}
                 <div className="place-actions">
+                    <ExportMenu placeIds={[place.place_id]} /> {/* NEW EXPORT MENU */}
                     <ComparisonButton place={place} variant="default" />
                     <BookmarkButton place={place} variant="default" />
                 </div>
@@ -343,6 +346,11 @@ function PlacePanel({ placeId, place: initialPlace, activeTab = 'overview', onTa
                     </div>
                 </TabPanel>
 
+                {/* Timeline Tab - Feature 3.2 */}
+                <TabPanel id="timeline" activeTab={currentTab}>
+                    <TimelineView placeId={place.place_id} />
+                </TabPanel>
+
                 {/* Geography Tab */}
                 <TabPanel id="geography" activeTab={currentTab}>
                     <GeographySection place={place} />
@@ -373,6 +381,16 @@ function PlacePanel({ placeId, place: initialPlace, activeTab = 'overview', onTa
                     <CultureSection place={place} />
                 </TabPanel>
 
+                {/* Reviews Tab - Feature 3.3 */}
+                <TabPanel id="reviews" activeTab={currentTab}>
+                    <ReviewsSection placeId={place.place_id} />
+                </TabPanel>
+
+                {/* Discussions Tab - Feature 3.3 */}
+                <TabPanel id="discussions" activeTab={currentTab}>
+                    <DiscussionBoard placeId={place.place_id} />
+                </TabPanel>
+
                 {/* Community Tab */}
                 <TabPanel id="community" activeTab={currentTab}>
                     <CommunitySection place={place} />
@@ -383,7 +401,7 @@ function PlacePanel({ placeId, place: initialPlace, activeTab = 'overview', onTa
                     <RisksSection place={place} />
                 </TabPanel>
             </div>
-        </div>
+        </div >
     )
 }
 

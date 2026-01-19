@@ -50,6 +50,44 @@ const WorkspaceSchema = new mongoose.Schema({
         saved_at: { type: Date, default: Date.now }
     }],
 
+    // 4. Collaboration Features (NEW - Feature 2.2)
+    owner_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        sparse: true // Optional for backward compatibility
+    },
+    collaborators: [{
+        user_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
+        },
+        role: {
+            type: String,
+            enum: ['owner', 'editor', 'viewer'],
+            default: 'viewer'
+        },
+        added_at: { type: Date, default: Date.now }
+    }],
+    visibility: {
+        type: String,
+        enum: ['private', 'team', 'public'],
+        default: 'private'
+    },
+    shared_link: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    activity_log: [{
+        user_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        action: String,
+        timestamp: { type: Date, default: Date.now }
+    }],
+
     // Metadata
     created_at: { type: Date, default: Date.now },
     last_active: { type: Date, default: Date.now }

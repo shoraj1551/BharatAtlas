@@ -1,59 +1,93 @@
-import { useState } from 'react'
-import { useNotificationStore } from '../services/notificationService'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { getNotifications, getUnreadCount, markAsRead, markAllAsRead, deleteNotification } from '../services/notificationService'
+import useAuthStore from '../store/authStore'
 import './NotificationCenter.css'
 
-/**
- * Notification Center Component
- * 
- * Displays user notifications
- */
-function NotificationCenter() {
+export default function NotificationCenter() {
+    const { isAuthenticated } = useAuthStore()
     const [isOpen, setIsOpen] = useState(false)
-    const { notifications, unreadCount, markAsRead, markAllAsRead, deleteNotification, clearAll } = useNotificationStore()
+    const [notifications, setNotifications] = useState([])
+    const [unreadCount, setUnreadCount] = useState(0)
+    const [loading, setLoading] = useState(false)
 
-    const handleNotificationClick = (notification) => {
-        if (!notification.read) {
-            markAsRead(notification.id)
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchUnreadCount()
+            // Poll for new notifications every 30 seconds
+            const interval = setInterval(fetchUnreadCount, 30000)
+            return () => clearInterval(interval)
+        }
+    }, [isAuthenticated])
+
+    const fetchUnreadCount = async () => {
+        try {
+            const data = await getUnreadCount()
+            setUnreadCount(data.count)
+        } catch (error) {
+            console.error('Error fetching unread count:', error)
         }
     }
 
-    const getNotificationIcon = (type) => {
-        const icons = {
-            data_update: '📊',
-            bookmark_update: '⭐',
-            comparison_alert: '⚖️',
-            system: '⚙️',
-            info: 'ℹ️'
+    const fetchNotifications = async () => {
+        setLoading(true)
+        try {
+            const data = await getNotifications(false, 20)
+            setNotifications(data.data)
+        } catch (error) {
+            console.error('Error fetching notifications:', error)
+        } finally {
+            setLoading(false)
         }
-        return icons[type] || 'ℹ️'
     }
 
-    const formatTime = (timestamp) => {
-        const date = new Date(timestamp)
-        const now = new Date()
-        const diff = now - date
-
-        const minutes = Math.floor(diff / 60000)
-        const hours = Math.floor(diff / 3600000)
-        const days = Math.floor(diff / 86400000)
-
-        if (minutes < 1) return 'Just now'
-        if (minutes < 60) return `${minutes}m ago`
-        if (hours < 24) return `${hours}h ago`
-        if (days < 7) return `${days}d ago`
-        return date.toLocaleDateString()
+    const handleOpen = () => {
+        setIsOpen(!isOpen)
+        if (!isOpen) {
+            fetchNotifications()
+        }
     }
+
+    const handleMarkAsRead = async (id) => {
+        try {
+            await markAsRead(id)
+            setNotifications(notifications.map(n =>
+                n._id === id ? { ...n, read: true } : n
+            ))
+            setUnreadCount(Math.max(0, unreadCount - 1))
+        } catch (error) {
+            console.error('Error marking as read:', error)
+        }
+    }
+
+    const handleMarkAllAsRead = async () => {
+        try {
+            await markAllAsRead()
+            setNotifications(notifications.map(n => ({ ...n, read: true })))
+            setUnreadCount(0)
+        } catch (error) {
+            console.error('Error marking all as read:', error)
+        }
+    }
+
+    const handleDelete = async (id) => {
+        try {
+            await deleteNotification(id)
+            setNotifications(notifications.filter(n => n._id !== id))
+            fetchUnreadCount()
+        } catch (error) {
+            console.error('Error deleting notification:', error)
+        }
+    }
+
+    if (!isAuthenticated) return null
 
     return (
         <div className="notification-center">
-            <button
-                className="notification-bell"
-                onClick={() => setIsOpen(!isOpen)}
-                aria-label="Notifications"
-            >
+            <button className="notification-bell" onClick={handleOpen}>
                 🔔
                 {unreadCount > 0 && (
-                    <span className="notification-badge">{unreadCount}</span>
+                    <span className="notification-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
                 )}
             </button>
 
@@ -61,49 +95,26 @@ function NotificationCenter() {
                 <div className="notification-dropdown">
                     <div className="notification-header">
                         <h3>Notifications</h3>
-                        {notifications.length > 0 && (
-                            <div className="notification-actions">
-                                <button onClick={markAllAsRead} className="action-btn">
-                                    Mark all read
-                                </button>
-                                <button onClick={clearAll} className="action-btn">
-                                    Clear all
-                                </button>
-                            </div>
+                        {unreadCount > 0 && (
+                            <button onClick={handleMarkAllAsRead} className="mark-all-read">
+                                Mark all read
+                            </button>
                         )}
                     </div>
 
                     <div className="notification-list">
-                        {notifications.length === 0 ? (
-                            <div className="notification-empty">
-                                <p>No notifications</p>
-                            </div>
+                        {loading ? (
+                            <div className="notification-loading">Loading...</div>
+                        ) : notifications.length === 0 ? (
+                            <div className="notification-empty">No notifications</div>
                         ) : (
                             notifications.map(notification => (
-                                <div
-                                    key={notification.id}
-                                    className={`notification-item ${notification.read ? 'read' : 'unread'}`}
-                                    onClick={() => handleNotificationClick(notification)}
-                                >
-                                    <div className="notification-icon">
-                                        {notification.icon || getNotificationIcon(notification.type)}
-                                    </div>
-                                    <div className="notification-content">
-                                        <div className="notification-title">{notification.title}</div>
-                                        <div className="notification-message">{notification.message}</div>
-                                        <div className="notification-time">{formatTime(notification.timestamp)}</div>
-                                    </div>
-                                    <button
-                                        className="notification-delete"
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            deleteNotification(notification.id)
-                                        }}
-                                        aria-label="Delete notification"
-                                    >
-                                        ×
-                                    </button>
-                                </div>
+                                <NotificationItem
+                                    key={notification._id}
+                                    notification={notification}
+                                    onMarkAsRead={handleMarkAsRead}
+                                    onDelete={handleDelete}
+                                />
                             ))
                         )}
                     </div>
@@ -113,4 +124,49 @@ function NotificationCenter() {
     )
 }
 
-export default NotificationCenter
+function NotificationItem({ notification, onMarkAsRead, onDelete }) {
+    const getIcon = (type) => {
+        switch (type) {
+            case 'workspace_invite': return '🤝'
+            case 'data_update': return '📊'
+            case 'new_feature': return '✨'
+            case 'collaboration': return '👥'
+            default: return '🔔'
+        }
+    }
+
+    const handleClick = () => {
+        if (!notification.read) {
+            onMarkAsRead(notification._id)
+        }
+    }
+
+    return (
+        <div className={`notification-item ${notification.read ? 'read' : 'unread'}`}>
+            <div className="notification-icon">{getIcon(notification.type)}</div>
+            <div className="notification-content" onClick={handleClick}>
+                {notification.link ? (
+                    <Link to={notification.link} className="notification-link">
+                        <strong>{notification.title}</strong>
+                        <p>{notification.message}</p>
+                    </Link>
+                ) : (
+                    <>
+                        <strong>{notification.title}</strong>
+                        <p>{notification.message}</p>
+                    </>
+                )}
+                <span className="notification-time">
+                    {new Date(notification.created_at).toLocaleDateString()}
+                </span>
+            </div>
+            <button
+                className="notification-delete"
+                onClick={() => onDelete(notification._id)}
+                title="Delete"
+            >
+                ×
+            </button>
+        </div>
+    )
+}

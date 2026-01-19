@@ -91,13 +91,28 @@ class PlaceService {
         try {
             const response = await fetch(`${API_BASE}/states`)
             if (!response.ok) {
-                throw new Error('Failed to fetch states')
+                console.error('Failed to fetch states:', response.status)
+                return [] // Return empty array on error
             }
             const result = await response.json()
-            return result.data || result || [] // Extract data array from wrapped response
+            
+            // Handle different response formats
+            // Backend returns: { success: true, data: [...], pagination: {...} }
+            if (result.data && Array.isArray(result.data)) {
+                return result.data
+            }
+            
+            // Fallback: if result itself is an array
+            if (Array.isArray(result)) {
+                return result
+            }
+            
+            // If neither, log error and return empty array
+            console.error('Unexpected response format from /api/places/states:', result)
+            return []
         } catch (error) {
             console.error('Error fetching states:', error)
-            throw error
+            return [] // Return empty array instead of throwing
         }
     }
 

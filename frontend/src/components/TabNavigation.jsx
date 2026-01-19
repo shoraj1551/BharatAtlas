@@ -17,6 +17,7 @@ export default function TabNavigation({ activeTab = 'overview', onTabChange }) {
 
     const tabs = [
         { id: 'overview', label: t('Overview'), icon: '📊' },
+        { id: 'timeline', label: t('Timeline'), icon: '📈' }, // Feature 3.2
         { id: 'geography', label: t('Geography'), icon: '🗺️' },
         { id: 'demographics', label: t('Demographics'), icon: '👥' },
         { id: 'economy', label: t('Economy'), icon: '💰' },
@@ -24,6 +25,8 @@ export default function TabNavigation({ activeTab = 'overview', onTabChange }) {
         { id: 'governance', label: t('Governance'), icon: '🏛️' },
         { id: 'opportunity', label: t('Opportunity'), icon: '🚀' },
         { id: 'culture', label: t('Culture'), icon: '🎭' },
+        { id: 'reviews', label: t('Reviews'), icon: '⭐' }, // Feature 3.3
+        { id: 'discussions', label: t('Discussions'), icon: '💬' }, // Feature 3.3
         { id: 'community', label: t('Community'), icon: '🏙️' },
         { id: 'risks', label: t('Risks'), icon: '⚠️' }
     ]

@@ -22,8 +22,25 @@ const router = express.Router()
 router.use('/:placeId/opportunities', opportunitiesRouter)
 
 /**
- * GET /api/places/:placeId/history
- * Fetch the Audit Log / Trust Ledger for a place
+ * @swagger
+ * /api/v1/places/{placeId}/history:
+ *   get:
+ *     summary: Get place history/audit log
+ *     tags: [Places]
+ *     parameters:
+ *       - in: path
+ *         name: placeId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Place ID
+ *     responses:
+ *       200:
+ *         description: Place history records
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiResponse'
  */
 router.get('/:placeId/history', async (req, res, next) => {
     try {
@@ -56,8 +73,37 @@ router.get('/states', cachePlaceList, async (req, res, next) => {
 })
 
 /**
- * GET /api/places/:id
- * Get place by ID with all enhanced data
+ * @swagger
+ * /api/v1/places/{id}:
+ *   get:
+ *     summary: Get place by ID
+ *     tags: [Places]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Place ID (e.g., 'karnataka', 'bangalore')
+ *       - in: query
+ *         name: fields
+ *         schema:
+ *           type: string
+ *         description: Comma-separated fields to return
+ *     responses:
+ *       200:
+ *         description: Place data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/Place'
+ *       404:
+ *         description: Place not found
  */
 router.get('/:id', cachePlaceById, async (req, res, next) => {
     try {

@@ -8,17 +8,21 @@ import express from 'express'
 import cors from 'cors'
 import compression from 'compression'
 import dotenv from 'dotenv'
+import swaggerUi from 'swagger-ui-express'
+import { swaggerSpec } from './config/swagger.js'
+import v1Router from './api/v1/index.js'
 import geoRouter from './api/geo.js'
 import imagesRouter from './api/images.js'
 import placesRouter from './api/places.js'
 import aiRoutes from './api/ai.js'
 import communityRouter from './api/community.js'
 import opportunitiesRouter from './api/opportunities.js'
-import workspaceRouter from './api/workspace.js' // Added Workspace import
+import workspaceRouter from './api/workspace.js'
 import { connectMongo } from './services/mongoService.js'
 import { apiLimiter } from './middleware/rateLimiter.js'
 import { securityHeaders } from './middleware/securityHeaders.js'
 import { requestLogger } from './utils/logger.js'
+import { errorHandler } from './middleware/errorHandler.js'
 
 // Load environment variables
 dotenv.config()
@@ -49,44 +53,41 @@ app.get('/health', (req, res) => {
     })
 })
 
-// API Routes
-app.use('/api/geo', geoRouter)
-app.use('/api/images', imagesRouter)
-app.use('/api/places', placesRouter)
-app.use('/api/ai', aiRoutes)
-app.use('/api/community', communityRouter)
-app.use('/api/opportunities', opportunitiesRouter)
-app.use('/api/workspace', workspaceRouter) // Added Workspace API
+// Deprecation middleware
+const deprecationWarning = (routeName) => (req, res, next) => {
+    res.setHeader('X-API-Warn', `This endpoint is deprecated. Please use /api/v1/${routeName}`)
+    res.setHeader('Deprecation', 'true')
+    next()
+}
+
+// API Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    customSiteTitle: 'BharatAtlas API Documentation',
+    customCss: '.swagger-ui .topbar { display: none }'
+}))
+
+// API v1 Routes (Primary)
+app.use('/api/v1', v1Router)
+
+// Backward Compatibility - Mount individual routers under legacy paths with deprecation warnings
+app.use('/api/geo', deprecationWarning('geo'), geoRouter)
+app.use('/api/images', deprecationWarning('images'), imagesRouter)
+app.use('/api/places', deprecationWarning('places'), placesRouter)
+app.use('/api/ai', deprecationWarning('ai'), aiRoutes)
+app.use('/api/community', deprecationWarning('community'), communityRouter)
+app.use('/api/opportunities', deprecationWarning('opportunities'), opportunitiesRouter)
+app.use('/api/workspace', deprecationWarning('workspace'), workspaceRouter)
 
 // 404 handler
-app.use((req, res) => {
-    res.status(404).json({
-        error: 'Not Found',
-        message: `The requested resource '${req.path}' was not found`,
-        path: req.path,
-        timestamp: new Date().toISOString()
-    })
+app.use((req, res, next) => {
+    const error = new Error(`Can't find ${req.originalUrl} on this server!`)
+    error.statusCode = 404
+    error.status = 'fail'
+    next(error)
 })
 
-// Error handler - Standardized error responses
-app.use((err, req, res, next) => {
-    console.error('Error:', err)
-
-    const statusCode = err.statusCode || 500
-    const errorResponse = {
-        error: err.name || 'Internal Server Error',
-        message: err.message || 'An unexpected error occurred',
-        timestamp: new Date().toISOString()
-    }
-
-    // Include stack trace in development
-    if (process.env.NODE_ENV === 'development') {
-        errorResponse.stack = err.stack
-        errorResponse.details = err.details
-    }
-
-    res.status(statusCode).json(errorResponse)
-})
+// Central Error Handler
+app.use(errorHandler)
 
 // Initialize MongoDB and start server
 async function startServer() {

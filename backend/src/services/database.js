@@ -32,7 +32,7 @@ const pool = new Pool(config)
 pool.on('error', (err, client) => {
     console.error('Unexpected error on idle client', err)
     process.exit(-1)
-}
+})
 
 // Test connection on startup
 pool.query('SELECT NOW()', (err, res) => {

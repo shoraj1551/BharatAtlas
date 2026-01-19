@@ -15,10 +15,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-map': ['maplibre-gl']
-        }
+        // manualChunks removed to prevent React 19 import issues
       }
     },
     chunkSizeWarningLimit: 600

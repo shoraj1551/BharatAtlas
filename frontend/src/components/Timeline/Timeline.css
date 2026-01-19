@@ -1,0 +1,84 @@
+.timeline-view {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-top: 2rem;
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.timeline-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.25rem;
+}
+
+.metric-selector {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.metric-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background: white;
+    color: #666;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.metric-btn:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+}
+
+.metric-btn.active {
+    font-weight: 600;
+    border-width: 1.5px;
+}
+
+.chart-container {
+    margin-bottom: 1rem;
+    padding: 1rem 0;
+}
+
+.data-source-note {
+    text-align: right;
+    font-size: 0.8rem;
+    color: #999;
+    font-style: italic;
+}
+
+.timeline-loading {
+    padding: 2rem;
+    text-align: center;
+    color: #666;
+}
+
+.timeline-error {
+    padding: 1rem;
+    color: #d32f2f;
+    background: #ffebee;
+    border-radius: 6px;
+    margin-top: 1rem;
+}
+
+.no-data {
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+    font-style: italic;
+}

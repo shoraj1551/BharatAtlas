@@ -1,138 +1,86 @@
 /**
  * Notification Service
  * 
- * Manages user notifications for data updates and alerts
+ * Frontend API client for notifications
  */
 
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+const API_BASE = '/api/v1/notifications'
 
-export const useNotificationStore = create(
-    persist(
-        (set, get) => ({
-            // State
-            notifications: [],
-            unreadCount: 0,
-            preferences: {
-                dataUpdates: true,
-                bookmarkUpdates: true,
-                comparisonAlerts: false
-            },
+const getHeaders = () => {
+    const store = JSON.parse(localStorage.getItem('auth-storage') || '{}')
+    const token = store.state?.token
 
-            // Actions
-            addNotification: (notification) => {
-                const newNotification = {
-                    id: `notif_${Date.now()}`,
-                    timestamp: new Date().toISOString(),
-                    read: false,
-                    ...notification
-                }
-
-                set(state => ({
-                    notifications: [newNotification, ...state.notifications].slice(0, 50), // Keep last 50
-                    unreadCount: state.unreadCount + 1
-                }))
-            },
-
-            markAsRead: (notificationId) => {
-                set(state => ({
-                    notifications: state.notifications.map(n =>
-                        n.id === notificationId ? { ...n, read: true } : n
-                    ),
-                    unreadCount: Math.max(0, state.unreadCount - 1)
-                }))
-            },
-
-            markAllAsRead: () => {
-                set(state => ({
-                    notifications: state.notifications.map(n => ({ ...n, read: true })),
-                    unreadCount: 0
-                }))
-            },
-
-            deleteNotification: (notificationId) => {
-                set(state => {
-                    const notification = state.notifications.find(n => n.id === notificationId)
-                    return {
-                        notifications: state.notifications.filter(n => n.id !== notificationId),
-                        unreadCount: notification && !notification.read
-                            ? Math.max(0, state.unreadCount - 1)
-                            : state.unreadCount
-                    }
-                })
-            },
-
-            clearAll: () => {
-                set({ notifications: [], unreadCount: 0 })
-            },
-
-            updatePreferences: (newPreferences) => {
-                set(state => ({
-                    preferences: { ...state.preferences, ...newPreferences }
-                }))
-            }
-        }),
-        {
-            name: 'bharatatlas-notifications'
-        }
-    )
-)
-
-/**
- * Notification types
- */
-export const NotificationType = {
-    DATA_UPDATE: 'data_update',
-    BOOKMARK_UPDATE: 'bookmark_update',
-    COMPARISON_ALERT: 'comparison_alert',
-    SYSTEM: 'system',
-    INFO: 'info'
-}
-
-/**
- * Create notification helpers
- */
-export function notifyDataUpdate(placeName) {
-    const { addNotification, preferences } = useNotificationStore.getState()
-
-    if (preferences.dataUpdates) {
-        addNotification({
-            type: NotificationType.DATA_UPDATE,
-            title: 'Data Updated',
-            message: `New data available for ${placeName}`,
-            icon: '📊'
-        })
+    return {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
     }
 }
 
-export function notifyBookmarkUpdate(placeName) {
-    const { addNotification, preferences } = useNotificationStore.getState()
-
-    if (preferences.bookmarkUpdates) {
-        addNotification({
-            type: NotificationType.BOOKMARK_UPDATE,
-            title: 'Bookmark Updated',
-            message: `${placeName} has been updated`,
-            icon: '⭐'
-        })
-    }
-}
-
-export function notifyInfo(title, message) {
-    const { addNotification } = useNotificationStore.getState()
-
-    addNotification({
-        type: NotificationType.INFO,
-        title,
-        message,
-        icon: 'ℹ️'
+export async function getNotifications(unreadOnly = false, limit = 50) {
+    const params = new URLSearchParams({ unreadOnly, limit })
+    const response = await fetch(`${API_BASE}?${params}`, {
+        headers: getHeaders()
     })
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch notifications')
+    }
+
+    return data
 }
 
-export default {
-    useNotificationStore,
-    NotificationType,
-    notifyDataUpdate,
-    notifyBookmarkUpdate,
-    notifyInfo
+export async function getUnreadCount() {
+    const response = await fetch(`${API_BASE}/unread-count`, {
+        headers: getHeaders()
+    })
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch unread count')
+    }
+
+    return data
+}
+
+export async function markAsRead(notificationId) {
+    const response = await fetch(`${API_BASE}/${notificationId}/read`, {
+        method: 'PUT',
+        headers: getHeaders()
+    })
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(data.error || 'Failed to mark as read')
+    }
+
+    return data
+}
+
+export async function markAllAsRead() {
+    const response = await fetch(`${API_BASE}/read-all`, {
+        method: 'PUT',
+        headers: getHeaders()
+    })
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(data.error || 'Failed to mark all as read')
+    }
+
+    return data
+}
+
+export async function deleteNotification(notificationId) {
+    const response = await fetch(`${API_BASE}/${notificationId}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+    })
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(data.error || 'Failed to delete notification')
+    }
+
+    return data
 }

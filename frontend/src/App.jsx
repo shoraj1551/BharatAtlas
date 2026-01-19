@@ -9,12 +9,19 @@ import HealthPage from './pages/HealthPage'
 import ComparePage from './pages/ComparePage'
 import WorkspacePage from './pages/WorkspacePage' // Changed from BookmarksPage
 import GovernancePage from './pages/GovernancePage'
+import AdvancedSearchPage from './pages/AdvancedSearchPage'
+import DeveloperPage from './pages/DeveloperPage'
+import AnalyticsDashboard from './pages/AnalyticsDashboard'
 import SearchBar from './components/SearchBar'
 import LoadingSpinner from './components/LoadingSpinner'
 import ErrorBoundary from './components/ErrorBoundary'
 import ComparisonFloatingButton from './components/ComparisonFloatingButton'
 import NotificationCenter from './components/NotificationCenter'
 import AIChat from './components/AIChat'
+import UserMenu from './components/UserMenu' // NEW
+import LoginModal from './components/auth/LoginModal' // NEW
+import RegisterModal from './components/auth/RegisterModal' // NEW
+import ProfilePage from './pages/ProfilePage' // NEW
 import { logScaleReadiness } from './utils/scaleReadiness'
 
 // Log scale readiness on app load (development only)
@@ -89,19 +96,38 @@ function LanguageSwitcher() {
 import { ConnectivityProvider } from './context/ConnectivityProvider' // Bypass locked file
 
 function App() {
+  const { language } = useLanguage()
+  const [activeTab, setActiveTab] = useState('overview')
+  const [isLoginOpen, setIsLoginOpen] = useState(false)
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false)
+
+  const openLogin = () => {
+    setIsRegisterOpen(false)
+    setIsLoginOpen(true)
+  }
+
+  const openRegister = () => {
+    setIsLoginOpen(false)
+    setIsRegisterOpen(true)
+  }
+
+  useEffect(() => {
+    document.documentElement.lang = language
+  }, [language])
+
   return (
     <ErrorBoundary>
       <LanguageProvider>
         <ConnectivityProvider> {/* Added Provider */}
           <BrowserRouter>
             <div className="app">
-              <header className="identity-header">
-                <div className="header-content">
+              <header className="app-header">
+                <div className="header-container">
                   <div className="identity">
                     <h1 className="platform-name">BharatAtlas</h1>
                     <p className="platform-purpose">Digital Intelligence for India</p>
                   </div>
-                  <Navigation />
+                  <Navigation onOpenLogin={openLogin} />
                   <SearchBar />
                   <LanguageSwitcher /> {/* Added Switcher */}
                   <NotificationCenter />
@@ -111,6 +137,18 @@ function App() {
                   </div>
                 </div>
               </header>
+
+              <LoginModal
+                isOpen={isLoginOpen}
+                onClose={() => setIsLoginOpen(false)}
+                onSwitchToRegister={openRegister}
+              />
+
+              <RegisterModal
+                isOpen={isRegisterOpen}
+                onClose={() => setIsRegisterOpen(false)}
+                onSwitchToLogin={openLogin}
+              />
 
               <Suspense fallback={<LoadingSpinner message="Loading..." />}>
                 <Routes>
@@ -129,6 +167,10 @@ function App() {
                   <Route path="/workspace" element={<WorkspacePage />} /> { /* NEW WORKSPACE ROUTE */}
                   <Route path="/bookmarks" element={<Navigate to="/workspace" replace />} /> {/* Redirect old bookmarks */}
                   <Route path="/governance" element={<GovernancePage />} />
+                  <Route path="/search/advanced" element={<AdvancedSearchPage />} /> {/* NEW ADVANCED SEARCH */}
+                  <Route path="/developer" element={<DeveloperPage />} /> {/* NEW DEVELOPER PORTAL */}
+                  <Route path="/profile" element={<ProfilePage />} /> {/* NEW USER PROFILE */}
+                  <Route path="/analytics" element={<AnalyticsDashboard />} /> {/* NEW ANALYTICS DASHBOARD - Feature 3.1 */}
 
                   {/* Placeholders for Governance links to prevent 404s */}
                   <Route path="/curators" element={<div style={{ padding: '4rem', textAlign: 'center' }}><h2>Curator Profiles</h2><p>Coming Soon</p></div>} />

@@ -1,107 +1,115 @@
 /**
- * Structured Logging Utility
+ * Structured Logging Utility (Winston)
  * 
- * Provides consistent logging format across the application
+ * Provides consistent, structured logging with multiple transports (Console, File)
+ * and automatic log correlation support.
  */
 
-const LOG_LEVELS = {
-    DEBUG: 'DEBUG',
-    INFO: 'INFO',
-    WARN: 'WARN',
-    ERROR: 'ERROR'
+import winston from 'winston'
+import 'winston-daily-rotate-file'
+import { v4 as uuidv4 } from 'uuid'
+
+// Ensure logs directory exists - structure mimics strategy
+const LOG_DIR = 'logs'
+
+// Define Log Format
+const jsonFormat = winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.errors({ stack: true }),
+    winston.format.json()
+)
+
+const prettyFormat = winston.format.combine(
+    winston.format.colorize(),
+    winston.format.timestamp({ format: 'HH:mm:ss' }),
+    winston.format.printf(({ level, message, timestamp, context, ...meta }) => {
+        const ctx = context ? `[${context}]` : ''
+        const metaStr = Object.keys(meta).length ? JSON.stringify(meta) : ''
+        return `${timestamp} ${level}: ${ctx} ${message} ${metaStr}`
+    })
+)
+
+// Create base logger
+const outputFormat = process.env.NODE_ENV === 'production' ? jsonFormat : prettyFormat
+
+const baseLogger = winston.createLogger({
+    level: process.env.LOG_LEVEL || 'info', // Default to info
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.json()
+    ),
+    defaultMeta: { service: 'bharatatlas-api' },
+    transports: [
+        // Console Transport
+        new winston.transports.Console({
+            format: outputFormat
+        }),
+        // Daily Rotate File for Errors
+        new winston.transports.DailyRotateFile({
+            filename: `${LOG_DIR}/error-%DATE%.log`,
+            datePattern: 'YYYY-MM-DD',
+            zippedArchive: true,
+            maxSize: '20m',
+            maxFiles: '14d',
+            level: 'error'
+        }),
+        // Daily Rotate File for Combined Logs
+        new winston.transports.DailyRotateFile({
+            filename: `${LOG_DIR}/combined-%DATE%.log`,
+            datePattern: 'YYYY-MM-DD',
+            zippedArchive: true,
+            maxSize: '20m',
+            maxFiles: '14d'
+        })
+    ]
+})
+
+/**
+ * Create a child logger with specific context
+ */
+export function createLogger(context) {
+    return baseLogger.child({ context })
 }
 
-class Logger {
-    constructor(context = 'App') {
-        this.context = context
-        this.isDevelopment = process.env.NODE_ENV === 'development'
-    }
+/**
+ * Express Middleware for Request Logging
+ * Attaches logger to req and logs response time
+ */
+export function requestLogger(req, res, next) {
+    const startTime = Date.now()
+    const requestId = req.headers['x-request-id'] || uuidv4()
 
-    /**
-     * Format log message with timestamp and context
-     */
-    formatMessage(level, message, meta = {}) {
-        const timestamp = new Date().toISOString()
-        const logEntry = {
-            timestamp,
-            level,
-            context: this.context,
-            message,
-            ...meta
-        }
+    // Attach correlation ID and logger to request
+    req.id = requestId
+    req.logger = baseLogger.child({
+        context: 'HTTP',
+        requestId
+    })
 
-        // In development, pretty print
-        if (this.isDevelopment) {
-            return logEntry
-        }
+    // Log Request Start (Debug only)
+    // req.logger.debug(`Incoming ${req.method} ${req.originalUrl}`)
 
-        // In production, JSON format for log aggregation
-        return JSON.stringify(logEntry)
-    }
+    // Log Response on Finish
+    res.on('finish', () => {
+        const duration = Date.now() - startTime
 
-    debug(message, meta = {}) {
-        if (this.isDevelopment) {
-            console.debug(this.formatMessage(LOG_LEVELS.DEBUG, message, meta))
-        }
-    }
+        // Determine log level based on status code
+        let level = 'info'
+        if (res.statusCode >= 500) level = 'error'
+        else if (res.statusCode >= 400) level = 'warn'
 
-    info(message, meta = {}) {
-        console.info(this.formatMessage(LOG_LEVELS.INFO, message, meta))
-    }
-
-    warn(message, meta = {}) {
-        console.warn(this.formatMessage(LOG_LEVELS.WARN, message, meta))
-    }
-
-    error(message, error = null, meta = {}) {
-        const errorMeta = error ? {
-            error: {
-                message: error.message,
-                stack: error.stack,
-                name: error.name
-            },
-            ...meta
-        } : meta
-
-        console.error(this.formatMessage(LOG_LEVELS.ERROR, message, errorMeta))
-    }
-
-    /**
-     * Log HTTP request
-     */
-    logRequest(req, res, duration) {
-        this.info('HTTP Request', {
+        req.logger.log(level, 'HTTP Request', {
             method: req.method,
-            path: req.path,
+            path: req.originalUrl || req.url,
             statusCode: res.statusCode,
             duration: `${duration}ms`,
             ip: req.ip,
             userAgent: req.get('user-agent')
         })
-    }
-}
-
-/**
- * Create logger instance
- */
-export function createLogger(context) {
-    return new Logger(context)
-}
-
-/**
- * Express middleware for request logging
- */
-export function requestLogger(req, res, next) {
-    const logger = createLogger('HTTP')
-    const startTime = Date.now()
-
-    // Log when response finishes
-    res.on('finish', () => {
-        const duration = Date.now() - startTime
-        logger.logRequest(req, res, duration)
     })
 
     next()
 }
 
-export default createLogger('App')
+// Default export for backward compatibility
+export default baseLogger.child({ context: 'App' })

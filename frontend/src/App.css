@@ -8,27 +8,30 @@
 }
 
 /* --- THE OBSIDIAN HEADER --- */
-.identity-header {
+.identity-header,
+.app-header {
   height: var(--header-height);
-  background: var(--surface-header);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: #0F172A;
+  /* Solid dark slate - no transparency */
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   padding: 0 2rem;
   z-index: 1000;
   position: relative;
-  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  /* Subtle shadow for depth, no bloom */
 }
 
-.header-content {
+.header-content,
+.header-container {
   width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 2rem;
 }
 
 /* Identity - "The Mission" */
@@ -45,27 +48,32 @@
   font-weight: 700;
   font-size: 1.25rem;
   letter-spacing: -0.03em;
-  color: var(--text-inverse);
+  color: #FFFFFF;
+  /* Pure white for maximum contrast */
   line-height: 1.1;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  /* Subtle shadow for depth */
 }
 
 .platform-name::before {
   content: '';
   display: block;
-  width: 10px;
-  height: 10px;
-  background: var(--color-primary);
+  width: 8px;
+  height: 8px;
+  background: #3B82F6;
+  /* Solid blue, no glow */
   border-radius: 50%;
-  box-shadow: 0 0 12px var(--color-primary-dark);
+  /* No box-shadow at all */
 }
 
 .platform-purpose {
   font-family: var(--font-mono);
   font-size: 0.65rem;
-  color: var(--text-tertiary);
+  color: rgba(255, 255, 255, 0.7);
+  /* Brighter for visibility */
   text-transform: uppercase;
   letter-spacing: 0.1em;
   padding-left: 1.1rem;
@@ -77,16 +85,19 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
+  /* Slightly more visible */
   padding: 0.25rem;
   border-radius: 8px;
   /* Inner capsule */
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* More visible border */
 }
 
 .nav-link {
   padding: 0.5rem 1rem;
-  color: var(--text-tertiary);
+  color: rgba(255, 255, 255, 0.75);
+  /* Much brighter default state */
   text-decoration: none;
   font-size: 0.875rem;
   font-weight: 500;
@@ -96,13 +107,16 @@
 
 .nav-link:hover {
   color: var(--text-inverse);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.12);
+  /* More visible hover */
 }
 
 .nav-link.active {
   color: var(--text-inverse);
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background: rgba(59, 130, 246, 0.3);
+  /* Blue tint for active state */
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  /* Glow effect */
 }
 
 /* System Info - "Server Heartbeat" */

@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useState, useEffect } from 'react'
 import { LanguageProvider, useLanguage } from './context/LanguageContext'
 import './App.css'
 import './styles/mobile.css'
@@ -95,9 +95,9 @@ function LanguageSwitcher() {
 
 import { ConnectivityProvider } from './context/ConnectivityProvider' // Bypass locked file
 
-function App() {
+// AppContent - uses language context (must be inside LanguageProvider)
+function AppContent() {
   const { language } = useLanguage()
-  const [activeTab, setActiveTab] = useState('overview')
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isRegisterOpen, setIsRegisterOpen] = useState(false)
 
@@ -116,76 +116,85 @@ function App() {
   }, [language])
 
   return (
+    <ConnectivityProvider>
+      <BrowserRouter>
+        <div className="app">
+          <header className="app-header">
+            <div className="header-container">
+              <div className="identity">
+                <h1 className="platform-name">BharatAtlas</h1>
+                <p className="platform-purpose">Digital Intelligence for India</p>
+              </div>
+              <Navigation onOpenLogin={openLogin} />
+              <SearchBar />
+              <LanguageSwitcher />
+              <NotificationCenter />
+              <div className="system-info">
+                <span className="status-indicator">●</span>
+                <span className="status-text">Operational</span>
+              </div>
+            </div>
+          </header>
+
+          <LoginModal
+            isOpen={isLoginOpen}
+            onClose={() => setIsLoginOpen(false)}
+            onSwitchToRegister={openRegister}
+          />
+
+          <RegisterModal
+            isOpen={isRegisterOpen}
+            onClose={() => setIsRegisterOpen(false)}
+            onSwitchToLogin={openLogin}
+          />
+
+          <Suspense fallback={<LoadingSpinner message="Loading..." />}>
+            <Routes>
+              <Route path="/health" element={<HealthPage />} />
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/explore" element={<ExplorePage />} />
+
+              {/* Map Routes - Hierarchical */}
+              <Route path="/map" element={<MapPage />} />
+              <Route path="/map/state/:state" element={<MapPage />} />
+              <Route path="/map/state/:state/district/:district" element={<MapPage />} />
+              <Route path="/map/state/:state/district/:district/tehsil/:tehsil" element={<MapPage />} />
+
+              <Route path="/compare" element={<ComparePage />} />
+              <Route path="/place/:placeId/:layer?" element={<PlacePage />} />
+              <Route path="/workspace" element={<WorkspacePage />} />
+              <Route path="/bookmarks" element={<Navigate to="/workspace" replace />} />
+              <Route path="/governance" element={<GovernancePage />} />
+              <Route path="/search/advanced" element={<AdvancedSearchPage />} />
+              <Route path="/developer" element={<DeveloperPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/analytics" element={<AnalyticsDashboard />} />
+
+              {/* Placeholders for Governance links to prevent 404s */}
+              <Route path="/curators" element={<div style={{ padding: '4rem', textAlign: 'center' }}><h2>Curator Profiles</h2><p>Coming Soon</p></div>} />
+              <Route path="/governance/logs" element={<div style={{ padding: '4rem', textAlign: 'center' }}><h2>Governance Logs</h2><p>Coming Soon</p></div>} />
+              <Route path="/governance/charter" element={<div style={{ padding: '4rem', textAlign: 'center' }}><h2>Full Charter</h2><p>Coming Soon</p></div>} />
+
+              <Route path="/" element={<Navigate to="/explore" replace />} />
+            </Routes>
+          </Suspense>
+
+          <ComparisonFloatingButton />
+          <AIChat />
+        </div>
+      </BrowserRouter>
+    </ConnectivityProvider>
+  )
+}
+
+// App - provides context (wraps AppContent)
+function App() {
+  console.log("🚀 App Component Rendering...");
+
+  return (
     <ErrorBoundary>
       <LanguageProvider>
-        <ConnectivityProvider> {/* Added Provider */}
-          <BrowserRouter>
-            <div className="app">
-              <header className="app-header">
-                <div className="header-container">
-                  <div className="identity">
-                    <h1 className="platform-name">BharatAtlas</h1>
-                    <p className="platform-purpose">Digital Intelligence for India</p>
-                  </div>
-                  <Navigation onOpenLogin={openLogin} />
-                  <SearchBar />
-                  <LanguageSwitcher /> {/* Added Switcher */}
-                  <NotificationCenter />
-                  <div className="system-info">
-                    <span className="status-indicator">●</span>
-                    <span className="status-text">Operational</span>
-                  </div>
-                </div>
-              </header>
-
-              <LoginModal
-                isOpen={isLoginOpen}
-                onClose={() => setIsLoginOpen(false)}
-                onSwitchToRegister={openRegister}
-              />
-
-              <RegisterModal
-                isOpen={isRegisterOpen}
-                onClose={() => setIsRegisterOpen(false)}
-                onSwitchToLogin={openLogin}
-              />
-
-              <Suspense fallback={<LoadingSpinner message="Loading..." />}>
-                <Routes>
-                  <Route path="/health" element={<HealthPage />} />
-                  <Route path="/admin" element={<AdminPage />} />
-                  <Route path="/explore" element={<ExplorePage />} />
-
-                  {/* Map Routes - Hierarchical */}
-                  <Route path="/map" element={<MapPage />} />
-                  <Route path="/map/state/:state" element={<MapPage />} />
-                  <Route path="/map/state/:state/district/:district" element={<MapPage />} />
-                  <Route path="/map/state/:state/district/:district/tehsil/:tehsil" element={<MapPage />} />
-
-                  <Route path="/compare" element={<ComparePage />} />
-                  <Route path="/place/:placeId/:layer?" element={<PlacePage />} />
-                  <Route path="/workspace" element={<WorkspacePage />} /> { /* NEW WORKSPACE ROUTE */}
-                  <Route path="/bookmarks" element={<Navigate to="/workspace" replace />} /> {/* Redirect old bookmarks */}
-                  <Route path="/governance" element={<GovernancePage />} />
-                  <Route path="/search/advanced" element={<AdvancedSearchPage />} /> {/* NEW ADVANCED SEARCH */}
-                  <Route path="/developer" element={<DeveloperPage />} /> {/* NEW DEVELOPER PORTAL */}
-                  <Route path="/profile" element={<ProfilePage />} /> {/* NEW USER PROFILE */}
-                  <Route path="/analytics" element={<AnalyticsDashboard />} /> {/* NEW ANALYTICS DASHBOARD - Feature 3.1 */}
-
-                  {/* Placeholders for Governance links to prevent 404s */}
-                  <Route path="/curators" element={<div style={{ padding: '4rem', textAlign: 'center' }}><h2>Curator Profiles</h2><p>Coming Soon</p></div>} />
-                  <Route path="/governance/logs" element={<div style={{ padding: '4rem', textAlign: 'center' }}><h2>Governance Logs</h2><p>Coming Soon</p></div>} />
-                  <Route path="/governance/charter" element={<div style={{ padding: '4rem', textAlign: 'center' }}><h2>Full Charter</h2><p>Coming Soon</p></div>} />
-
-                  <Route path="/" element={<Navigate to="/explore" replace />} />
-                </Routes>
-              </Suspense>
-
-              <ComparisonFloatingButton />
-              <AIChat />
-            </div>
-          </BrowserRouter>
-        </ConnectivityProvider>
+        <AppContent />
       </LanguageProvider>
     </ErrorBoundary>
   )

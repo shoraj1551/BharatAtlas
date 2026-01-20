@@ -79,19 +79,19 @@ export function useStates() {
 }
 
 export function useDistricts(stateName) {
-    return useGeoData('districts', stateName ? { state: stateName } : null)
+    return useGeoData(stateName ? 'districts' : null, stateName ? { state: stateName } : null)
 }
 
 export function useTehsils(districtName) {
-    return useGeoData('tehsils', districtName ? { district: districtName } : null)
+    return useGeoData(districtName ? 'tehsils' : null, districtName ? { district: districtName } : null)
 }
 
 export function useThanas(tehsilName) {
-    return useGeoData('thanas', tehsilName ? { tehsil: tehsilName } : null)
+    return useGeoData(tehsilName ? 'thanas' : null, tehsilName ? { tehsil: tehsilName } : null)
 }
 
 export function useVillages(thanaName, limit = 100) {
-    return useGeoData('villages', thanaName ? { thana: thanaName, limit } : null)
+    return useGeoData(thanaName ? 'villages' : null, thanaName ? { thana: thanaName, limit } : null)
 }
 
 /**

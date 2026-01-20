@@ -31,6 +31,8 @@ import BlindSpots from './BlindSpots'
 import DataFreshnessLabel from './DataFreshnessLabel' // NEW
 import FieldVerificationMode from './FieldVerificationMode' // NEW
 import TimelineView from './Timeline/TimelineView' // NEW - Feature 3.2
+import ReviewsSection from './Social/ReviewsSection' // NEW - Feature 3.3
+import DiscussionBoard from './Social/DiscussionBoard' // NEW - Feature 3.3
 import placeService from '../services/placeService'
 import narrativeService from '../services/narrativeService'
 import opportunityService from '../services/opportunityService'

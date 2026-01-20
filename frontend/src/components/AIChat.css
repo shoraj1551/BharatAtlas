@@ -9,7 +9,8 @@
     border: none;
     font-size: 28px;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    /* Reduced glow */
     z-index: 1000;
     transition: transform 0.2s;
 }

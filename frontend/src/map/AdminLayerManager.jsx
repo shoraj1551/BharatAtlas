@@ -17,6 +17,13 @@ import HighlightManager from './highlightManager'
 
 export default function AdminLayerManager({ map }) {
     const { state, district, tehsil } = useParams()
+
+    // Early return if map is not ready
+    if (!map) {
+        console.warn('AdminLayerManager: Map not ready yet')
+        return null
+    }
+
     const { addLayer, removeLayer, clearAllLayers, addClickHandler } = useMapLayers(map)
     const { navigateToState, navigateToDistrict, navigateToTehsil } = useURLSync()
     const { selectFeature } = useSelectionStore()

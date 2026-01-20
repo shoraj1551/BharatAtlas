@@ -30,6 +30,8 @@ const INDUSTRY_COLORS = {
     'Energy': '#eab308'
 }
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
+
 /**
  * Add industry markers to map
  */
@@ -38,7 +40,7 @@ export async function addIndustryMarkers(map) {
 
     try {
         // Fetch places with industry data
-        const response = await fetch('/api/places/states')
+        const response = await fetch(`${API_BASE}/places/states`)
         if (!response.ok) throw new Error('Failed to fetch places')
 
         const places = await response.json()

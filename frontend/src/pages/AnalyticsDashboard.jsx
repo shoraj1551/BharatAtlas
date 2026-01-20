@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import DashboardBuilder from '../components/Analytics/DashboardBuilder'
+// TEMPORARILY DISABLED TO DEBUG
+// import DashboardBuilder from '../components/Analytics/DashboardBuilder'
 import { getDashboards, createDashboard, updateDashboard } from '../services/analyticsService'
 import useAuthStore from '../store/authStore'
 import './AnalyticsDashboard.css'
@@ -107,12 +108,10 @@ export default function AnalyticsDashboard() {
             </div>
 
             {currentDashboard ? (
-                <DashboardBuilder
-                    key={currentDashboard._id} // Force re-render on switch
-                    initialLayout={currentDashboard.layout}
-                    onSave={handleSave}
-                    isEditable={isEditing}
-                />
+                <div style={{ padding: '2rem', background: '#f5f5f5', borderRadius: '8px' }}>
+                    <p style={{ color: '#666' }}>Dashboard Builder temporarily disabled for debugging</p>
+                    <p style={{ fontSize: '0.9em' }}>Dashboard: {currentDashboard.name}</p>
+                </div>
             ) : (
                 <div className="empty-state">
                     <p>You haven't created any dashboards yet.</p>

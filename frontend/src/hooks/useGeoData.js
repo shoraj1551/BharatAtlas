@@ -20,6 +20,13 @@ export function useGeoData(level, params) {
     useEffect(() => {
         if (!level) return
 
+        // Defensive check: Dependent levels MUST have params
+        const dependentLevels = ['districts', 'tehsils', 'thanas', 'villages']
+        if (dependentLevels.includes(level) && !params) {
+            console.warn(`[useGeoData] Blocking fetch for ${level} - missing params`)
+            return
+        }
+
         let cancelled = false
 
         async function fetchData() {
@@ -27,6 +34,7 @@ export function useGeoData(level, params) {
             setError(null)
 
             try {
+                console.log('useGeoData Hook Call:', { level, params })
                 let url = `${API_BASE}/geo/${level}`
 
                 // Add query params

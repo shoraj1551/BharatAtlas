@@ -17,6 +17,7 @@ import HighlightManager from './highlightManager'
 
 export default function AdminLayerManager({ map }) {
     const { state, district, tehsil } = useParams()
+    console.log('AdminLayerManager Params:', { state, district, tehsil })
 
     // Early return if map is not ready
     if (!map) {

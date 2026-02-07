@@ -37,67 +37,86 @@ export default function MapContainer() {
         console.log('🗺️  Initializing map...')
 
         // Create map instance
-        const map = new maplibregl.Map({
-            container: containerRef.current,
-            style: MAP_CONFIG.style,
-            center: MAP_CONFIG.center,
-            zoom: MAP_CONFIG.zoom,
-            minZoom: MAP_CONFIG.minZoom,
-            maxZoom: MAP_CONFIG.maxZoom,
-            maxBounds: MAP_CONFIG.maxBounds,
-            maxBoundsViscosity: MAP_CONFIG.maxBoundsViscosity
-        })
-
-        mapRef.current = map
-
-        // Add navigation controls
-        map.addControl(new maplibregl.NavigationControl(), 'top-right')
-
-        // Wait for map to load
-        map.on('load', async () => {
-            console.log('✓ Map loaded')
-
-            // Load and enrich states data
-            try {
-                const rawStatesData = await loadStatesGeoJSON()
-                console.log('Loaded raw states GeoJSON')
-
-                // Enrich with population density and literacy data
-                const { enrichGeoJSONWithData } = await import('./visualizationUtils')
-                const enrichedData = await enrichGeoJSONWithData(rawStatesData)
-
-                statesDataRef.current = enrichedData
-                console.log('States data enriched and cached')
-
-                // Add city markers
-                const { addCityMarkers } = await import('./cityMarkers')
-                await addCityMarkers(map)
-
-                // Add tooltips
-                const { addMapTooltip } = await import('./mapTooltip')
-                addMapTooltip(map)
-
-                // Add industry markers (hidden by default)
-                const { addIndustryMarkers } = await import('./industryMarkers')
-                await addIndustryMarkers(map)
-            } catch (error) {
-                console.error('Error loading states data:', error)
+        try {
+            console.log('🗺️  Attempting to create MapLibre instance...', containerRef.current)
+            if (!containerRef.current) {
+                console.error('❌ Map container ref is null!')
+                return
             }
 
-            setMapReady(true)
-        })
+            const map = new maplibregl.Map({
+                container: containerRef.current,
+                style: MAP_CONFIG.style,
+                center: MAP_CONFIG.center,
+                zoom: MAP_CONFIG.zoom,
+                minZoom: MAP_CONFIG.minZoom,
+                maxZoom: MAP_CONFIG.maxZoom,
+                maxBounds: MAP_CONFIG.maxBounds,
+                maxBoundsViscosity: MAP_CONFIG.maxBoundsViscosity
+            })
 
-        // Error handler
-        map.on('error', (e) => {
-            console.error('Map error:', e)
-        })
+            map.on('error', (e) => {
+                console.error('❌ MapLibre Error:', e)
+            })
 
-        // Cleanup
-        return () => {
-            if (mapRef.current) {
-                mapRef.current.remove()
-                mapRef.current = null
+            map.on('load', () => {
+                console.log('✅ Map loaded successfully')
+            })
+
+
+            mapRef.current = map
+
+            // Add navigation controls
+            map.addControl(new maplibregl.NavigationControl(), 'top-right')
+
+            // Wait for map to load
+            map.on('load', async () => {
+                console.log('✓ Map loaded')
+
+                // Load and enrich states data
+                try {
+                    const rawStatesData = await loadStatesGeoJSON()
+                    console.log('Loaded raw states GeoJSON')
+
+                    // Enrich with population density and literacy data
+                    const { enrichGeoJSONWithData } = await import('./visualizationUtils')
+                    const enrichedData = await enrichGeoJSONWithData(rawStatesData)
+
+                    statesDataRef.current = enrichedData
+                    console.log('States data enriched and cached')
+
+                    // Add city markers
+                    const { addCityMarkers } = await import('./cityMarkers')
+                    await addCityMarkers(map)
+
+                    // Add tooltips
+                    const { addMapTooltip } = await import('./mapTooltip')
+                    addMapTooltip(map)
+
+                    // Add industry markers (hidden by default)
+                    const { addIndustryMarkers } = await import('./industryMarkers')
+                    await addIndustryMarkers(map)
+                } catch (error) {
+                    console.error('Error loading states data:', error)
+                }
+
+                setMapReady(true)
+            })
+
+            // Error handler
+            map.on('error', (e) => {
+                console.error('Map error:', e)
+            })
+
+            // Cleanup
+            return () => {
+                if (mapRef.current) {
+                    mapRef.current.remove()
+                    mapRef.current = null
+                }
             }
+        } catch (err) {
+            console.error('Failed to initialize map:', err)
         }
     }, [])
 
@@ -299,7 +318,7 @@ export default function MapContainer() {
 
     return (
         <div className="map-container">
-            <div ref={containerRef} className="map" style={{ height: '100vh', width: '100%' }} />
+            <div ref={containerRef} className="map" style={{ height: '100%', width: '100%' }} />
 
             {/* Map Style Switcher */}
             <MapStyleSwitcher onStyleChange={handleStyleChange} />

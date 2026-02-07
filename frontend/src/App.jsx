@@ -18,10 +18,10 @@ import ErrorBoundary from './components/ErrorBoundary'
 import ComparisonFloatingButton from './components/ComparisonFloatingButton'
 import NotificationCenter from './components/NotificationCenter'
 import AIChat from './components/AIChat'
-import UserMenu from './components/UserMenu' // NEW
-import LoginModal from './components/auth/LoginModal' // NEW
-import RegisterModal from './components/auth/RegisterModal' // NEW
-import ProfilePage from './pages/ProfilePage' // NEW
+// import UserMenu from './components/UserMenu' // NEW
+// import LoginModal from './components/auth/LoginModal' // NEW
+// import RegisterModal from './components/auth/RegisterModal' // NEW
+// import ProfilePage from './pages/ProfilePage' // NEW
 import { logScaleReadiness } from './utils/scaleReadiness'
 
 // Log scale readiness on app load (development only)
@@ -136,6 +136,7 @@ function AppContent() {
             </div>
           </header>
 
+          {/* 
           <LoginModal
             isOpen={isLoginOpen}
             onClose={() => setIsLoginOpen(false)}
@@ -146,7 +147,8 @@ function AppContent() {
             isOpen={isRegisterOpen}
             onClose={() => setIsRegisterOpen(false)}
             onSwitchToLogin={openLogin}
-          />
+          /> 
+*/}
 
           <Suspense fallback={<LoadingSpinner message="Loading..." />}>
             <Routes>
@@ -167,7 +169,7 @@ function AppContent() {
               <Route path="/governance" element={<GovernancePage />} />
               <Route path="/search/advanced" element={<AdvancedSearchPage />} />
               <Route path="/developer" element={<DeveloperPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
+              {/* <Route path="/profile" element={<ProfilePage />} /> */}
               <Route path="/analytics" element={<AnalyticsDashboard />} />
 
               {/* Placeholders for Governance links to prevent 404s */}

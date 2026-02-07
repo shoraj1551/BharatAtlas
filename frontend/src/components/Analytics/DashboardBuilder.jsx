@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
+import '/node_modules/react-grid-layout/css/styles.css'
+import '/node_modules/react-resizable/css/styles.css'
 import TrendChart from './TrendChart'
 import ComparisonChart from './ComparisonChart'
 import InsightCard from './InsightCard'
